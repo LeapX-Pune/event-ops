@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Event Details | Conclave</title>
+    <meta name="description" content="Detailed view of an exclusive Conclave experience."/>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+    <!-- Particle Background -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- ═══ Navigation ═══ -->
+    <nav class="nav scrolled">
+        <div class="nav-inner">
+            <a href="../index.html" class="nav-brand">CONCLAVE</a>
+            <div class="nav-links">
+                <a class="nav-link active" href="events.html">Events</a>
+                <a class="nav-link" href="venues.html">Venues</a>
+                <a class="nav-link" href="bookings.html">My Bookings</a>
+            </div>
+            <div class="nav-actions">
+
+                <a href="bookings.html" class="nav-avatar" style="display: flex; align-items: center; justify-content: center; color: var(--text-secondary); text-decoration: none;">
+                    <span class="material-symbols-outlined" style="font-size: 24px;">person</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ═══ Mobile Menu ═══ -->
+    <div class="mobile-menu" id="mobile-menu">
+        <a class="mobile-menu-link" href="events.html">Events</a>
+        <a class="mobile-menu-link" href="venues.html">Venues</a>
+        <a class="mobile-menu-link" href="bookings.html">My Bookings</a>
+        <button class="mobile-menu-close material-symbols-outlined" id="mobile-menu-close">close</button>
+    </div>
+
+    <!-- ═══ Main Content ═══ -->
+    <main class="container" style="padding-top:160px;padding-bottom:80px;">
+
+        <!-- Hero Section -->
+        <section class="text-center reveal" style="margin-bottom:32px;">
+            <div style="margin-bottom:16px;">
+                <span id="event-subtitle" class="featured-badge">Exclusive Series</span>
+            </div>
+            <h1 id="event-title" class="text-display-lg text-gold" style="margin-bottom:24px;">Night Photography Masterclass</h1>
+            <div class="event-meta">
+                <span id="event-location">Tokyo, Japan</span>
+                <span class="event-meta-dot">•</span>
+                <span id="event-date">October 12-14, 2024</span>
+                <span class="event-meta-dot">•</span>
+                <span id="event-seats-limit">Limited to 12 Seats</span>
+                <span class="event-meta-dot">•</span>
+                <span style="display:flex;align-items:center;gap:4px;">
+                    <span class="material-symbols-outlined" style="font-size:14px;">group</span>
+                    <span id="attendee-count">0</span> Attendees
+                </span>
+            </div>
+        </section>
+
+        <!-- Hero Image -->
+        <div class="detail-hero-image reveal-scale">
+            <img id="event-hero-image" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA4vVFwroiVFT6a4LafKoWtMGPAflNRtZgIaRJNA50n15B4q3QxIQ4CvGrqr5rQEuQnSQEcOFppFzKlBg2SwFaxp2-AgEuiPaX12ukR5DcZb96N30EFsd9qhHR8T-zNfvMHSUiok_gIUwJ4hc-ruQfXrIpsQ_2amziNGV2dgIyZbtvQa-LCvR5mmWtORbIaFXAPP5MS8KtMFMPNDp4i_uMQuMB4b5peil3630n7jlrxXIuPzn-JUceH3GSffbUy1tJta9yLisPlpK-d" alt="Event Hero"/>
+        </div>
+
+        <!-- Split Layout -->
+        <div class="detail-grid">
+            <!-- Left: Content -->
+            <div class="detail-content">
+
+                <!-- Itinerary -->
+                <section class="detail-section">
+                    <h2 class="detail-section-title reveal">The Itinerary</h2>
+                    <div id="itinerary-container"></div>
+                </section>
+
+                <!-- Speaker -->
+                <section class="detail-section">
+                    <h2 class="detail-section-title reveal" id="speaker-role">The Master</h2>
+                    <div class="speaker-card reveal">
+                        <div class="speaker-image">
+                            <img id="speaker-image" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDooH6C2fS7f7d-0nONpYFtYPQDhC9eHn7Nwx9lKLnSRMTJrboN0n61zHZQ_0WKhteDoecOUpsJe2rIeCBMBzIs1IPRCnr0KglnhvME9rVGeZeZxGBRX4RdXiKBZqHbKrJV55mhDdFmZMr7NUy9FDn6KhNjQhgWV0jmshIIn89InpHd4Zb7eFimQTk2OBj4PBDWV-Sj_kSsL-AeAaZlOrKTkTIaZykAlHZjoBtpKjkd_Ir2VITLD3HUgs5ykqalA-QTLlkXMEsVoudv" alt="Speaker"/>
+                        </div>
+                        <div>
+                            <h3 class="speaker-name" id="speaker-name">Julian Thorne</h3>
+                            <p class="speaker-quote" id="speaker-quote">"Darkness is not the absence of light, but the canvas for its most beautiful expressions."</p>
+                            <p class="speaker-bio" id="speaker-bio">Two-time World Press Photo awardee with two decades of experience capturing the world's most elusive nighttime landscapes.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Perks -->
+                <section class="detail-section">
+                    <h2 class="detail-section-title reveal">Exclusive Perks</h2>
+                    <div class="perks-grid stagger-children">
+                        <div class="perk-card reveal">
+                            <span class="material-symbols-outlined">camera_outdoor</span>
+                            <h4 class="perk-card-title">Pro Gear Access</h4>
+                            <p class="perk-card-desc">Use of the latest flagship camera bodies and specialized prime lenses.</p>
+                        </div>
+                        <div class="perk-card reveal">
+                            <span class="material-symbols-outlined">wine_bar</span>
+                            <h4 class="perk-card-title">Private Dining</h4>
+                            <p class="perk-card-desc">Gourmet catering and evening cocktail mixers at exclusive rooftop venues.</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Right: Booking Widget -->
+            <div class="hide-mobile">
+                <div class="booking-widget">
+                    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:32px;">
+                        <div>
+                            <span class="text-label text-secondary" style="display:block;margin-bottom:4px;">Investment</span>
+                            <div class="booking-widget-price" id="widget-price">$4,500</div>
+                        </div>
+                        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;">
+                            <span class="booking-widget-badge" id="widget-seats-badge-1">2 SEATS</span>
+                            <span class="booking-widget-badge" id="widget-seats-badge-2">LEFT</span>
+                        </div>
+                    </div>
+
+                    <div class="booking-widget-row">
+                        <span class="booking-widget-row-label">Duration</span>
+                        <span class="booking-widget-row-value" id="widget-duration">3 Full Days</span>
+                    </div>
+                    <div class="booking-widget-row">
+                        <span class="booking-widget-row-label">Location</span>
+                        <span class="booking-widget-row-value" id="widget-location">Shinjuku, Tokyo</span>
+                    </div>
+                    <div class="booking-widget-row" style="border-bottom:1px solid var(--border-subtle);margin-bottom:32px;">
+                        <span class="booking-widget-row-label">Difficulty</span>
+                        <span class="booking-widget-row-value" id="widget-difficulty">Intermediate</span>
+                    </div>
+
+                    <button id="reserve-btn" class="btn-primary" style="margin-bottom:16px;">Reserve Pass</button>
+
+                    <p style="text-align:center;font-size:13px;color:var(--text-secondary);font-style:italic;line-height:1.6;">
+                        All-inclusive luxury accommodation<br>included.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Mobile Booking Bar -->
+    <div class="mobile-booking-bar">
+        <div>
+            <div id="mobile-price" style="font-family:var(--font-display);font-size:28px;font-weight:200;color:var(--gold);">$4,500</div>
+            <span id="mobile-seats-badge" style="font-size:11px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.15em;">Final 2 Seats</span>
+        </div>
+        <button id="mobile-reserve-btn" class="btn-primary" style="width:auto;padding:14px 28px;">Reserve</button>
+    </div>
+
+    <!-- ═══ Footer ═══ -->
+    <footer class="footer">
+        <div class="footer-brand">Conclave</div>
+        <div class="footer-links">
+            <a class="footer-link" href="#">Privacy Policy</a>
+            <a class="footer-link" href="#">Terms of Service</a>
+            <a class="footer-link" href="#">Contact</a>
+        </div>
+        <p class="footer-copy">© 2024 Conclave. All rights reserved.</p>
+    </footer>
+
+    <!-- ═══ Scripts ═══ -->
+    <script src="../js/events-data.js"></script>
+    <script src="../js/animations.js"></script>
+    <script src="../js/app.js"></script>
+    <script src="../js/sidebar.js"></script>
+
+    <script>
+        // ── Event Data Store ──────────────────────────────────────
+        // ── Load Event Data ───────────────────────────────────────
+        const urlParams = new URLSearchParams(window.location.search);
+        let eventKey = urlParams.get('event');
+        const allEvents = window.CONCLAVE_EVENTS || [];
+        
+        let data = allEvents.find(e => e.id === eventKey) || allEvents[0];
+
+        // Generic mock data for details not stored in global array
+        const defaultSpeaker = {
+            role: "The Master",
+            name: "Julian Thorne",
+            quote: '"Darkness is not the absence of light, but the canvas for its most beautiful expressions."',
+            bio: "Two-time World Press Photo awardee with two decades of experience.",
+            image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDooH6C2fS7f7d-0nONpYFtYPQDhC9eHn7Nwx9lKLnSRMTJrboN0n61zHZQ_0WKhteDoecOUpsJe2rIeCBMBzIs1IPRCnr0KglnhvME9rVGeZeZxGBRX4RdXiKBZqHbKrJV55mhDdFmZMr7NUy9FDn6KhNjQhgWV0jmshIIn89InpHd4Zb7eFimQTk2OBj4PBDWV-Sj_kSsL-AeAaZlOrKTkTIaZykAlHZjoBtpKjkd_Ir2VITLD3HUgs5ykqalA-QTLlkXMEsVoudv"
+        };
+        const defaultItinerary = [
+            { num: "01", title: "Arrival & Integration", desc: "Settle into the venue with a curated welcome reception featuring elite networking." },
+            { num: "02", title: "The Masterclass", desc: "An immersive deep dive into the subject matter with our distinguished host." },
+            { num: "03", title: "The Final Act", desc: "A cinematic closing ceremony and private dinner to reflect on the experience." }
+        ];
+
+        // Update page
+        document.title = data.title + ' | Conclave';
+        document.getElementById('event-title').textContent = data.title;
+        document.getElementById('event-subtitle').textContent = data.category;
+        document.getElementById('event-location').textContent = data.location;
+        document.getElementById('event-date').textContent = data.date;
+        document.getElementById('event-seats-limit').textContent = "Limited to " + data.capacity + " Seats";
+        document.getElementById('attendee-count').textContent = data.capacity;
+        document.getElementById('event-hero-image').src = data.image;
+
+        const itineraryContainer = document.getElementById('itinerary-container');
+        defaultItinerary.forEach((item, index) => {
+            const div = document.createElement('div');
+            div.className = 'itinerary-item reveal visible';
+            div.style.transitionDelay = `${index * 0.1}s`;
+            div.innerHTML = `
+                <div class="itinerary-num">${item.num}</div>
+                <div class="itinerary-content">
+                    <h3 class="itinerary-title">${item.title}</h3>
+                    <p class="itinerary-desc">${item.desc}</p>
+                </div>
+            `;
+            itineraryContainer.appendChild(div);
+        });
+
+        // Speaker
+        document.getElementById('speaker-role').textContent = defaultSpeaker.role;
+        document.getElementById('speaker-name').textContent = defaultSpeaker.name;
+        document.getElementById('speaker-quote').textContent = defaultSpeaker.quote;
+        document.getElementById('speaker-bio').textContent = defaultSpeaker.bio;
+        document.getElementById('speaker-image').src = defaultSpeaker.image;
+
+        // Booking widget
+        document.getElementById('widget-price').textContent = data.price;
+        document.getElementById('widget-duration').textContent = data.duration;
+        document.getElementById('widget-location').textContent = data.location.split(',')[0];
+        document.getElementById('widget-difficulty').textContent = data.difficulty;
+        document.getElementById('mobile-price').textContent = data.price;
+
+        // Seats from localStorage
+        const defaultSeats = { photography: 2, automotive: 5, gala: 12, transit: 3 };
+        let seatsObj = JSON.parse(localStorage.getItem('conclave_seats'));
+        if (!seatsObj) {
+            seatsObj = defaultSeats;
+            localStorage.setItem('conclave_seats', JSON.stringify(seatsObj));
+        }
+
+        function updateSeatsDisplay() {
+            const remaining = seatsObj[eventKey] !== undefined ? seatsObj[eventKey] : 0;
+            const b1 = document.getElementById('widget-seats-badge-1');
+            const b2 = document.getElementById('widget-seats-badge-2');
+            const reserveBtn = document.getElementById('reserve-btn');
+            const mobileReserveBtn = document.getElementById('mobile-reserve-btn');
+            const mobileBadge = document.getElementById('mobile-seats-badge');
+
+            if (remaining > 0) {
+                b1.textContent = remaining + ' SEAT' + (remaining > 1 ? 'S' : '');
+                b2.textContent = 'LEFT';
+                mobileBadge.textContent = 'Final ' + remaining + ' Seat' + (remaining > 1 ? 's' : '');
+                reserveBtn.textContent = 'Reserve Pass';
+                reserveBtn.disabled = false;
+                mobileReserveBtn.disabled = false;
+            } else {
+                b1.textContent = 'SOLD';
+                b2.textContent = 'OUT';
+                mobileBadge.textContent = 'Sold Out';
+                reserveBtn.textContent = 'Fully Booked';
+                reserveBtn.disabled = true;
+                mobileReserveBtn.disabled = true;
+            }
+        }
+
+        updateSeatsDisplay();
+
+        // Reserve actions
+        const reserveAction = () => {
+            window.location.href = 'checkout.html?event=' + eventKey;
+        };
+        document.getElementById('reserve-btn').addEventListener('click', reserveAction);
+        document.getElementById('mobile-reserve-btn').addEventListener('click', reserveAction);
+    </script>
+</body>
+</html>

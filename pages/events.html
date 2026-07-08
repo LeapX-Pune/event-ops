@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>All Experiences | Conclave</title>
+    <meta name="description" content="Explore our full calendar of curated masterclasses, elite social gatherings, and industry showcases."/>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+    <!-- Particle Background -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- ═══ Navigation ═══ -->
+    <nav class="nav scrolled">
+        <div class="nav-inner">
+            <a href="../index.html" class="nav-brand">CONCLAVE</a>
+            <div class="nav-links">
+                <a class="nav-link active" href="events.html">Events</a>
+                <a class="nav-link" href="venues.html">Venues</a>
+                <a class="nav-link" href="bookings.html">My Bookings</a>
+            </div>
+            <div class="nav-actions">
+
+                <a href="bookings.html" class="nav-avatar hide-mobile" style="display: flex; align-items: center; justify-content: center; color: var(--text-secondary); text-decoration: none;">
+                    <span class="material-symbols-outlined" style="font-size: 24px;">person</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ═══ Mobile Menu ═══ -->
+    <div class="mobile-menu" id="mobile-menu">
+        <a class="mobile-menu-link" href="events.html">Events</a>
+        <a class="mobile-menu-link" href="venues.html">Venues</a>
+        <a class="mobile-menu-link" href="bookings.html">My Bookings</a>
+        <button class="mobile-menu-close material-symbols-outlined" id="mobile-menu-close">close</button>
+    </div>
+
+    <!-- ═══ Main Content ═══ -->
+    <main class="container" style="padding-top:160px;padding-bottom:80px;">
+
+        <!-- Page Header -->
+        <div class="page-header centered">
+            <span class="section-label reveal" style="display:block;">Conclave Schedule</span>
+            <h1 class="section-title reveal">The Directory</h1>
+            <p class="section-desc reveal" style="margin:0 auto;">
+                Explore our full calendar of curated masterclasses, elite social gatherings, and industry showcases.
+            </p>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="filter-bar reveal" style="margin-bottom:48px;">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="automotive">Automotive</button>
+            <button class="filter-btn" data-filter="aviation">Aviation</button>
+            <button class="filter-btn" data-filter="social">Social</button>
+            <button class="filter-btn" data-filter="masterclass">Masterclass</button>
+            <div style="width:1px;height:32px;background:var(--border-subtle);margin:0 8px;" class="hide-mobile"></div>
+            <div style="display:flex;align-items:center;gap:8px;">
+                <span class="material-symbols-outlined" style="color:var(--text-secondary);font-size:18px;">calendar_month</span>
+                <input type="date" id="date-filter" class="filter-date">
+            </div>
+        </div>
+
+        <!-- Events Grid (Rendered Dynamically) -->
+        <div class="grid-events stagger-children" id="events-grid">
+            <!-- Cards will be injected here via JS -->
+        </div>
+    </main>
+
+    <!-- ═══ Footer ═══ -->
+    <footer class="footer">
+        <div class="footer-brand">Conclave</div>
+        <div class="footer-links">
+            <a class="footer-link" href="#">Privacy Policy</a>
+            <a class="footer-link" href="#">Terms of Service</a>
+            <a class="footer-link" href="#">Contact</a>
+        </div>
+        <p class="footer-copy">© 2024 Conclave. All rights reserved.</p>
+    </footer>
+
+    <!-- ═══ Scripts ═══ -->
+    <script src="../js/events-data.js"></script>
+    <script src="../js/animations.js"></script>
+    <script src="../js/app.js"></script>
+    <script src="../js/sidebar.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const grid = document.getElementById('events-grid');
+            const events = window.CONCLAVE_EVENTS || [];
+
+            events.forEach((evt, idx) => {
+                const categoryMapping = {
+                    "Celestial Gala": "social",
+                    "Aviation Showcase": "aviation",
+                    "Automotive Excellence": "automotive",
+                    "Digital Art & Crypto": "masterclass",
+                    "Gastronomic Journey": "social",
+                    "Extreme Wellness": "masterclass"
+                };
+                
+                const filterCat = categoryMapping[evt.category] || "social";
+                
+                const card = document.createElement('a');
+                card.href = `event-detail.html?event=${evt.id}`;
+                card.className = 'event-card reveal visible';
+                card.setAttribute('data-category', filterCat);
+                card.style.transitionDelay = `${idx * 0.1}s`;
+
+                card.innerHTML = `
+                    <div class="event-card-image">
+                        <img src="${evt.image}" alt="${evt.title}"/>
+                    </div>
+                    <div class="event-card-body">
+                        <div>
+                            <div class="event-card-meta">${evt.date} / ${evt.time}</div>
+                            <div class="event-card-attendees">
+                                <span class="material-symbols-outlined">group</span>
+                                <span>${evt.capacity} Attendees</span>
+                            </div>
+                            <h3 class="event-card-title">${evt.title}</h3>
+                            <p class="event-card-location">${evt.location}</p>
+                        </div>
+                        <span class="event-card-price">${evt.price}</span>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+
+            // ── Filtering Logic ─────────────────────────────────────
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            const dateFilter = document.getElementById('date-filter');
+            let currentCategory = 'all';
+
+            function applyFilters() {
+                const eventCards = document.querySelectorAll('.event-card');
+                const selectedDate = dateFilter.value;
+
+                eventCards.forEach(card => {
+                    const cardCategory = card.getAttribute('data-category');
+                    const dateText = card.querySelector('.event-card-meta').textContent;
+                    const cardDate = dateText.split('/')[0].trim();
+
+                    const matchesCategory = currentCategory === 'all' || cardCategory === currentCategory;
+                    const matchesDate = !selectedDate || cardDate === selectedDate;
+
+                    if (matchesCategory && matchesDate) {
+                        card.style.display = 'flex';
+                        card.style.opacity = '1';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            }
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentCategory = btn.getAttribute('data-filter');
+                    applyFilters();
+                });
+            });
+
+            dateFilter.addEventListener('change', applyFilters);
+        });
+    </script>
+</body>
+</html>

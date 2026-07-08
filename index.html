@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Conclave</title>
+    <meta name="description" content="Journey through a surreal digital landscape of exclusive events. Immersive, cinematic, impossible to ignore."/>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    
+    <!-- ═══ Background Cache / Prefetch for Venues Globe ═══ -->
+    <link rel="prefetch" href="pages/venues.html" as="document"/>
+    <link rel="prefetch" href="js/venues-globe.js" as="script"/>
+    <link rel="prefetch" href="https://unpkg.com/three" as="script"/>
+    <link rel="prefetch" href="https://unpkg.com/globe.gl" as="script"/>
+    <link rel="prefetch" href="https://unpkg.com/three-globe/example/img/earth-dark.jpg" as="image"/>
+    <link rel="prefetch" href="https://unpkg.com/three-globe/example/img/earth-topology.png" as="image"/>
+    <link rel="prefetch" href="https://unpkg.com/three-globe/example/img/night-sky.png" as="image"/>
+    <style>
+
+        html { scroll-behavior: smooth; }
+        body { background: #0a0a12; overflow-x: hidden; }
+
+        /* ── Fixed Particle Canvas ── */
+        #world-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: 0;
+        }
+
+        /* ── Content over canvas ── */
+        .page-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Pointer events: let canvas get mouse events except on interactive elements */
+        .page-content { pointer-events: none; }
+        .page-content a,
+        .page-content button,
+        .page-content input,
+        .page-content .nav,
+        .page-content .mobile-menu,
+        .page-content .chat-widget,
+        .page-content .footer,
+        .page-content .bento-card,
+        .page-content .scroll-event-card,
+        .page-content .pill-nav { pointer-events: auto; }
+
+        /* ── Scroll Progress ── */
+        #scroll-progress {
+            position: fixed; top: 0; left: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--gold), var(--violet));
+            z-index: 999;
+            transition: width 0.1s linear;
+        }
+
+        /* ═══ HERO SECTION ═══ */
+        .editions-hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            text-align: center;
+            padding: 0 24px 15vh;
+            position: relative;
+        }
+        .editions-hero-sub {
+            font-family: var(--font-body);
+            font-size: 15px;
+            line-height: 1.7;
+            color: rgba(255,255,255,0.45);
+            max-width: 420px;
+            margin: 0 auto 40px;
+            opacity: 0;
+            animation: e-fade-up 1s ease forwards 0.3s;
+        }
+        /* Character-by-character sub text */
+        .char-node {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(12px);
+            animation: e-char-reveal 0.4s ease forwards;
+        }
+        .editions-hero-cta {
+            display: flex; gap: 16px;
+            justify-content: center; flex-wrap: wrap;
+            opacity: 0;
+            animation: e-fade-up 1s ease forwards 1.2s;
+        }
+        .editions-hero-anchor-row {
+            margin-top: 56px;
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            justify-content: center;
+            opacity: 0;
+            animation: e-fade-up 1s ease forwards 1.5s;
+        }
+        .anchor-chip {
+            font-family: var(--font-body);
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 8px 16px;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.08);
+            color: rgba(255,255,255,0.4);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            background: transparent;
+        }
+        .anchor-chip:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+            background: rgba(230,198,135,0.06);
+        }
+        .editions-scroll-hint {
+            position: absolute;
+            bottom: 32px; left: 50%;
+            transform: translateX(-50%);
+            display: flex; flex-direction: column;
+            align-items: center; gap: 10px;
+            opacity: 0;
+            animation: e-fade-up 1s ease forwards 1.8s;
+        }
+        .editions-scroll-hint span {
+            font-family: var(--font-body);
+            font-size: 9px; letter-spacing: 4px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.2);
+        }
+        .e-scroll-line {
+            width: 1px; height: 36px;
+            background: linear-gradient(to bottom, rgba(230,198,135,0.4), transparent);
+            animation: e-scroll-pulse 2.5s ease-in-out infinite;
+        }
+
+        @keyframes e-fade-up {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes e-char-reveal {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes e-scroll-pulse {
+            0%, 100% { opacity: 0.15; transform: scaleY(0.5); }
+            50% { opacity: 0.8; transform: scaleY(1); }
+        }
+
+        /* ═══ SECTION LAYOUT ═══ */
+        .editions-section {
+            padding: 160px 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .section-header {
+            margin-bottom: 64px;
+        }
+        .section-header h2 {
+            font-family: var(--font-display);
+            font-size: clamp(36px, 6vw, 72px);
+            font-weight: 200;
+            letter-spacing: -0.03em;
+            line-height: 1;
+            color: white;
+            margin-bottom: 20px;
+        }
+        .section-header p {
+            font-family: var(--font-body);
+            font-size: 15px;
+            line-height: 1.8;
+            color: rgba(255,255,255,0.4);
+            max-width: 480px;
+        }
+
+        /* ═══ BENTO-BOX GRID ═══ */
+        .bento-grid {
+            display: grid;
+            gap: 16px;
+        }
+        .bento-2col { grid-template-columns: 1fr 1fr; }
+        .bento-3col { grid-template-columns: 1fr 1fr 1fr; }
+        .bento-featured { grid-template-columns: 1.4fr 1fr; }
+
+        .bento-card {
+            background: rgba(18, 18, 28, 0.65);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: border-color 0.4s ease;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+        }
+        .bento-card:hover {
+            border-color: rgba(230,198,135,0.2);
+        }
+        /* Border glow effect (refracted light from canvas) */
+        .bento-card::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 13px;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(230,198,135,0.1), transparent, rgba(123,104,238,0.05));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .bento-card:hover::before { opacity: 1; }
+
+        .bento-card-body {
+            padding: 32px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .bento-label {
+            font-family: var(--font-body);
+            font-size: 10px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 16px;
+        }
+        .bento-title {
+            font-family: var(--font-display);
+            font-size: clamp(18px, 2.5vw, 28px);
+            font-weight: 300;
+            color: white;
+            line-height: 1.2;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+        }
+        .bento-desc {
+            font-family: var(--font-body);
+            font-size: 13px;
+            line-height: 1.7;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 20px;
+            flex: 1;
+        }
+        .bento-image {
+            width: 100%;
+            aspect-ratio: 16/9;
+            object-fit: cover;
+            border-radius: 0 0 12px 12px;
+        }
+        .bento-image-top {
+            width: 100%;
+            aspect-ratio: 16/9;
+            object-fit: cover;
+            border-radius: 12px 12px 0 0;
+        }
+        .bento-metric {
+            font-family: var(--font-display);
+            font-size: clamp(40px, 5vw, 64px);
+            font-weight: 100;
+            color: white;
+            line-height: 1;
+        }
+        .bento-metric-label {
+            font-family: var(--font-body);
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.3);
+            margin-top: 8px;
+        }
+        .bento-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: var(--font-body);
+            font-size: 12px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--gold);
+            text-decoration: none;
+            transition: gap 0.3s ease;
+            margin-top: auto;
+        }
+        .bento-link:hover { gap: 12px; }
+        .bento-link .material-symbols-outlined {
+            font-size: 14px;
+            transition: transform 0.3s ease;
+        }
+        .bento-link:hover .material-symbols-outlined {
+            transform: translateX(4px);
+        }
+
+        /* Span helpers */
+        .span-2 { grid-column: span 2; }
+        .span-row-2 { grid-row: span 2; }
+
+        /* ═══ STATS STRIP ═══ */
+        .stats-strip {
+            display: flex;
+            justify-content: space-between;
+            gap: 24px;
+            padding: 48px 0;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            margin: 80px 0;
+        }
+        .stat-block { text-align: center; flex: 1; }
+        .stat-block-num {
+            font-family: var(--font-display);
+            font-size: clamp(32px, 5vw, 56px);
+            font-weight: 100;
+            color: white;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+        .stat-block-label {
+            font-family: var(--font-body);
+            font-size: 10px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.25);
+        }
+
+        /* ═══ EVENTS SCROLL ROW ═══ */
+        .events-scroll-row {
+            display: flex; gap: 16px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            padding: 0 24px 24px;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+        .events-scroll-row::-webkit-scrollbar { display: none; }
+        .scroll-event-card {
+            flex: 0 0 300px;
+            scroll-snap-align: start;
+            background: rgba(18, 18, 28, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 12px;
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+            transition: border-color 0.4s ease, transform 0.4s ease;
+        }
+        .scroll-event-card:hover {
+            border-color: rgba(230,198,135,0.2);
+            transform: translateY(-4px);
+        }
+        .sec-img { width: 100%; height: 180px; object-fit: cover; }
+        .sec-body { padding: 20px; }
+        .sec-meta {
+            font-family: var(--font-body);
+            font-size: 10px; letter-spacing: 3px;
+            text-transform: uppercase; color: var(--gold);
+            margin-bottom: 10px;
+        }
+        .sec-title {
+            font-family: var(--font-display);
+            font-size: 16px; font-weight: 400;
+            color: white; margin-bottom: 6px;
+        }
+        .sec-loc {
+            font-family: var(--font-body);
+            font-size: 12px;
+            color: rgba(255,255,255,0.35);
+            margin-bottom: 14px;
+        }
+        .sec-footer {
+            display: flex; justify-content: space-between;
+            align-items: center;
+        }
+        .sec-price {
+            font-family: var(--font-display);
+            font-size: 14px; font-weight: 500; color: white;
+        }
+        .sec-arrow {
+            width: 28px; height: 28px;
+            display: flex; align-items: center; justify-content: center;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 50%;
+            color: rgba(255,255,255,0.3);
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        .scroll-event-card:hover .sec-arrow {
+            background: var(--gold);
+            border-color: var(--gold);
+            color: #0a0a12;
+        }
+
+        /* ═══ CTA ═══ */
+        .editions-cta {
+            text-align: center;
+            padding: 200px 24px;
+        }
+        .editions-cta h2 {
+            font-family: var(--font-display);
+            font-size: clamp(40px, 8vw, 100px);
+            font-weight: 100;
+            letter-spacing: -0.03em;
+            color: white; line-height: 0.95;
+            margin-bottom: 24px;
+        }
+        .editions-cta h2 em {
+            font-style: normal; font-weight: 300;
+            background: linear-gradient(135deg, var(--gold), #fff5d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .editions-cta p {
+            font-family: var(--font-body);
+            font-size: 14px;
+            color: rgba(255,255,255,0.35);
+            max-width: 340px;
+            margin: 0 auto 40px;
+            line-height: 1.7;
+        }
+
+        /* ═══ FLOATING PILL NAV ═══ */
+        .pill-nav {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 50;
+            background: rgba(18, 18, 28, 0.6);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 999px;
+            padding: 6px;
+            display: flex;
+            gap: 2px;
+            opacity: 0;
+            transform: translateX(-50%) translateY(20px);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .pill-nav.visible {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+        .pill-nav a {
+            font-family: var(--font-body);
+            font-size: 11px;
+            letter-spacing: 0.5px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            color: rgba(255,255,255,0.4);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        .pill-nav a:hover { color: rgba(255,255,255,0.8); }
+        .pill-nav a.active {
+            background: rgba(230,198,135,0.1);
+            color: var(--gold);
+        }
+
+        /* ═══ RESPONSIVE ═══ */
+        @media (max-width: 768px) {
+            .bento-2col, .bento-3col, .bento-featured {
+                grid-template-columns: 1fr;
+            }
+            .span-2 { grid-column: span 1; }
+            .editions-section { padding: 100px 20px; }
+            .stats-strip { flex-direction: column; gap: 32px; }
+            .scroll-event-card { flex: 0 0 260px; }
+            .pill-nav { display: none; }
+            .editions-hero-anchor-row { display: none; }
+        }
+
+        @media (max-width: 480px) {
+            .bento-card-body { padding: 24px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ═══ Particle Canvas (fixed, behind everything) ═══ -->
+    <canvas id="world-canvas"></canvas>
+
+    <!-- ═══ Scroll Progress ═══ -->
+    <div id="scroll-progress"></div>
+
+    <!-- ═══ Content Layer ═══ -->
+    <div class="page-content">
+
+        <!-- ═══ Navigation ═══ -->
+        <nav class="nav">
+            <div class="nav-inner">
+                <a href="index.html" class="nav-brand">CONCLAVE</a>
+                <div class="nav-links">
+                    <a class="nav-link active" href="pages/events.html">Events</a>
+                    <a class="nav-link" href="pages/venues.html">Venues</a>
+                    <a class="nav-link" href="pages/bookings.html">My Bookings</a>
+                </div>
+                <div class="nav-actions">
+
+                    <a href="pages/bookings.html" class="nav-avatar" style="display: flex; align-items: center; justify-content: center; color: var(--text-secondary); text-decoration: none;">
+                        <span class="material-symbols-outlined" style="font-size: 24px;">person</span>
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- ═══ Mobile Menu ═══ -->
+        <div class="mobile-menu" id="mobile-menu">
+            <a class="mobile-menu-link" href="pages/events.html">Events</a>
+            <a class="mobile-menu-link" href="pages/venues.html">Venues</a>
+            <a class="mobile-menu-link" href="pages/bookings.html">My Bookings</a>
+            <button class="mobile-menu-close material-symbols-outlined" id="mobile-menu-close">close</button>
+        </div>
+
+
+        <!-- ═══════════════════════════════════════════════════════
+             HERO — Particles form "CONCLAVE" above, text below
+             ═══════════════════════════════════════════════════════ -->
+        <section class="editions-hero" id="s-hero">
+            <p class="editions-hero-sub" id="hero-sub">
+                <!-- Characters injected by JS for staggered animation -->
+            </p>
+            <!-- <div class="editions-hero-cta">
+                <a href="pages/events.html" class="btn-primary">Explore Events <span class="material-symbols-outlined" style="font-size:16px;">arrow_forward</span></a>
+                <a href="pages/venues.html" class="btn-outline">View Globe</a>
+            </div> -->
+            <!-- <div class="editions-hero-anchor-row">
+                <a href="#s-featured" class="anchor-chip">Featured</a>
+                <a href="#s-collection" class="anchor-chip">Collection</a>
+                <a href="#s-philosophy" class="anchor-chip">Philosophy</a>
+                <a href="#s-venues" class="anchor-chip">Venues</a>
+                <a href="#s-cta" class="anchor-chip">Join</a>
+            </div> -->
+            <div class="editions-scroll-hint">
+                <span>Scroll</span>
+                <div class="e-scroll-line"></div>
+            </div>
+        </section>
+
+
+        <!-- ═══════════════════════════════════════════════════════
+             STATS STRIP
+             ═══════════════════════════════════════════════════════ -->
+        <div class="editions-section" style="padding-top:80px;padding-bottom:0;">
+            <div class="stats-strip stagger-children">
+                <div class="stat-block reveal">
+                    <div class="stat-block-num" data-counter="2400" data-counter-duration="2500">0</div>
+                    <div class="stat-block-label">Global Attendees</div>
+                </div>
+                <div class="stat-block reveal">
+                    <div class="stat-block-num" data-counter="48" data-counter-duration="2000">0</div>
+                    <div class="stat-block-label">Elite Events</div>
+                </div>
+                <div class="stat-block reveal">
+                    <div class="stat-block-num" data-counter="16" data-counter-duration="1500">0</div>
+                    <div class="stat-block-label">World Cities</div>
+                </div>
+                <div class="stat-block reveal">
+                    <div class="stat-block-num" data-counter="99" data-counter-duration="2000">0</div>
+                    <div class="stat-block-label">% Satisfaction</div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- ═══════════════════════════════════════════════════════
+             FEATURED — Bento Box (Shopify-style asymmetric grid)
+             ═══════════════════════════════════════════════════════ -->
+        <section class="editions-section" id="s-featured">
+            <div class="section-header reveal">
+                <h2>Featured</h2>
+                <p>Handpicked experiences that define what's next in exclusive gatherings.</p>
+            </div>
+
+            <div class="reveal">
+                <!-- Large featured card -->
+                <a href="pages/event-detail.html?event=gala" class="bento-card" style="position:relative; max-width: 900px; margin: 0 auto;">
+                    <img class="bento-image-top" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQ4lqXmb9ohJTExZL7x1p4ucnw37r5De4sAZM1-OPdeCqA3cQq9F3YknX5Dvo519KmoeaeFLtaAjZLJldSQ_M3mS5Do1ODDtJimZ0OZ2MjTlbRtonH68WfcqHhgFqjpQzNkBFDVVq1HoFvqmLXgRH_s7aOOebT528ybpz6yOhf7GQA8eJQxhpGfKBwsMDDKteVuFUJO6Xw8Uemao8Nv9j4cvIqYxFWcSF8FYu9n4htbzHAZ8rI58WACoB5xk4ENbKTlcPCP2tRgsTi" alt="Skyline Gala" style="aspect-ratio: 21/9; object-position: center 30%;"/>
+                    <div class="bento-card-body" style="padding: 48px; text-align: center; align-items: center;">
+                        <div class="bento-label">Live Soon</div>
+                        <div class="bento-title" style="font-size: clamp(24px, 3.5vw, 40px);">Skyline Gala: The Winter Solstice</div>
+                        <div class="bento-desc" style="max-width: 600px; margin-bottom: 32px;">A curated evening above the clouds for the world's visionaries. Rooftop dining, silent auctions, and celestial views.</div>
+                        <span class="btn-primary" style="display: inline-flex; align-items: center; gap: 8px;">View Details <span class="material-symbols-outlined" style="font-size:18px;">arrow_forward</span></span>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+
+        <!-- ═══════════════════════════════════════════════════════
+             COLLECTION — Horizontal Scroll
+             ═══════════════════════════════════════════════════════ -->
+        <section class="editions-section" id="s-collection">
+            <div class="section-header reveal">
+                <h2>Collection</h2>
+                <p>Scroll through every curated experience in the Conclave universe.</p>
+            </div>
+
+            <div class="events-scroll-row reveal" id="events-scroll-row">
+                <!-- Cards injected by JS -->
+            </div>
+
+            <div class="text-center reveal" style="margin-top:48px;">
+                <a href="pages/events.html" class="btn-outline">VIEW ALL EVENTS</a>
+            </div>
+        </section>
+
+
+        <!-- ═══════════════════════════════════════════════════════
+             PHILOSOPHY — Bento 3-col
+             ═══════════════════════════════════════════════════════ -->
+        <!-- <section class="editions-section" id="s-philosophy">
+            <div class="section-header reveal">
+                <h2>Philosophy</h2>
+                <p>We don't organize events. We architect dimensions.</p>
+            </div>
+
+            <div class="bento-grid bento-3col reveal">
+                <div class="bento-card span-2">
+                    <div class="bento-card-body">
+                        <div class="bento-label">Our Manifesto</div>
+                        <div class="bento-title" style="font-size:clamp(20px,2.5vw,32px);">Events as living worlds</div>
+                        <div class="bento-desc" style="max-width:500px;font-size:14px;">
+                            Each gathering is a meticulously designed universe — from intimate masterclasses in Tokyo's neon-lit streets to celestial galas above Manhattan's skyline. We craft portals to moments that change how you see the world.
+                        </div>
+                        <span class="bento-link" style="cursor:pointer;">
+                            <a href="pages/events.html" style="color:var(--gold);text-decoration:none;">Enter the World</a>
+                            <span class="material-symbols-outlined">arrow_forward</span>
+                        </span>
+                    </div>
+                </div>
+                <div class="bento-card">
+                    <div class="bento-card-body" style="justify-content:center;text-align:center;align-items:center;">
+                        <div style="font-size:56px;margin-bottom:16px;">🌍</div>
+                        <div class="bento-title" style="font-size:18px;">Global Network</div>
+                        <div class="bento-desc" style="text-align:center;">Events across 16 cities on 4 continents.</div>
+                        <a href="pages/venues.html" class="bento-link">View Globe <span class="material-symbols-outlined">arrow_forward</span></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bento-grid bento-3col reveal" style="margin-top:16px;">
+                <div class="bento-card">
+                    <div class="bento-card-body" style="justify-content:center;">
+                        <div class="bento-metric" data-counter="12" data-counter-duration="1500">0</div>
+                        <div class="bento-metric-label">Seats per Masterclass</div>
+                    </div>
+                </div>
+                <div class="bento-card">
+                    <div class="bento-card-body" style="justify-content:center;">
+                        <div class="bento-metric" data-counter="150" data-counter-duration="2000">0</div>
+                        <div class="bento-metric-label">Max Gala Capacity</div>
+                    </div>
+                </div>
+                <a href="pages/event-detail.html?event=automotive" class="bento-card">
+                    <img class="bento-image-top" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCIZnxe91H5MoBi7ofCMwuk3V8skOxPoiyTAkUhspzhrpEXIUp3W2LrB2G88YMO2HzITG4fpqs37Oj1g87Sqszyw1eXCPB_Wc8sAXLpEhm4nMlAhSUqEDgKRI_TWjuFpoKkjYvUmjHawe8SPa7HFx3ndFhatqj4JVajnWeX0pJ4LG7mZCi6vhpokIiDT4mHsnELkiIpv7IO0xvYz259gFQzmz8m8FFx77CXlv2nH99rp5DaowpxorFnRnwP_5M4geAntZO6Omr_NAXK" alt="Automotive" style="aspect-ratio:16/8;"/>
+                    <div class="bento-card-body" style="padding:16px 20px;">
+                        <div class="bento-label">Design Showcase</div>
+                        <div class="bento-title" style="font-size:14px;">Automotive Excellence · Milan</div>
+                    </div>
+                </a>
+            </div>
+        </section> -->
+
+
+        <!-- ═══════════════════════════════════════════════════════
+             VENUES TEASER
+             ═══════════════════════════════════════════════════════ -->
+        <!-- <section class="editions-section" id="s-venues">
+            <div class="section-header reveal">
+                <h2>Venues</h2>
+                <p>Explore our global network through an interactive 3D globe.</p>
+            </div>
+            <div class="bento-grid bento-2col reveal">
+                <a href="pages/venues.html" class="bento-card span-2" style="text-align:center;align-items:center;">
+                    <div class="bento-card-body" style="align-items:center;padding:64px 32px;">
+                        <div style="font-size:72px;margin-bottom:24px;">🌐</div>
+                        <div class="bento-title" style="font-size:clamp(20px,3vw,32px);">Interactive 3D Globe</div>
+                        <div class="bento-desc" style="text-align:center;max-width:400px;">
+                            Pinpoint events happening around the world. The globe zooms into your location and reveals nearby exclusive gatherings.
+                        </div>
+                        <span class="bento-link">Launch Globe <span class="material-symbols-outlined">arrow_forward</span></span>
+                    </div>
+                </a>
+            </div>
+        </section> -->
+
+
+        <!-- ═══════════════════════════════════════════════════════
+             FINAL CTA
+             ═══════════════════════════════════════════════════════ -->
+        <section class="editions-cta reveal" id="s-cta">
+            <h2>Enter<br><em>the world</em></h2>
+            <p>Discover experiences that transcend the ordinary. Your next chapter awaits.</p>
+            <a href="pages/events.html" class="btn-primary" style="max-width:320px;margin:0 auto;">
+                Explore Events <span class="material-symbols-outlined" style="font-size:16px;">arrow_forward</span>
+            </a>
+        </section>
+
+
+        <!-- ═══ Chat Widget ═══ -->
+        <div class="chat-widget">
+            <div class="chat-window" id="chat-window">
+                <div class="chat-header">
+                    <span class="chat-header-title">Conclave Assistant</span>
+                    <button class="material-symbols-outlined" id="chat-close" style="font-size:18px;color:var(--text-secondary);">close</button>
+                </div>
+                <div class="chat-messages" id="chat-messages">
+                    <div class="chat-msg bot">Welcome to Conclave! How can I assist you?</div>
+                </div>
+                <div class="chat-input-row">
+                    <input type="text" id="chat-input" class="chat-input" placeholder="Type a message...">
+                    <button class="chat-send material-symbols-outlined" id="chat-send">send</button>
+                </div>
+            </div>
+            <button class="chat-toggle" id="chat-toggle">
+                <span class="material-symbols-outlined">chat</span>
+            </button>
+        </div>
+
+        <!-- ═══ Footer ═══ -->
+        <footer class="footer">
+            <div class="footer-brand">Conclave</div>
+            <div class="footer-links">
+                <a class="footer-link" href="#">Privacy Policy</a>
+                <a class="footer-link" href="#">Terms of Service</a>
+                <a class="footer-link" href="#">Contact</a>
+            </div>
+            <p class="footer-copy">© 2024 Conclave. All rights reserved.</p>
+        </footer>
+
+        <!-- ═══ Floating Pill Navigation ═══ -->
+        <!-- <nav class="pill-nav" id="pill-nav" aria-label="Floating section navigation">
+            <a href="#s-featured" data-section="s-featured">Featured</a>
+            <a href="#s-collection" data-section="s-collection">Collection</a>
+            <a href="#s-philosophy" data-section="s-philosophy">Philosophy</a>
+            <a href="#s-venues" data-section="s-venues">Venues</a>
+        </nav> -->
+
+    </div><!-- /page-content -->
+
+    <!-- ═══ Scripts ═══ -->
+    <script src="js/three-world.js"></script>
+    <script src="js/events-data.js"></script>
+    <script src="js/animations.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/sidebar.js"></script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // ── 1. Hero sub-text: Character-by-character reveal ──
+        const subText = "Curated gatherings at the intersection of art, technology, and human connection";
+        const subEl = document.getElementById('hero-sub');
+        if (subEl) {
+            const words = subText.split(' ');
+            let charIndex = 0;
+            words.forEach((word, wordIdx) => {
+                const wordSpan = document.createElement('span');
+                wordSpan.style.whiteSpace = 'nowrap';
+                wordSpan.style.display = 'inline-block';
+                
+                word.split('').forEach((char) => {
+                    const charSpan = document.createElement('span');
+                    charSpan.textContent = char;
+                    charSpan.classList.add('char-node');
+                    charSpan.style.animationDelay = (0.4 + charIndex * 0.015) + 's';
+                    wordSpan.appendChild(charSpan);
+                    charIndex++;
+                });
+                
+                subEl.appendChild(wordSpan);
+                
+                if (wordIdx < words.length - 1) {
+                    const spaceSpan = document.createElement('span');
+                    spaceSpan.textContent = '\u00A0';
+                    spaceSpan.classList.add('char-node');
+                    spaceSpan.style.animationDelay = (0.4 + charIndex * 0.015) + 's';
+                    subEl.appendChild(spaceSpan);
+                    charIndex++;
+                }
+            });
+        }
+
+        // ── 2. Populate event scroll cards ──
+        const row = document.getElementById('events-scroll-row');
+        if (row && window.CONCLAVE_EVENTS) {
+            window.CONCLAVE_EVENTS.forEach(evt => {
+                const card = document.createElement('a');
+                card.href = `pages/event-detail.html?event=${evt.id}`;
+                card.className = 'scroll-event-card';
+                card.innerHTML = `
+                    <img class="sec-img" src="${evt.image}" alt="${evt.title}"/>
+                    <div class="sec-body">
+                        <div class="sec-meta">${evt.category}</div>
+                        <div class="sec-title">${evt.title}</div>
+                        <div class="sec-loc">${evt.location}</div>
+                        <div class="sec-footer">
+                            <span class="sec-price">${evt.price}</span>
+                            <span class="sec-arrow material-symbols-outlined">arrow_forward</span>
+                        </div>
+                    </div>
+                `;
+                row.appendChild(card);
+            });
+        }
+
+        // ── 3. Floating pill nav: show on scroll, highlight active section ──
+        const pillNav = document.getElementById('pill-nav');
+        const pillLinks = pillNav ? pillNav.querySelectorAll('a') : [];
+        const sections = ['s-featured', 's-collection', 's-philosophy', 's-venues']
+            .map(id => document.getElementById(id))
+            .filter(Boolean);
+
+        function updatePillNav() {
+            const scrollY = window.scrollY;
+
+            // Show/hide pill
+            if (pillNav) {
+                if (scrollY > window.innerHeight * 0.8) {
+                    pillNav.classList.add('visible');
+                } else {
+                    pillNav.classList.remove('visible');
+                }
+            }
+
+            // Highlight active section
+            let activeId = '';
+            const midY = scrollY + window.innerHeight / 2;
+            sections.forEach(sec => {
+                if (sec.offsetTop <= midY) {
+                    activeId = sec.id;
+                }
+            });
+            pillLinks.forEach(link => {
+                link.classList.toggle('active', link.dataset.section === activeId);
+            });
+        }
+
+        window.addEventListener('scroll', updatePillNav, { passive: true });
+        updatePillNav();
+    });
+    </script>
+
+</body>
+</html>
