@@ -80,7 +80,7 @@
                 <!-- Payment Methods -->
                 <div style="margin-bottom:32px;">
                     <label class="form-label" style="margin-bottom:12px;">Payment Method</label>
-                    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
+                    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px;">
                         <label class="payment-option">
                             <input type="radio" name="payment-method" value="card" checked>
                             <div class="payment-option-card">
@@ -102,6 +102,19 @@
                                 <span class="pay-label">Bank</span>
                             </div>
                         </label>
+                    </div>
+
+                    <!-- Payment Inputs (Toggled via JS) -->
+                    <div id="payment-input-card" style="display:block;">
+                        <label class="form-label">Card Number</label>
+                        <input id="checkout-card" class="form-input" placeholder="**** **** **** ****" type="text"/>
+                    </div>
+                    <div id="payment-input-upi" style="display:none;">
+                        <label class="form-label">UPI ID</label>
+                        <input id="checkout-upi" class="form-input" placeholder="username@upi" type="text"/>
+                    </div>
+                    <div id="payment-input-netbanking" style="display:none;">
+                        <p style="font-size:13px; color:var(--text-secondary);">You will be redirected to your bank's secure portal.</p>
                     </div>
                 </div>
 
@@ -155,73 +168,66 @@
     <!-- ═══ Scripts ═══ -->
     <script src="../js/events-data.js"></script>
     <script src="../js/animations.js"></script>
+    <script src="../js/toast.js"></script>
     <script src="../js/app.js"></script>
     <script src="../js/sidebar.js"></script>
 
     <script>
         // ── Event Data ────────────────────────────────────────────
-        const eventsData = {
-            photography: {
-                title: "Night Photography Masterclass",
-                location: "Shinjuku, Tokyo",
-                date: "Oct 12, 2024",
-                price: "$4,500.00",
-                category: "Exclusive Series",
-                time: "09:00 AM JST"
-            },
-            automotive: {
-                title: "Automotive Excellence",
-                location: "Monza Circuit, Milan",
-                date: "Sep 20, 2024",
-                price: "$6,500.00",
-                category: "Design Showcase",
-                time: "10:00 AM CET"
-            },
-            gala: {
-                title: "Skyline Gala: Solstice",
-                location: "Manhattan Rooftop, New York",
-                date: "Dec 21, 2024",
-                price: "$2,500.00",
-                category: "Premier Social",
-                time: "07:30 PM EST"
-            },
-            transit: {
-                title: "Elite Private Jet Symposium",
-                location: "Cointrin Hangar, Geneva",
-                date: "Nov 05, 2024",
-                price: "$8,000.00",
-                category: "Aviation Masterclass",
-                time: "09:00 AM CET"
-            }
-        };
-
         const urlParams = new URLSearchParams(window.location.search);
         let eventKey = urlParams.get('event');
-        if (!eventKey || !eventsData[eventKey]) eventKey = 'photography';
 
-        const data = eventsData[eventKey];
+        const defaultEvents = window.CONCLAVE_EVENTS || [];
+        const customEvents = JSON.parse(localStorage.getItem('conclave_custom_events') || '[]');
+        const allEvents = [...defaultEvents, ...customEvents];
+        
+        let data = allEvents.find(e => e.id === eventKey) || allEvents[0];
+        eventKey = data.id; // ensure fallback key matches
 
         // Update summary
         document.getElementById('checkout-event-title').textContent = data.title;
-        document.getElementById('checkout-event-location').textContent = data.location;
+        document.getElementById('checkout-event-location').textContent = data.location.split(',')[0];
         document.getElementById('checkout-event-date').textContent = data.date;
-        document.getElementById('checkout-ticket-price').textContent = data.price;
-        document.getElementById('breakdown-subtotal').textContent = data.price;
-        document.getElementById('breakdown-total').textContent = data.price;
-        document.getElementById('back-link').href = 'detail.html?event=' + eventKey;
+        document.getElementById('checkout-ticket-price').textContent = data.price || 'Free';
+        document.getElementById('breakdown-subtotal').textContent = data.price || 'Free';
+        document.getElementById('breakdown-total').textContent = data.price || 'Free';
+        document.getElementById('back-link').href = 'event-detail.html?event=' + eventKey;
 
-        // Payment method button text
+        // Pre-fill fields from localStorage
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedName = localStorage.getItem('conclave_user_name');
+            const savedEmail = localStorage.getItem('conclave_user_email');
+            const savedCard = localStorage.getItem('conclave_saved_card');
+            const savedUpi = localStorage.getItem('conclave_saved_upi');
+            
+            if (savedName) document.getElementById('guest-name').value = savedName;
+            if (savedEmail) document.getElementById('guest-email').value = savedEmail;
+            if (savedCard) document.getElementById('checkout-card').value = savedCard;
+            if (savedUpi) document.getElementById('checkout-upi').value = savedUpi;
+        });
+
+        // Payment method button text & input toggle
         const paymentRadios = document.querySelectorAll('input[name="payment-method"]');
         const payButton = document.getElementById('pay-button');
+        const inputCard = document.getElementById('payment-input-card');
+        const inputUpi = document.getElementById('payment-input-upi');
+        const inputNet = document.getElementById('payment-input-netbanking');
 
         paymentRadios.forEach(radio => {
             radio.addEventListener('change', (e) => {
                 const val = e.target.value;
+                inputCard.style.display = 'none';
+                inputUpi.style.display = 'none';
+                inputNet.style.display = 'none';
+
                 if (val === 'card') {
+                    inputCard.style.display = 'block';
                     payButton.innerHTML = 'Secure with <span class="material-symbols-outlined" style="font-size:16px;margin:0 4px;font-variation-settings:\'FILL\' 1;">token</span> Conclave Pay';
                 } else if (val === 'upi') {
+                    inputUpi.style.display = 'block';
                     payButton.innerHTML = 'Pay with <span class="material-symbols-outlined" style="font-size:16px;margin:0 4px;">qr_code_scanner</span> UPI App';
                 } else if (val === 'netbanking') {
+                    inputNet.style.display = 'block';
                     payButton.innerHTML = 'Proceed to <span class="material-symbols-outlined" style="font-size:16px;margin:0 4px;">account_balance</span> Bank Login';
                 }
             });
@@ -241,24 +247,23 @@
                 btn.style.background = 'white';
                 btn.style.color = '#0a0a12';
 
-                // Decrement seats
-                let seatsObj = JSON.parse(localStorage.getItem('conclave_seats')) || { photography: 2, automotive: 5, gala: 12, transit: 3 };
-                if (seatsObj[eventKey] !== undefined && seatsObj[eventKey] > 0) {
-                    seatsObj[eventKey]--;
-                    localStorage.setItem('conclave_seats', JSON.stringify(seatsObj));
-                }
+                // Register the event
+                let registered = JSON.parse(localStorage.getItem('conclave_registered')) || [];
+                if (!registered.includes(eventKey)) {
+                    // Only decrement seats and increment attendees if not already registered
+                    registered.push(eventKey);
+                    localStorage.setItem('conclave_registered', JSON.stringify(registered));
 
-                // Save booking
-                let bookings = JSON.parse(localStorage.getItem('conclave_bookings')) || [];
-                bookings.unshift({
-                    id: 'booking-' + Date.now(),
-                    title: data.title,
-                    location: data.location,
-                    time: data.time,
-                    dateFormatted: data.date,
-                    category: data.category
-                });
-                localStorage.setItem('conclave_bookings', JSON.stringify(bookings));
+                    let seatsObj = JSON.parse(localStorage.getItem('conclave_seats')) || {};
+                    if (seatsObj[eventKey] !== undefined && seatsObj[eventKey] > 0) {
+                        seatsObj[eventKey]--;
+                        localStorage.setItem('conclave_seats', JSON.stringify(seatsObj));
+                    }
+
+                    let attendeesObj = JSON.parse(localStorage.getItem('conclave_attendees') || '{}');
+                    attendeesObj[eventKey] = (attendeesObj[eventKey] || 0) + 1;
+                    localStorage.setItem('conclave_attendees', JSON.stringify(attendeesObj));
+                }
 
                 // Redirect
                 setTimeout(() => {

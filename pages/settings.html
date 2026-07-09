@@ -145,27 +145,44 @@
             <p class="section-desc">Manage your preferences and member profile.</p>
         </header>
 
+        <style>
+            .tab-content {
+                display: none;
+                opacity: 0;
+                transform: translateY(10px);
+                animation: tabFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            }
+            .tab-content.active {
+                display: block;
+            }
+            @keyframes tabFadeIn {
+                from { opacity: 0; transform: translateY(10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+        </style>
+
         <div class="settings-layout reveal" style="animation-delay:0.2s;">
             <div class="settings-nav">
-                <div class="settings-nav-item active">
+                <div class="settings-nav-item active" id="nav-profile" onclick="switchTab('profile')">
                     <span class="material-symbols-outlined">person</span>
                     Profile
                 </div>
-                <div class="settings-nav-item">
+                <!-- <div class="settings-nav-item">
                     <span class="material-symbols-outlined">notifications</span>
                     Notifications
-                </div>
-                <div class="settings-nav-item">
+                </div> -->
+                <!-- <div class="settings-nav-item">
                     <span class="material-symbols-outlined">security</span>
                     Security
-                </div>
-                <div class="settings-nav-item">
+                </div> -->
+                <div class="settings-nav-item" id="nav-billing" onclick="switchTab('billing')">
                     <span class="material-symbols-outlined">payment</span>
                     Billing
                 </div>
             </div>
 
             <div>
+                <div id="tab-profile" class="tab-content active">
                 <section class="settings-section">
                     <h2 class="text-display-sm" style="margin-bottom:32px;">Personal Information</h2>
                     <div class="form-group">
@@ -174,12 +191,12 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label">Email Address</label>
-                        <input type="email" class="form-input" value="contact@conclave.com">
+                        <input type="email" class="form-input" id="profile-email" value="contact@conclave.com">
                     </div>
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label class="form-label">Phone Number</label>
                         <input type="tel" class="form-input" id="profile-phone" value="Premium Account">
-                    </div>
+                    </div> -->
                     <button class="btn-primary" onclick="saveProfile()" style="margin-top:16px;">Save Changes</button>
                 </section>
 
@@ -199,14 +216,30 @@
                         </div>
                         <div class="toggle-switch" onclick="this.classList.toggle('active')"></div>
                     </div>
-                    <div class="setting-row">
+                    <!-- <div class="setting-row">
                         <div>
                             <div style="font-size:16px;font-weight:500;margin-bottom:4px;">Cinematic Mode</div>
                             <div style="font-size:13px;color:var(--text-secondary);">Enable 3D WebGL background effects.</div>
                         </div>
                         <div class="toggle-switch active" onclick="this.classList.toggle('active')"></div>
-                    </div>
+                    </div> -->
                 </section>
+                </div>
+
+                <div id="tab-billing" class="tab-content">
+                <section class="settings-section">
+                    <h2 class="text-display-sm" style="margin-bottom:32px;">Billing & Payment</h2>
+                    <div class="form-group">
+                        <label class="form-label">Saved Card Number</label>
+                        <input type="text" class="form-input" id="profile-card" placeholder="**** **** **** ****">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Saved UPI ID</label>
+                        <input type="text" class="form-input" id="profile-upi" placeholder="username@upi">
+                    </div>
+                    <button class="btn-primary" onclick="saveProfile()" style="margin-top:16px;">Save Payment Options</button>
+                </section>
+                </div>
             </div>
         </div>
     </main>
@@ -224,33 +257,64 @@
 
     <!-- ═══ Scripts ═══ -->
     <script src="../js/animations.js"></script>
+    <script src="../js/toast.js"></script>
     <script src="../js/app.js"></script>
     <script src="../js/sidebar.js"></script>
 
     <script>
+        function switchTab(tabId) {
+            document.getElementById('nav-profile').classList.remove('active');
+            document.getElementById('nav-billing').classList.remove('active');
+            
+            document.getElementById('tab-profile').classList.remove('active');
+            document.getElementById('tab-billing').classList.remove('active');
+            
+            document.getElementById('nav-' + tabId).classList.add('active');
+            document.getElementById('tab-' + tabId).classList.add('active');
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             const savedName = localStorage.getItem('conclave_user_name');
-            const savedPhone = localStorage.getItem('conclave_user_phone');
+            const savedEmail = localStorage.getItem('conclave_user_email');
+            const savedCard = localStorage.getItem('conclave_saved_card');
+            const savedUpi = localStorage.getItem('conclave_saved_upi');
             if (savedName) document.getElementById('profile-name').value = savedName;
-            if (savedPhone) document.getElementById('profile-phone').value = savedPhone;
+            if (savedEmail) document.getElementById('profile-email').value = savedEmail;
+            if (savedCard) document.getElementById('profile-card').value = savedCard;
+            if (savedUpi) document.getElementById('profile-upi').value = savedUpi;
         });
 
         function saveProfile() {
             const name = document.getElementById('profile-name').value;
-            const phone = document.getElementById('profile-phone').value;
-            localStorage.setItem('conclave_user_name', name);
-            localStorage.setItem('conclave_user_phone', phone);
+            const email = document.getElementById('profile-email').value;
+            const card = document.getElementById('profile-card').value;
+            const upi = document.getElementById('profile-upi').value;
             
-            const btn = document.querySelector('.btn-primary');
-            const originalText = btn.textContent;
-            btn.textContent = 'Saved!';
-            btn.style.backgroundColor = 'var(--aurora-green)';
-            btn.style.color = 'black';
-            setTimeout(() => {
-                btn.textContent = originalText;
-                btn.style.backgroundColor = '';
-                btn.style.color = '';
-            }, 2000);
+            localStorage.setItem('conclave_user_name', name);
+            localStorage.setItem('conclave_user_email', email);
+            localStorage.setItem('conclave_saved_card', card);
+            localStorage.setItem('conclave_saved_upi', upi);
+            
+            // Update sidebar instantly if it exists in the DOM
+            const sbName = document.querySelector('.sidebar-user-info h3');
+            const sbEmail = document.querySelector('.sidebar-user-info p');
+            const sbAvatar = document.querySelector('.sidebar-avatar');
+            if (sbName) sbName.textContent = name || 'Member Guest';
+            if (sbEmail) sbEmail.textContent = email || 'contact@conclave.com';
+            if (sbAvatar) sbAvatar.textContent = (name || 'Member Guest').charAt(0).toUpperCase();
+            
+            const btns = document.querySelectorAll('.btn-primary');
+            btns.forEach(btn => {
+                const originalText = btn.textContent;
+                btn.textContent = 'Saved!';
+                btn.style.backgroundColor = 'var(--aurora-green)';
+                btn.style.color = 'black';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.backgroundColor = '';
+                    btn.style.color = '';
+                }, 2000);
+            });
         }
     </script>
 </body>
