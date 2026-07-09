@@ -79,37 +79,7 @@
                     <div id="itinerary-container"></div>
                 </section>
 
-                <!-- Speaker -->
-                <section class="detail-section">
-                    <h2 class="detail-section-title reveal" id="speaker-role">The Master</h2>
-                    <div class="speaker-card reveal">
-                        <div class="speaker-image">
-                            <img id="speaker-image" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDooH6C2fS7f7d-0nONpYFtYPQDhC9eHn7Nwx9lKLnSRMTJrboN0n61zHZQ_0WKhteDoecOUpsJe2rIeCBMBzIs1IPRCnr0KglnhvME9rVGeZeZxGBRX4RdXiKBZqHbKrJV55mhDdFmZMr7NUy9FDn6KhNjQhgWV0jmshIIn89InpHd4Zb7eFimQTk2OBj4PBDWV-Sj_kSsL-AeAaZlOrKTkTIaZykAlHZjoBtpKjkd_Ir2VITLD3HUgs5ykqalA-QTLlkXMEsVoudv" alt="Speaker"/>
-                        </div>
-                        <div>
-                            <h3 class="speaker-name" id="speaker-name">Julian Thorne</h3>
-                            <p class="speaker-quote" id="speaker-quote">"Darkness is not the absence of light, but the canvas for its most beautiful expressions."</p>
-                            <p class="speaker-bio" id="speaker-bio">Two-time World Press Photo awardee with two decades of experience capturing the world's most elusive nighttime landscapes.</p>
-                        </div>
-                    </div>
-                </section>
 
-                <!-- Perks -->
-                <section class="detail-section">
-                    <h2 class="detail-section-title reveal">Exclusive Perks</h2>
-                    <div class="perks-grid stagger-children">
-                        <div class="perk-card reveal">
-                            <span class="material-symbols-outlined">camera_outdoor</span>
-                            <h4 class="perk-card-title">Pro Gear Access</h4>
-                            <p class="perk-card-desc">Use of the latest flagship camera bodies and specialized prime lenses.</p>
-                        </div>
-                        <div class="perk-card reveal">
-                            <span class="material-symbols-outlined">wine_bar</span>
-                            <h4 class="perk-card-title">Private Dining</h4>
-                            <p class="perk-card-desc">Gourmet catering and evening cocktail mixers at exclusive rooftop venues.</p>
-                        </div>
-                    </div>
-                </section>
             </div>
 
             <!-- Right: Booking Widget -->
@@ -172,6 +142,7 @@
     <!-- ═══ Scripts ═══ -->
     <script src="../js/events-data.js"></script>
     <script src="../js/animations.js"></script>
+    <script src="../js/toast.js"></script>
     <script src="../js/app.js"></script>
     <script src="../js/sidebar.js"></script>
 
@@ -180,7 +151,9 @@
         // ── Load Event Data ───────────────────────────────────────
         const urlParams = new URLSearchParams(window.location.search);
         let eventKey = urlParams.get('event');
-        const allEvents = window.CONCLAVE_EVENTS || [];
+        const defaultEvents = window.CONCLAVE_EVENTS || [];
+        const customEvents = JSON.parse(localStorage.getItem('conclave_custom_events') || '[]');
+        const allEvents = [...defaultEvents, ...customEvents];
         
         let data = allEvents.find(e => e.id === eventKey) || allEvents[0];
 
@@ -206,10 +179,15 @@
         document.getElementById('event-date').textContent = data.date;
         document.getElementById('event-seats-limit').textContent = "Limited to " + data.capacity + " Seats";
         document.getElementById('attendee-count').textContent = data.capacity;
-        document.getElementById('event-hero-image').src = data.image;
+        if (data.image) {
+            document.getElementById('event-hero-image').src = data.image;
+        } else {
+            document.getElementById('event-hero-image').parentElement.style.display = 'none';
+        }
 
         const itineraryContainer = document.getElementById('itinerary-container');
-        defaultItinerary.forEach((item, index) => {
+        const itineraryData = data.itinerary || defaultItinerary;
+        itineraryData.forEach((item, index) => {
             const div = document.createElement('div');
             div.className = 'itinerary-item reveal visible';
             div.style.transitionDelay = `${index * 0.1}s`;
@@ -223,42 +201,60 @@
             itineraryContainer.appendChild(div);
         });
 
-        // Speaker
-        document.getElementById('speaker-role').textContent = defaultSpeaker.role;
-        document.getElementById('speaker-name').textContent = defaultSpeaker.name;
-        document.getElementById('speaker-quote').textContent = defaultSpeaker.quote;
-        document.getElementById('speaker-bio').textContent = defaultSpeaker.bio;
-        document.getElementById('speaker-image').src = defaultSpeaker.image;
-
         // Booking widget
         document.getElementById('widget-price').textContent = data.price;
-        document.getElementById('widget-duration').textContent = data.duration;
-        document.getElementById('widget-location').textContent = data.location.split(',')[0];
-        document.getElementById('widget-difficulty').textContent = data.difficulty;
+        document.getElementById('widget-duration').textContent = data.duration || '3 Full Days';
+        document.getElementById('widget-location').textContent = (data.location || '').split(',')[0];
+        document.getElementById('widget-difficulty').textContent = data.difficulty || 'Intermediate';
         document.getElementById('mobile-price').textContent = data.price;
 
         // Seats from localStorage
-        const defaultSeats = { photography: 2, automotive: 5, gala: 12, transit: 3 };
+        const defaultSeats = {};
+        allEvents.forEach(e => { defaultSeats[e.id] = e.capacity; });
         let seatsObj = JSON.parse(localStorage.getItem('conclave_seats'));
         if (!seatsObj) {
             seatsObj = defaultSeats;
             localStorage.setItem('conclave_seats', JSON.stringify(seatsObj));
         }
 
+        // Attendee counts from localStorage
+        let attendeesObj = JSON.parse(localStorage.getItem('conclave_attendees') || '{}');
+
+        // Registered events tracking
+        let registeredEvents = JSON.parse(localStorage.getItem('conclave_registered') || '[]');
+
         function updateSeatsDisplay() {
             const remaining = seatsObj[eventKey] !== undefined ? seatsObj[eventKey] : 0;
+            const attendees = attendeesObj[eventKey] || 0;
             const b1 = document.getElementById('widget-seats-badge-1');
             const b2 = document.getElementById('widget-seats-badge-2');
             const reserveBtn = document.getElementById('reserve-btn');
             const mobileReserveBtn = document.getElementById('mobile-reserve-btn');
             const mobileBadge = document.getElementById('mobile-seats-badge');
+            const attendeeEl = document.getElementById('attendee-count');
 
-            if (remaining > 0) {
+            attendeeEl.textContent = attendees;
+
+            const isRegistered = registeredEvents.includes(eventKey);
+
+            if (isRegistered) {
+                b1.textContent = 'REGISTERED';
+                b2.textContent = '✓';
+                mobileBadge.textContent = 'Registered';
+                reserveBtn.textContent = 'Book Now →';
+                reserveBtn.disabled = false;
+                mobileReserveBtn.textContent = 'Book';
+                mobileReserveBtn.disabled = false;
+                // Change reserve to checkout
+                reserveBtn.onclick = () => { window.location.href = 'checkout.html?event=' + eventKey; };
+                mobileReserveBtn.onclick = () => { window.location.href = 'checkout.html?event=' + eventKey; };
+            } else if (remaining > 0) {
                 b1.textContent = remaining + ' SEAT' + (remaining > 1 ? 'S' : '');
                 b2.textContent = 'LEFT';
                 mobileBadge.textContent = 'Final ' + remaining + ' Seat' + (remaining > 1 ? 's' : '');
-                reserveBtn.textContent = 'Reserve Pass';
+                reserveBtn.textContent = 'Register';
                 reserveBtn.disabled = false;
+                mobileReserveBtn.textContent = 'Register';
                 mobileReserveBtn.disabled = false;
             } else {
                 b1.textContent = 'SOLD';
@@ -272,12 +268,29 @@
 
         updateSeatsDisplay();
 
-        // Reserve actions
-        const reserveAction = () => {
-            window.location.href = 'checkout.html?event=' + eventKey;
+        // Register action (FR-2): decrements seat, increments attendee, no page refresh
+        const registerAction = () => {
+            if (registeredEvents.includes(eventKey)) {
+                // Already registered, go to checkout
+                window.location.href = 'checkout.html?event=' + eventKey;
+                return;
+            }
+            if (seatsObj[eventKey] !== undefined && seatsObj[eventKey] > 0) {
+                seatsObj[eventKey]--;
+                localStorage.setItem('conclave_seats', JSON.stringify(seatsObj));
+
+                attendeesObj[eventKey] = (attendeesObj[eventKey] || 0) + 1;
+                localStorage.setItem('conclave_attendees', JSON.stringify(attendeesObj));
+
+                registeredEvents.push(eventKey);
+                localStorage.setItem('conclave_registered', JSON.stringify(registeredEvents));
+
+                updateSeatsDisplay();
+                if (typeof showToast === 'function') showToast('Registration confirmed! You can now book your pass.', 'success');
+            }
         };
-        document.getElementById('reserve-btn').addEventListener('click', reserveAction);
-        document.getElementById('mobile-reserve-btn').addEventListener('click', reserveAction);
+        document.getElementById('reserve-btn').addEventListener('click', registerAction);
+        document.getElementById('mobile-reserve-btn').addEventListener('click', registerAction);
     </script>
 </body>
 </html>

@@ -52,6 +52,14 @@
             </p>
         </div>
 
+        <!-- Search Bar -->
+        <div class="reveal" style="margin-bottom:24px;">
+            <div style="position:relative;max-width:480px;margin:0 auto;">
+                <span class="material-symbols-outlined" style="position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--text-secondary);font-size:20px;">search</span>
+                <input type="text" id="search-input" placeholder="Search events by name..." class="form-input" style="padding-left:48px;background:rgba(18,18,28,0.65);border:1px solid var(--border-subtle);border-radius:999px;">
+            </div>
+        </div>
+
         <!-- Filter Bar -->
         <div class="filter-bar reveal" style="margin-bottom:48px;">
             <button class="filter-btn active" data-filter="all">All</button>
@@ -70,6 +78,13 @@
         <div class="grid-events stagger-children" id="events-grid">
             <!-- Cards will be injected here via JS -->
         </div>
+
+        <!-- No Results Message -->
+        <div id="no-results" style="display:none;text-align:center;padding:80px 24px;">
+            <span class="material-symbols-outlined" style="font-size:48px;color:var(--text-secondary);margin-bottom:16px;display:block;">search_off</span>
+            <h3 style="font-family:var(--font-display);font-size:24px;font-weight:300;color:white;margin-bottom:8px;">No events found</h3>
+            <p style="font-family:var(--font-body);font-size:14px;color:var(--text-secondary);">Try adjusting your search or filters.</p>
+        </div>
     </main>
 
     <!-- ═══ Footer ═══ -->
@@ -86,13 +101,17 @@
     <!-- ═══ Scripts ═══ -->
     <script src="../js/events-data.js"></script>
     <script src="../js/animations.js"></script>
+    <script src="../js/toast.js"></script>
     <script src="../js/app.js"></script>
     <script src="../js/sidebar.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const grid = document.getElementById('events-grid');
-            const events = window.CONCLAVE_EVENTS || [];
+            const defaultEvents = window.CONCLAVE_EVENTS || [];
+            // Merge custom events from localStorage
+            const customEvents = JSON.parse(localStorage.getItem('conclave_custom_events') || '[]');
+            const events = [...defaultEvents, ...customEvents];
 
             events.forEach((evt, idx) => {
                 const categoryMapping = {
@@ -101,7 +120,11 @@
                     "Automotive Excellence": "automotive",
                     "Digital Art & Crypto": "masterclass",
                     "Gastronomic Journey": "social",
-                    "Extreme Wellness": "masterclass"
+                    "Extreme Wellness": "masterclass",
+                    "Technology": "masterclass",
+                    "Music": "social",
+                    "Workshop": "masterclass",
+                    "Social": "social"
                 };
                 
                 const filterCat = categoryMapping[evt.category] || "social";
@@ -110,11 +133,12 @@
                 card.href = `event-detail.html?event=${evt.id}`;
                 card.className = 'event-card reveal visible';
                 card.setAttribute('data-category', filterCat);
+                card.setAttribute('data-title', evt.title.toLowerCase());
                 card.style.transitionDelay = `${idx * 0.1}s`;
 
                 card.innerHTML = `
-                    <div class="event-card-image">
-                        <img src="${evt.image}" alt="${evt.title}"/>
+                    <div class="event-card-image" style="background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center;">
+                        ${evt.image ? `<img src="${evt.image}" alt="${evt.title}"/>` : `<span class="material-symbols-outlined" style="font-size: 48px; color: rgba(255,255,255,0.1);">event</span>`}
                     </div>
                     <div class="event-card-body">
                         <div>
@@ -126,7 +150,7 @@
                             <h3 class="event-card-title">${evt.title}</h3>
                             <p class="event-card-location">${evt.location}</p>
                         </div>
-                        <span class="event-card-price">${evt.price}</span>
+                        <span class="event-card-price">${evt.price || 'Free'}</span>
                     </div>
                 `;
                 grid.appendChild(card);
@@ -135,27 +159,36 @@
             // ── Filtering Logic ─────────────────────────────────────
             const filterBtns = document.querySelectorAll('.filter-btn');
             const dateFilter = document.getElementById('date-filter');
+            const searchInput = document.getElementById('search-input');
+            const noResults = document.getElementById('no-results');
             let currentCategory = 'all';
 
             function applyFilters() {
                 const eventCards = document.querySelectorAll('.event-card');
                 const selectedDate = dateFilter.value;
+                const searchTerm = searchInput.value.toLowerCase().trim();
+                let visibleCount = 0;
 
                 eventCards.forEach(card => {
                     const cardCategory = card.getAttribute('data-category');
+                    const cardTitle = card.getAttribute('data-title');
                     const dateText = card.querySelector('.event-card-meta').textContent;
                     const cardDate = dateText.split('/')[0].trim();
 
                     const matchesCategory = currentCategory === 'all' || cardCategory === currentCategory;
                     const matchesDate = !selectedDate || cardDate === selectedDate;
+                    const matchesSearch = !searchTerm || cardTitle.includes(searchTerm);
 
-                    if (matchesCategory && matchesDate) {
+                    if (matchesCategory && matchesDate && matchesSearch) {
                         card.style.display = 'flex';
                         card.style.opacity = '1';
+                        visibleCount++;
                     } else {
                         card.style.display = 'none';
                     }
                 });
+
+                noResults.style.display = visibleCount === 0 ? 'block' : 'none';
             }
 
             filterBtns.forEach(btn => {
@@ -168,6 +201,7 @@
             });
 
             dateFilter.addEventListener('change', applyFilters);
+            searchInput.addEventListener('input', applyFilters);
         });
     </script>
 </body>
