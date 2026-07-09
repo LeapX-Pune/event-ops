@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Settings | Conclave</title>
+    <meta name="description" content="Manage your preferences and profile settings."/>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <style>
+        .settings-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 48px;
+            margin-top: 40px;
+        }
+        @media (max-width: 900px) {
+            .settings-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+        .settings-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .settings-nav-item {
+            padding: 16px 20px;
+            border-radius: 8px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .settings-nav-item:hover, .settings-nav-item.active {
+            background-color: var(--bg-card);
+            color: var(--gold);
+        }
+        .settings-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-xl);
+            padding: 40px;
+            margin-bottom: 32px;
+        }
+        .form-group {
+            margin-bottom: 24px;
+        }
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+        .form-input {
+            width: 100%;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            color: white;
+            font-family: var(--font-body);
+            transition: border-color 0.3s, background 0.3s;
+        }
+        .form-input:focus {
+            border-color: var(--gold);
+            background: rgba(230, 198, 135, 0.05);
+        }
+        .toggle-switch {
+            position: relative;
+            width: 48px;
+            height: 24px;
+            background: var(--bg-surface-high);
+            border-radius: 24px;
+            cursor: pointer;
+            transition: background 0.3s;
+            border: 1px solid var(--border-subtle);
+        }
+        .toggle-switch.active {
+            background: var(--gold);
+            border-color: var(--gold);
+        }
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 18px;
+            height: 18px;
+            background: white;
+            border-radius: 50%;
+            transition: left 0.3s;
+        }
+        .toggle-switch.active::after {
+            left: 26px;
+        }
+        .setting-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .setting-row:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- ═══ Navigation ═══ -->
+    <nav class="nav scrolled">
+        <div class="nav-inner">
+            <a href="../index.html" class="nav-brand">CONCLAVE</a>
+            <div class="nav-links">
+                <a class="nav-link" href="events.html">Events</a>
+                <a class="nav-link" href="venues.html">Venues</a>
+                <a class="nav-link" href="bookings.html">My Bookings</a>
+            </div>
+            <div class="nav-actions">
+                <a href="#" class="nav-avatar" style="display: flex; align-items: center; justify-content: center; color: var(--text-secondary); text-decoration: none;">
+                    <span class="material-symbols-outlined" style="font-size: 24px;">person</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ═══ Mobile Menu ═══ -->
+    <div class="mobile-menu" id="mobile-menu">
+        <a class="mobile-menu-link" href="events.html">Events</a>
+        <a class="mobile-menu-link" href="venues.html">Venues</a>
+        <a class="mobile-menu-link" href="bookings.html">My Bookings</a>
+        <button class="mobile-menu-close material-symbols-outlined" id="mobile-menu-close">close</button>
+    </div>
+
+    <!-- ═══ Main Content ═══ -->
+    <main class="container" style="padding-top:160px;padding-bottom:80px;position:relative;z-index:2;">
+        <header class="page-header reveal">
+            <h1 class="section-title">Settings</h1>
+            <p class="section-desc">Manage your preferences and member profile.</p>
+        </header>
+
+        <div class="settings-layout reveal" style="animation-delay:0.2s;">
+            <div class="settings-nav">
+                <div class="settings-nav-item active">
+                    <span class="material-symbols-outlined">person</span>
+                    Profile
+                </div>
+                <div class="settings-nav-item">
+                    <span class="material-symbols-outlined">notifications</span>
+                    Notifications
+                </div>
+                <div class="settings-nav-item">
+                    <span class="material-symbols-outlined">security</span>
+                    Security
+                </div>
+                <div class="settings-nav-item">
+                    <span class="material-symbols-outlined">payment</span>
+                    Billing
+                </div>
+            </div>
+
+            <div>
+                <section class="settings-section">
+                    <h2 class="text-display-sm" style="margin-bottom:32px;">Personal Information</h2>
+                    <div class="form-group">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" class="form-input" id="profile-name" value="Member Guest">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" class="form-input" value="contact@conclave.com">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Phone Number</label>
+                        <input type="tel" class="form-input" id="profile-phone" value="Premium Account">
+                    </div>
+                    <button class="btn-primary" onclick="saveProfile()" style="margin-top:16px;">Save Changes</button>
+                </section>
+
+                <section class="settings-section">
+                    <h2 class="text-display-sm" style="margin-bottom:32px;">Preferences</h2>
+                    <div class="setting-row">
+                        <div>
+                            <div style="font-size:16px;font-weight:500;margin-bottom:4px;">Email Notifications</div>
+                            <div style="font-size:13px;color:var(--text-secondary);">Receive updates about your bookings and new events.</div>
+                        </div>
+                        <div class="toggle-switch active" onclick="this.classList.toggle('active')"></div>
+                    </div>
+                    <div class="setting-row">
+                        <div>
+                            <div style="font-size:16px;font-weight:500;margin-bottom:4px;">SMS Alerts</div>
+                            <div style="font-size:13px;color:var(--text-secondary);">Get last-minute venue changes and reminders via SMS.</div>
+                        </div>
+                        <div class="toggle-switch" onclick="this.classList.toggle('active')"></div>
+                    </div>
+                    <div class="setting-row">
+                        <div>
+                            <div style="font-size:16px;font-weight:500;margin-bottom:4px;">Cinematic Mode</div>
+                            <div style="font-size:13px;color:var(--text-secondary);">Enable 3D WebGL background effects.</div>
+                        </div>
+                        <div class="toggle-switch active" onclick="this.classList.toggle('active')"></div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- ═══ Footer ═══ -->
+    <footer class="footer">
+        <div class="footer-brand">Conclave</div>
+        <div class="footer-links">
+            <a class="footer-link" href="#">Privacy Policy</a>
+            <a class="footer-link" href="#">Terms of Service</a>
+            <a class="footer-link" href="#">Contact</a>
+        </div>
+        <p class="footer-copy">© 2024 Conclave. All rights reserved.</p>
+    </footer>
+
+    <!-- ═══ Scripts ═══ -->
+    <script src="../js/animations.js"></script>
+    <script src="../js/app.js"></script>
+    <script src="../js/sidebar.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedName = localStorage.getItem('conclave_user_name');
+            const savedPhone = localStorage.getItem('conclave_user_phone');
+            if (savedName) document.getElementById('profile-name').value = savedName;
+            if (savedPhone) document.getElementById('profile-phone').value = savedPhone;
+        });
+
+        function saveProfile() {
+            const name = document.getElementById('profile-name').value;
+            const phone = document.getElementById('profile-phone').value;
+            localStorage.setItem('conclave_user_name', name);
+            localStorage.setItem('conclave_user_phone', phone);
+            
+            const btn = document.querySelector('.btn-primary');
+            const originalText = btn.textContent;
+            btn.textContent = 'Saved!';
+            btn.style.backgroundColor = 'var(--aurora-green)';
+            btn.style.color = 'black';
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.style.backgroundColor = '';
+                btn.style.color = '';
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
