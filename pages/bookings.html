@@ -233,7 +233,7 @@
         </section>
 
         <!-- Concierge Section -->
-        <div class="container reveal" style="padding-bottom: 120px;">
+        <!-- <div class="container reveal" style="padding-bottom: 120px;">
             <div class="concierge-grid">
                 <div class="concierge-card" style="background: rgba(230,198,135,0.05); border: 1px solid var(--border-medium);">
                     <div>
@@ -247,7 +247,7 @@
                     <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0DgQKy45xoa-vS4pGXYaf7SbY-iW2llXBwd9WfX2C5rnZp6afG8_tnd4bd-X2CylYhxhdH9VfxlZW54ijmwWYi56Gpc7LkTtHiI3fQSQIIFW4NggXj4nYYdRIgMeDBvWwAVGYxpQmc1l61_1jdYqCDi2f5P3hZdXtMSCdvG5BSQ5XQyHiXeP96Gcixm5hgAbKVUW2ifH9RfoUmeP-KaYlq4XlIGUfLsab9Bx7-sslkpBtx1nTfMc-yYvNNzW28TNdfIfIfHpvSYZx" alt="Concierge"/>
                 </div>
             </div>
-        </div>
+        </div> -->
     </main>
 
     <!-- ═══ Wallet Pass Modal ═══ -->
@@ -295,36 +295,16 @@
     <!-- ═══ Scripts ═══ -->
     <script src="../js/events-data.js"></script>
     <script src="../js/animations.js"></script>
+    <script src="../js/toast.js"></script>
     <script src="../js/app.js"></script>
     <script src="../js/sidebar.js"></script>
 
     <script>
-        const defaultBookings = [
-            {
-                id: "booking-1",
-                title: "Skyline Gala: The Winter Solstice",
-                location: "The Edge, Manhattan",
-                time: "07:00 PM EST",
-                dateFormatted: "Nov 12, 2024",
-                category: "Celestial Gala",
-                code: "SKY-7A9B"
-            },
-            {
-                id: "booking-2",
-                title: "Private Skies: Elite Transit",
-                location: "Palexpo, Geneva",
-                time: "02:00 PM CET",
-                dateFormatted: "Dec 05, 2024",
-                category: "Aviation Showcase",
-                code: "AV-4412"
-            }
-        ];
+        const defaultEvents = window.CONCLAVE_EVENTS || [];
+        const customEvents = JSON.parse(localStorage.getItem('conclave_custom_events') || '[]');
+        const allEvents = [...defaultEvents, ...customEvents];
 
-        let bookings = JSON.parse(localStorage.getItem('conclave_bookings'));
-        if (!bookings || bookings.length === 0) {
-            bookings = defaultBookings;
-            localStorage.setItem('conclave_bookings', JSON.stringify(bookings));
-        }
+        let registeredEvents = JSON.parse(localStorage.getItem('conclave_registered') || '[]');
 
         const container = document.getElementById('bookings-container');
         const userName = localStorage.getItem('conclave_user_name') || 'Member Guest';
@@ -332,7 +312,7 @@
         function renderBookings() {
             container.innerHTML = '';
 
-            if (bookings.length === 0) {
+            if (registeredEvents.length === 0) {
                 container.innerHTML = `
                     <div class="empty-portal" style="grid-column: 1 / -1;">
                         <span class="material-symbols-outlined">explore</span>
@@ -344,8 +324,11 @@
                 return;
             }
 
-            bookings.forEach((booking, index) => {
-                const parts = booking.dateFormatted.split(' ');
+            registeredEvents.forEach((eventId, index) => {
+                const booking = allEvents.find(e => e.id === eventId);
+                if (!booking) return;
+
+                const parts = (booking.date || '').split(' ');
                 const month = parts[0].toUpperCase();
                 const day = parts[1].replace(',', '');
                 const year = parts[2] || '2024';
@@ -381,7 +364,7 @@
                         </div>
                     </div>
                     <div class="ticket-footer">
-                        <button class="ticket-btn primary" onclick="showPass('${booking.title.replace(/'/g, "\\'")}', '${booking.location.replace(/'/g, "\\'")}', '${booking.dateFormatted}', '${booking.time}', '${code}')">
+                        <button class="ticket-btn primary" onclick="showPass('${(booking.title||'').replace(/'/g, "\\'")}', '${(booking.location||'').replace(/'/g, "\\'")}', '${booking.date||''}', '${booking.time||''}', '${code}')">
                             Open Pass
                         </button>
                         <button class="ticket-btn" onclick="deleteBooking('${booking.id}')">
@@ -410,8 +393,21 @@
 
         window.deleteBooking = (id) => {
             if (confirm("Are you sure you want to release your access to this experience?")) {
-                bookings = bookings.filter(b => b.id !== id);
-                localStorage.setItem('conclave_bookings', JSON.stringify(bookings));
+                registeredEvents = registeredEvents.filter(eventId => eventId !== id);
+                localStorage.setItem('conclave_registered', JSON.stringify(registeredEvents));
+                
+                // Also free up seat and decrement attendees
+                let seatsObj = JSON.parse(localStorage.getItem('conclave_seats')) || {};
+                if (seatsObj[id] !== undefined) {
+                    seatsObj[id]++;
+                    localStorage.setItem('conclave_seats', JSON.stringify(seatsObj));
+                }
+                let attendeesObj = JSON.parse(localStorage.getItem('conclave_attendees') || '{}');
+                if (attendeesObj[id] && attendeesObj[id] > 0) {
+                    attendeesObj[id]--;
+                    localStorage.setItem('conclave_attendees', JSON.stringify(attendeesObj));
+                }
+
                 renderBookings();
             }
         };

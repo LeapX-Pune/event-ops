@@ -151,6 +151,7 @@
         const bookingsPath = isSubdirectory ? 'bookings.html' : 'pages/bookings.html';
         const settingsPath = isSubdirectory ? 'settings.html' : 'pages/settings.html';
         const indexPath = isSubdirectory ? '../index.html' : 'index.html';
+        const adminPath = isSubdirectory ? '../admin.html' : 'admin.html';
 
         let overlay = document.getElementById('profile-sidebar-overlay');
         let drawer = document.getElementById('profile-sidebar-drawer');
@@ -162,7 +163,7 @@
         }
 
         const userName = localStorage.getItem('conclave_user_name') || 'Member Guest';
-        const userPhone = localStorage.getItem('conclave_user_phone') || 'Premium Account';
+        const userEmail = localStorage.getItem('conclave_user_email') || 'contact@conclave.com';
         const userInitial = userName.charAt(0).toUpperCase();
 
         if (!drawer) {
@@ -177,7 +178,7 @@
                     <div class="sidebar-avatar">${userInitial}</div>
                     <div class="sidebar-user-info">
                         <h3>${userName}</h3>
-                        <p>${userPhone}</p>
+                        <p>${userEmail}</p>
                     </div>
                 </div>
                 <div class="sidebar-menu">
@@ -201,6 +202,13 @@
                         <div class="flex">
                             <span class="material-symbols-outlined">help</span>
                             <span style="font-size:14px; font-weight:500;">Terms & Conditions</span>
+                        </div>
+                        <span class="material-symbols-outlined" style="opacity:0.5; font-size:20px;">chevron_right</span>
+                    </a>
+                    <a href="${adminPath}" class="sidebar-item-card" style="margin-bottom:0; border-radius:0; border-bottom:none;">
+                        <div class="flex">
+                            <span class="material-symbols-outlined">admin_panel_settings</span>
+                            <span style="font-size:14px; font-weight:500;">Admin Dashboard</span>
                         </div>
                         <span class="material-symbols-outlined" style="opacity:0.5; font-size:20px;">chevron_right</span>
                     </a>
