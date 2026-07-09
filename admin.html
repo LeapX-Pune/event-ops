@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Conclave Admin — Create, edit, and manage all events from the command center.">
+    <title>Conclave — Admin</title>
+
+    <!-- Fonts (same as main site) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+
+    <!-- Shared site stylesheet — do NOT override separately -->
+    <link rel="stylesheet" href="css/styles.css">
+
+    <style>
+        /* ── Admin-only styles appended here so we don't modify styles.css ── */
+
+        /* Layout */
+        .admin-page {
+            min-height: 100vh;
+            background: var(--bg-void);
+            padding-top: 96px;
+            padding-bottom: var(--space-5xl);
+        }
+
+        .admin-wrap {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--space-3xl);
+        }
+
+        @media (max-width: 768px) {
+            .admin-wrap { padding: 0 var(--space-lg); }
+        }
+
+        /* ── Page Header ── */
+        .admin-page-header {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: var(--space-lg);
+            flex-wrap: wrap;
+            padding: var(--space-3xl) 0 var(--space-2xl);
+            border-bottom: 1px solid var(--border-subtle);
+            margin-bottom: var(--space-3xl);
+        }
+
+        .admin-label {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: var(--space-sm);
+        }
+
+        .admin-title {
+            font-family: var(--font-display);
+            font-size: clamp(28px, 4vw, 44px);
+            font-weight: 200;
+            color: var(--text-primary);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            line-height: 1;
+        }
+
+        /* ── Stat Cards ── */
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-lg);
+            margin-bottom: var(--space-3xl);
+        }
+
+        @media (max-width: 640px) {
+            .admin-stats { grid-template-columns: 1fr; }
+        }
+
+        .stat-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+            transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+        }
+
+        .stat-card:hover {
+            border-color: var(--border-medium);
+            box-shadow: var(--shadow-glow-gold);
+        }
+
+        .stat-icon {
+            font-size: 22px;
+            color: var(--gold);
+            margin-bottom: var(--space-xs);
+        }
+
+        .stat-num {
+            font-family: var(--font-display);
+            font-size: 40px;
+            font-weight: 200;
+            color: var(--gold);
+            line-height: 1;
+            letter-spacing: 0.03em;
+        }
+
+        .stat-lbl {
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+        }
+
+        /* ── Table Panel ── */
+        .admin-panel {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: var(--space-md);
+            flex-wrap: wrap;
+            padding: var(--space-lg) var(--space-xl);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .panel-title {
+            font-family: var(--font-display);
+            font-size: 13px;
+            font-weight: 300;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--text-primary);
+        }
+
+        /* Search bar */
+        .search-bar {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            background: var(--bg-deep);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            padding: 8px 14px;
+            transition: border-color 0.3s;
+            min-width: 220px;
+        }
+
+        .search-bar:focus-within {
+            border-color: var(--gold);
+        }
+
+        .search-bar .material-symbols-outlined {
+            font-size: 18px;
+            color: var(--text-muted);
+            font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 20;
+            flex-shrink: 0;
+        }
+
+        .search-bar input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-size: 13px;
+            font-family: var(--font-body);
+        }
+
+        .search-bar input::placeholder { color: var(--text-muted); }
+
+        /* ── Events Table ── */
+        .events-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .events-table thead tr {
+            background: var(--bg-deep);
+        }
+
+        .events-table th {
+            padding: 12px var(--space-xl);
+            text-align: left;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border-subtle);
+            white-space: nowrap;
+        }
+
+        .events-table tbody tr {
+            border-bottom: 1px solid var(--border-subtle);
+            transition: background var(--transition-fast);
+        }
+
+        .events-table tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        .events-table tbody tr:hover {
+            background: var(--bg-surface-raised);
+        }
+
+        .events-table td {
+            padding: var(--space-lg) var(--space-xl);
+            font-size: 13px;
+            color: var(--text-primary);
+            vertical-align: middle;
+        }
+
+        .row-num {
+            font-family: var(--font-display);
+            font-size: 13px;
+            font-weight: 200;
+            color: var(--text-muted);
+        }
+
+        /* Event cell with thumbnail */
+        .ev-cell {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        .ev-thumb {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-md);
+            object-fit: cover;
+            border: 1px solid var(--border-subtle);
+            flex-shrink: 0;
+            background: var(--bg-surface-raised);
+        }
+
+        .ev-thumb-placeholder {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-subtle);
+            flex-shrink: 0;
+            background: var(--bg-surface-raised);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+        }
+
+        .ev-thumb-placeholder .material-symbols-outlined {
+            font-size: 20px;
+            font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 20;
+        }
+
+        .ev-info-name {
+            font-family: var(--font-display);
+            font-size: 14px;
+            font-weight: 300;
+            color: var(--text-primary);
+            letter-spacing: 0.02em;
+            max-width: 200px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .ev-info-venue {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .ev-info-venue .material-symbols-outlined {
+            font-size: 12px;
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 14;
+        }
+
+        /* Category badge */
+        .cat-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border: 1px solid rgba(230, 198, 135, 0.3);
+            color: var(--gold);
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            border-radius: var(--radius-sm);
+            background: var(--gold-subtle);
+            white-space: nowrap;
+        }
+
+        /* Date/time */
+        .ev-date-main {
+            font-size: 13px;
+            color: var(--text-primary);
+            font-weight: 400;
+        }
+
+        .ev-date-time {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        /* Attendees badge */
+        .att-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+
+        .att-badge .material-symbols-outlined {
+            font-size: 14px;
+            color: var(--gold);
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 16;
+        }
+
+        /* Action buttons */
+        .row-actions {
+            display: flex;
+            gap: var(--space-sm);
+            align-items: center;
+        }
+
+        .act-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+            background: transparent;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .act-btn .material-symbols-outlined {
+            font-size: 16px;
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 18;
+        }
+
+        .act-btn.edit:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+            background: var(--gold-subtle);
+        }
+
+        .act-btn.delete:hover {
+            border-color: rgba(255, 80, 80, 0.5);
+            color: #ff5555;
+            background: rgba(255, 80, 80, 0.08);
+        }
+
+        /* Empty state */
+        .admin-empty {
+            text-align: center;
+            padding: var(--space-4xl) var(--space-xl);
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .admin-empty .material-symbols-outlined {
+            font-size: 48px;
+            color: var(--text-muted);
+            font-variation-settings: 'FILL' 0, 'wght' 100, 'GRAD' 0, 'opsz' 48;
+            display: block;
+            margin-bottom: var(--space-lg);
+        }
+
+        .admin-empty h3 {
+            font-family: var(--font-display);
+            font-size: 20px;
+            font-weight: 200;
+            color: var(--text-secondary);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: var(--space-sm);
+        }
+
+        .admin-empty p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: var(--space-xl);
+        }
+
+        /* ── Admin-specific btn-primary (fits content, not full-width) ── */
+        .btn-admin {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: var(--gold);
+            color: var(--text-on-gold);
+            padding: 11px 24px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-radius: var(--radius-sm);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .btn-admin:hover {
+            background: white;
+            color: var(--bg-void);
+        }
+
+        .btn-admin:active { transform: scale(0.98); }
+
+        .btn-admin .material-symbols-outlined {
+            font-size: 16px;
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 18;
+        }
+
+        /* Danger button */
+        .btn-danger {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: transparent;
+            color: #ff5555;
+            padding: 11px 24px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            border: 1px solid rgba(255, 80, 80, 0.4);
+            cursor: pointer;
+            transition: all 0.3s;
+            border-radius: var(--radius-sm);
+        }
+
+        .btn-danger:hover {
+            background: rgba(255, 80, 80, 0.1);
+            border-color: #ff5555;
+        }
+
+        /* ── Modal (Admin) ── */
+        .admin-modal-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: var(--z-modal);
+            background: rgba(0, 0, 0, 0.88);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-lg);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+
+        .admin-modal-overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .admin-modal {
+            background: var(--bg-surface-raised);
+            border: 1px solid var(--border-medium);
+            border-radius: var(--radius-xl);
+            width: 100%;
+            max-width: 600px;
+            max-height: calc(100vh - var(--space-2xl));
+            overflow-y: auto;
+            box-shadow: var(--shadow-float);
+            transform: scale(0.94) translateY(20px);
+            transition: transform 0.4s var(--ease-out-expo);
+        }
+
+        .admin-modal-overlay.open .admin-modal {
+            transform: scale(1) translateY(0);
+        }
+
+        .admin-modal.modal-sm {
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .modal-hdr {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--space-xl) var(--space-2xl);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .modal-hdr-title {
+            font-family: var(--font-display);
+            font-size: 16px;
+            font-weight: 300;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--text-primary);
+        }
+
+        .modal-x {
+            width: 32px;
+            height: 32px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            transition: color 0.3s, background 0.3s;
+            cursor: pointer;
+        }
+
+        .modal-x .material-symbols-outlined {
+            font-size: 20px;
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 22;
+        }
+
+        .modal-x:hover {
+            color: var(--gold);
+            background: var(--gold-subtle);
+        }
+
+        .modal-body {
+            padding: var(--space-2xl);
+        }
+
+        /* ── Form Fields ── */
+        .form-row-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-lg);
+        }
+
+        @media (max-width: 500px) {
+            .form-row-2 { grid-template-columns: 1fr; }
+        }
+
+        /* Reuse .form-group and .form-label from styles.css */
+        .form-group {
+            margin-bottom: var(--space-lg);
+        }
+
+        .form-label {
+            display: block;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--text-primary);
+            margin-bottom: var(--space-sm);
+            transition: color 0.3s;
+        }
+
+        .form-group:focus-within .form-label {
+            color: var(--gold);
+        }
+
+        /* Extend form-input to also cover select & textarea */
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            background: var(--bg-deep);
+            border: 1px solid var(--border-subtle);
+            padding: 11px 14px;
+            font-size: 13px;
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            transition: border-color 0.3s;
+            border-radius: var(--radius-sm);
+        }
+
+        .form-input::placeholder,
+        .form-textarea::placeholder {
+            color: var(--text-muted);
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 96px;
+        }
+
+        .form-select {
+            appearance: none;
+            cursor: pointer;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%235a5a6a' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+        }
+
+        .form-select option {
+            background: var(--bg-surface-raised);
+        }
+
+        .form-hint {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: var(--space-xs);
+            display: block;
+        }
+
+        /* Error state */
+        .field-error-wrap input,
+        .field-error-wrap select,
+        .field-error-wrap textarea {
+            border-color: rgba(255, 80, 80, 0.6) !important;
+        }
+
+        .field-error-msg {
+            font-size: 11px;
+            color: #ff5555;
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .field-error-msg .material-symbols-outlined {
+            font-size: 14px;
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 16;
+        }
+
+        /* Form footer */
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: var(--space-md);
+            padding-top: var(--space-xl);
+            border-top: 1px solid var(--border-subtle);
+            margin-top: var(--space-xl);
+        }
+
+        .btn-cancel {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: transparent;
+            color: var(--text-secondary);
+            padding: 11px 24px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            border: 1px solid var(--border-subtle);
+            cursor: pointer;
+            transition: all 0.3s;
+            border-radius: var(--radius-sm);
+        }
+
+        .btn-cancel:hover {
+            border-color: var(--border-hover);
+            color: var(--text-primary);
+        }
+
+        /* ── Delete confirm modal ── */
+        .confirm-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: rgba(255, 80, 80, 0.1);
+            border: 1px solid rgba(255, 80, 80, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto var(--space-lg);
+        }
+
+        .confirm-icon .material-symbols-outlined {
+            font-size: 28px;
+            color: #ff5555;
+            font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 30;
+        }
+
+        .confirm-title {
+            font-family: var(--font-display);
+            font-size: 20px;
+            font-weight: 300;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: var(--space-sm);
+        }
+
+        .confirm-msg {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: var(--space-2xl);
+        }
+
+        .confirm-actions {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-md);
+        }
+
+        /* ── Toast notifications ── */
+        #toast-root {
+            position: fixed;
+            top: var(--space-xl);
+            right: var(--space-xl);
+            z-index: 500;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+            pointer-events: none;
+        }
+
+        .toast-note {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: 12px var(--space-lg);
+            background: var(--bg-surface-raised);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-float);
+            font-size: 13px;
+            color: var(--text-primary);
+            pointer-events: all;
+            animation: toastIn 0.3s var(--ease-out-expo) forwards;
+            min-width: 240px;
+            max-width: 340px;
+        }
+
+        .toast-note.toast-success { border-color: rgba(0, 200, 100, 0.3); }
+        .toast-note.toast-success .material-symbols-outlined { color: #00c864; }
+        .toast-note.toast-error   { border-color: rgba(255, 80, 80, 0.3); }
+        .toast-note.toast-error   .material-symbols-outlined { color: #ff5555; }
+        .toast-note.toast-info    { border-color: var(--border-medium); }
+        .toast-note.toast-info    .material-symbols-outlined { color: var(--gold); }
+
+        .toast-note .material-symbols-outlined {
+            font-size: 18px;
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+            flex-shrink: 0;
+        }
+
+        .toast-note.hiding {
+            animation: toastOut 0.3s ease forwards;
+        }
+
+        @keyframes toastIn {
+            from { transform: translateX(60px); opacity: 0; }
+            to   { transform: translateX(0);    opacity: 1; }
+        }
+
+        @keyframes toastOut {
+            from { transform: translateX(0);    opacity: 1; }
+            to   { transform: translateX(80px); opacity: 0; }
+        }
+
+        /* ── Scrollbar for modal ── */
+        .admin-modal::-webkit-scrollbar { width: 4px; }
+        .admin-modal::-webkit-scrollbar-track { background: transparent; }
+        .admin-modal::-webkit-scrollbar-thumb { background: var(--border-medium); border-radius: 2px; }
+
+        /* ── Mobile table scroll ── */
+        .table-scroll { overflow-x: auto; }
+        @media (max-width: 767px) {
+            .events-table { min-width: 640px; }
+            .panel-header { flex-direction: column; align-items: flex-start; }
+            .search-bar { width: 100%; }
+            .admin-page-header { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ═══ NAVBAR (mirrors site nav exactly) ═══ -->
+    <nav class="nav" id="admin-nav">
+        <div class="nav-inner">
+            <a href="index.html" class="nav-brand">CONCLAVE</a>
+            <div class="nav-links">
+                <a class="nav-link" href="pages/events.html">Events</a>
+                <a class="nav-link" href="pages/venues.html">Venues</a>
+                <a class="nav-link" href="pages/bookings.html">My Bookings</a>
+                <a class="nav-link active" href="admin.html">Admin</a>
+            </div>
+            <div class="nav-actions">
+                <a href="pages/bookings.html" class="nav-avatar" style="display:flex;align-items:center;justify-content:center;color:var(--text-secondary);text-decoration:none;">
+                    <span class="material-symbols-outlined" style="font-size:24px;">person</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ═══ MAIN CONTENT ═══ -->
+    <main class="admin-page" id="main-content">
+        <div class="admin-wrap">
+
+            <!-- Page header -->
+            <header class="admin-page-header">
+                <div>
+                    <p class="admin-label">Dashboard</p>
+                    <h1 class="admin-title">Event Management</h1>
+                </div>
+                <button class="btn-admin" id="createEventBtn">
+                    <span class="material-symbols-outlined">add</span>
+                    Create Event
+                </button>
+            </header>
+
+            <!-- Stat cards -->
+            <div class="admin-stats" role="region" aria-label="Statistics">
+                <div class="stat-card">
+                    <span class="material-symbols-outlined stat-icon">event</span>
+                    <div class="stat-num" id="totalEvents">0</div>
+                    <div class="stat-lbl">Total Events</div>
+                </div>
+                <div class="stat-card">
+                    <span class="material-symbols-outlined stat-icon">group</span>
+                    <div class="stat-num" id="totalAttendees">0</div>
+                    <div class="stat-lbl">Total Attendees</div>
+                </div>
+                <div class="stat-card">
+                    <span class="material-symbols-outlined stat-icon">category</span>
+                    <div class="stat-num" id="totalCategories">0</div>
+                    <div class="stat-lbl">Categories</div>
+                </div>
+            </div>
+
+            <!-- Table panel -->
+            <div class="admin-panel">
+                <div class="panel-header">
+                    <span class="panel-title">All Events</span>
+                    <div class="search-bar">
+                        <span class="material-symbols-outlined">search</span>
+                        <input type="search"
+                               id="tableSearchInput"
+                               placeholder="Search events…"
+                               aria-label="Search events">
+                    </div>
+                </div>
+
+                <div class="table-scroll">
+                    <table class="events-table" id="eventTable" aria-label="Events">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Event</th>
+                                <th>Category</th>
+                                <th>Date &amp; Time</th>
+                                <th>Attendees</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="eventTableBody">
+                            <!-- Injected by JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Empty state -->
+                <div class="admin-empty" id="noEventsAdmin" style="display:none;" aria-live="polite">
+                    <span class="material-symbols-outlined">event_busy</span>
+                    <h3>No Events Yet</h3>
+                    <p>Get started by creating your first event.</p>
+                    <button class="btn-admin" id="emptyCreateBtn">
+                        <span class="material-symbols-outlined">add</span>
+                        Create Event
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- ═══ FORM MODAL (Create / Edit) ═══ -->
+    <div class="admin-modal-overlay" id="formModal" role="dialog" aria-modal="true" aria-labelledby="formModalTitle">
+        <div class="admin-modal">
+            <div class="modal-hdr">
+                <span class="modal-hdr-title" id="formModalTitle">Create Event</span>
+                <button class="modal-x" id="closeFormModal" aria-label="Close">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="eventForm" novalidate>
+                    <input type="hidden" id="eventId" name="id">
+
+                    <div class="form-group">
+                        <label class="form-label" for="eventTitle">Event Title *</label>
+                        <input class="form-input" type="text" id="eventTitle" name="title"
+                               required minlength="3"
+                               placeholder="e.g. Aurora Music Festival">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="eventDescription">Description *</label>
+                        <textarea class="form-textarea" id="eventDescription" name="description"
+                                  required minlength="10"
+                                  rows="4"
+                                  placeholder="Describe the event experience…"></textarea>
+                    </div>
+
+                    <div class="form-row-2">
+                        <div class="form-group">
+                            <label class="form-label" for="eventCategory">Category *</label>
+                            <select class="form-select" id="eventCategory" name="category" required>
+                                <option value="">Select category</option>
+                                <option value="Technology">Technology</option>
+                                <option value="Music">Music</option>
+                                <option value="Workshop">Workshop</option>
+                                <option value="Sports">Sports</option>
+                                <option value="Food">Food</option>
+                                <option value="Social">Social</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="eventMaxAttendees">Max Attendees *</label>
+                            <input class="form-input" type="number" id="eventMaxAttendees" name="maxAttendees"
+                                   required min="1" placeholder="e.g. 250">
+                        </div>
+                    </div>
+
+                    <div class="form-row-2">
+                        <div class="form-group">
+                            <label class="form-label" for="eventDate">Date *</label>
+                            <input class="form-input" type="date" id="eventDate" name="date" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="eventTime">Time *</label>
+                            <input class="form-input" type="time" id="eventTime" name="time" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="eventVenue">Venue *</label>
+                        <input class="form-input" type="text" id="eventVenue" name="venue"
+                               required minlength="3"
+                               placeholder="e.g. The Grand Hall, Mumbai">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="eventImageUrl">
+                            Image URL <span style="letter-spacing:0;text-transform:none;font-weight:400;color:var(--text-muted)">(optional)</span>
+                        </label>
+                        <input class="form-input" type="url" id="eventImageUrl" name="imageUrl"
+                               placeholder="https://…">
+                        <span class="form-hint">Leave blank to show a placeholder icon</span>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn-cancel" id="cancelFormBtn">Cancel</button>
+                        <button type="submit" class="btn-admin" id="submitFormBtn">
+                            <span class="material-symbols-outlined">save</span>
+                            Save Event
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ DELETE CONFIRM MODAL ═══ -->
+    <div class="admin-modal-overlay" id="deleteModal" role="dialog" aria-modal="true" aria-labelledby="deleteModalTitle">
+        <div class="admin-modal modal-sm">
+            <div class="modal-body" style="padding: var(--space-2xl);">
+                <div class="confirm-icon">
+                    <span class="material-symbols-outlined">warning</span>
+                </div>
+                <h2 class="confirm-title" id="deleteModalTitle">Delete Event</h2>
+                <p class="confirm-msg">
+                    You are about to permanently delete<br>
+                    <strong style="color:var(--text-primary)">"<span id="deleteEventTitle"></span>"</strong>.<br>
+                    This cannot be undone.
+                </p>
+                <div class="confirm-actions">
+                    <button class="btn-cancel" id="cancelDeleteBtn">Cancel</button>
+                    <button class="btn-danger" id="confirmDeleteBtn">
+                        <span class="material-symbols-outlined" style="font-size:15px;font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 18">delete</span>
+                        Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast container -->
+    <div id="toast-root" aria-live="polite" aria-atomic="true"></div>
+
+    <!-- ═══ SCRIPTS ═══ -->
+    <script type="module" src="js/admin/adminApp.js"></script>
+
+    <!-- Nav scroll effect (same as main site) -->
+    <script>
+        const nav = document.getElementById('admin-nav');
+        window.addEventListener('scroll', () => {
+            nav.classList.toggle('scrolled', window.scrollY > 40);
+        }, { passive: true });
+    </script>
+</body>
+</html>
