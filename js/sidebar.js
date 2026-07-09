@@ -151,6 +151,7 @@
         const bookingsPath = isSubdirectory ? 'bookings.html' : 'pages/bookings.html';
         const settingsPath = isSubdirectory ? 'settings.html' : 'pages/settings.html';
         const indexPath = isSubdirectory ? '../index.html' : 'index.html';
+        const adminPath = isSubdirectory ? '../admin.html' : 'admin.html';
 
         let overlay = document.getElementById('profile-sidebar-overlay');
         let drawer = document.getElementById('profile-sidebar-drawer');
@@ -204,7 +205,7 @@
                         </div>
                         <span class="material-symbols-outlined" style="opacity:0.5; font-size:20px;">chevron_right</span>
                     </a>
-                    <a href="${isSubdirectory ? 'admin.html' : 'pages/admin.html'}" class="sidebar-item-card" style="margin-bottom:0; border-radius:0; border-bottom:none;">
+                    <a href="${adminPath}" class="sidebar-item-card" style="margin-bottom:0; border-radius:0; border-bottom:none;">
                         <div class="flex">
                             <span class="material-symbols-outlined">admin_panel_settings</span>
                             <span style="font-size:14px; font-weight:500;">Admin Dashboard</span>
