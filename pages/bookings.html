@@ -5,7 +5,7 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>My Bookings | Conclave</title>
     <meta name="description" content="Your curated itinerary for the season. Elite access and refined experiences await."/>
-    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/styles.css?v=2">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
     <!-- ═══ Anti-Flash Theme Script ═══ -->
@@ -28,7 +28,7 @@
             padding-top: 100px; /* Prevents overlap with fixed nav */
             overflow: hidden;
             border-bottom: 1px solid var(--border-subtle);
-            background: radial-gradient(circle at 50% 100%, rgba(230, 198, 135, 0.1) 0%, transparent 50%);
+            background: radial-gradient(circle at 50% 100%, var(--gold-subtle) 0%, transparent 50%);
         }
         .bookings-hero::before {
             content: '';
@@ -49,7 +49,7 @@
 
         .booking-ticket {
             position: relative;
-            background: rgba(22, 22, 42, 0.6);
+            background: var(--glass-bg-heavy);
             backdrop-filter: blur(20px);
             border: 1px solid var(--border-medium);
             border-radius: 20px;
@@ -67,7 +67,7 @@
             content: '';
             position: absolute;
             top: 0; left: 0; right: 0; height: 100%;
-            background: linear-gradient(135deg, rgba(230,198,135,0.1), transparent);
+            background: linear-gradient(135deg, var(--gold-subtle), transparent);
             pointer-events: none;
         }
 
@@ -103,7 +103,7 @@
         }
 
         .ticket-date-box {
-            background: rgba(230,198,135,0.1);
+            background: var(--gold-subtle);
             border: 1px solid var(--border-subtle);
             padding: 12px;
             border-radius: 12px;
@@ -181,7 +181,7 @@
         .empty-portal {
             text-align: center;
             padding: 100px 20px;
-            background: rgba(10,10,18,0.5);
+            background: var(--glass-bg);
             border: 1px solid var(--border-subtle);
             border-radius: 20px;
             backdrop-filter: blur(10px);
@@ -194,6 +194,7 @@
             margin-bottom: 24px;
         }
     </style>
+<script src="../js/page-transition.js"></script>
 </head>
 <body>
 
@@ -248,7 +249,7 @@
         <!-- Concierge Section -->
         <!-- <div class="container reveal" style="padding-bottom: 120px;">
             <div class="concierge-grid">
-                <div class="concierge-card" style="background: rgba(230,198,135,0.05); border: 1px solid var(--border-medium);">
+                <div class="concierge-card" style="background: var(--gold-subtle); border: 1px solid var(--border-medium);">
                     <div>
                         <span class="material-symbols-outlined text-gold" style="font-size:32px;margin-bottom:24px;display:block;">support_agent</span>
                         <h3 class="text-display-sm" style="color:var(--text-primary);margin-bottom:20px;">Elite Concierge</h3>
@@ -263,9 +264,26 @@
         </div> -->
     </main>
 
+    <!-- ═══ Release Confirmation Modal ═══ -->
+    <div class="modal-overlay" id="release-modal">
+        <div class="modal-card" style="background: var(--bg-card); border: 1px solid var(--border-medium); box-shadow: var(--shadow-card);">
+            <div style="text-align:center; padding: 20px 0;">
+                <span class="material-symbols-outlined" style="font-size:48px; color:var(--text-secondary); margin-bottom:16px;">cancel</span>
+                <h3 style="font-size:20px; font-weight:400; color:var(--text-primary); margin-bottom:12px;">Release Experience?</h3>
+                <p style="color:var(--text-secondary); margin-bottom: 24px; font-size:14px; line-height:1.5;">
+                    Are you sure you want to release your access to this experience? This action cannot be undone.
+                </p>
+                <div style="display:flex; gap:16px; justify-content:center;">
+                    <button class="btn-primary" style="background:var(--bg-surface); color:var(--text-primary); border:1px solid var(--border-medium);" onclick="closeReleaseModal()">Cancel</button>
+                    <button class="btn-primary" style="background:#ef4444; color:white; border:none;" id="confirm-release-btn">Release</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- ═══ Wallet Pass Modal ═══ -->
     <div class="modal-overlay" id="pass-modal">
-        <div class="modal-card" style="background: var(--bg-card); border: 1px solid var(--gold); box-shadow: 0 0 60px rgba(230,198,135,0.15);">
+        <div class="modal-card" style="background: var(--bg-card); border: 1px solid var(--gold); box-shadow: var(--shadow-glow-gold);">
             <button class="modal-close material-symbols-outlined" onclick="closePass()">close</button>
             <div class="text-center">
                 <span class="text-label text-gold" style="display:block;margin-bottom:4px;">CONCLAVE PASS</span>
@@ -273,7 +291,7 @@
             </div>
             <div style="width:100%;border-top:1px dashed var(--border-subtle); margin: 24px 0;"></div>
             <div class="text-center w-full">
-                <h4 id="pass-title" class="text-headline text-white" style="margin-bottom:8px;">Event Title</h4>
+                <h4 id="pass-title" class="text-headline" style="color:var(--text-primary); margin-bottom:8px;">Event Title</h4>
                 <p id="pass-location" style="font-size:14px;color:var(--gold);">Venue Location</p>
                 <p id="pass-datetime" style="font-size:14px;color:var(--text-secondary);margin-top:6px;">Oct 12, 2024 • 09:00 AM</p>
             </div>
@@ -324,7 +342,7 @@
     </div>
 
     <!-- ═══ Scripts ═══ -->
-    <script src="../js/events-data.js"></script>
+    <script type="module" src="../js/data/events.js"></script>
     <script src="../js/animations.js"></script>
     <script src="../js/toast.js"></script>
     <script src="../js/app.js"></script>
@@ -332,111 +350,135 @@
     <script src="../js/features/chat.js"></script>
 
     <script>
-        const defaultEvents = window.CONCLAVE_EVENTS || [];
-        const customEvents = JSON.parse(localStorage.getItem('conclave_custom_events') || '[]');
-        const allEvents = [...defaultEvents, ...customEvents];
+        document.addEventListener('DOMContentLoaded', () => {
+            const defaultEvents = window.CONCLAVE_EVENTS || [];
+            const customEvents = JSON.parse(localStorage.getItem('conclave_custom_events') || '[]');
+            const allEvents = [...defaultEvents, ...customEvents];
 
-        let registeredEvents = JSON.parse(localStorage.getItem('conclave_registered') || '[]');
+            let registeredEvents = JSON.parse(localStorage.getItem('conclave_registered') || '[]');
 
-        const container = document.getElementById('bookings-container');
-        const userName = localStorage.getItem('conclave_user_name') || 'Member Guest';
+            const container = document.getElementById('bookings-container');
+            const userName = localStorage.getItem('conclave_user_name') || 'Member Guest';
 
-        function renderBookings() {
-            // Re-read localStorage to catch cross-tab updates
-            registeredEvents = JSON.parse(localStorage.getItem('conclave_registered') || '[]');
-            container.innerHTML = '';
+            function renderBookings() {
+                // Re-read localStorage to catch cross-tab updates
+                registeredEvents = JSON.parse(localStorage.getItem('conclave_registered') || '[]');
+                container.innerHTML = '';
 
-            // Filter out null/undefined event IDs
-            const validEvents = registeredEvents.filter(id => id && typeof id === 'string');
+                // Filter out null/undefined event IDs
+                const validEvents = registeredEvents.filter(id => id && typeof id === 'string');
 
-            if (validEvents.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-portal" style="grid-column: 1 / -1;">
-                        <span class="material-symbols-outlined">explore</span>
-                        <h2 class="text-display-sm" style="color:var(--text-primary); margin-bottom: 16px;">The Void Awaits</h2>
-                        <p style="color:var(--text-secondary); margin-bottom: 32px;">You currently have no scheduled journeys. Step into a new dimension.</p>
-                        <a href="events.html" class="btn-primary" style="display:inline-flex;">Discover Events</a>
-                    </div>
-                `;
-                return;
+                if (validEvents.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-portal" style="grid-column: 1 / -1;">
+                            <span class="material-symbols-outlined">explore</span>
+                            <h2 class="text-display-sm" style="color:var(--text-primary); margin-bottom: 16px;">The Void Awaits</h2>
+                            <p style="color:var(--text-secondary); margin-bottom: 32px;">You currently have no scheduled journeys. Step into a new dimension.</p>
+                            <a href="events.html" class="btn-primary" style="display:inline-flex;">Discover Events</a>
+                        </div>
+                    `;
+                    return;
+                }
+
+                validEvents.forEach((eventId, index) => {
+                    const booking = allEvents.find(e => e.id === eventId);
+                    if (!booking) return;
+
+                    let month = "TBD", day = "00", year = "2024";
+                    if (booking.date) {
+                        const d = new Date(booking.date);
+                        if (!isNaN(d)) {
+                            month = d.toLocaleString('en-US', { month: 'short' }).toUpperCase();
+                            day = d.getDate().toString().padStart(2, '0');
+                            year = d.getFullYear().toString();
+                        } else {
+                            const parts = booking.date.split(' ');
+                            month = parts[0] ? parts[0].substring(0,3).toUpperCase() : '';
+                            day = parts[1] ? parts[1].replace(',', '') : '';
+                            year = parts[2] || '2024';
+                        }
+                    }
+                    const code = booking.code || 'VIP-' + Math.floor(Math.random()*9000 + 1000);
+
+                    const ticket = document.createElement('div');
+                    ticket.className = 'booking-ticket reveal';
+                    ticket.style.animationDelay = `${index * 0.1}s`;
+
+                    ticket.innerHTML = `
+                        <div class="ticket-header">
+                            <div>
+                                <span class="ticket-category">${booking.categoryName || booking.category || 'Experience'}</span>
+                                <h2 class="ticket-title">${booking.title}</h2>
+                            </div>
+                            <div class="ticket-date-box">
+                                <div class="ticket-month">${month}</div>
+                                <div class="ticket-day">${day}</div>
+                            </div>
+                        </div>
+                        <div class="ticket-body">
+                            <div class="ticket-info-row">
+                                <span class="material-symbols-outlined">location_on</span>
+                                <span class="ticket-info-text">${booking.location}</span>
+                            </div>
+                            <div class="ticket-info-row">
+                                <span class="material-symbols-outlined">schedule</span>
+                                <span class="ticket-info-text">${booking.time} • ${year}</span>
+                            </div>
+                            <div class="ticket-info-row">
+                                <span class="material-symbols-outlined">qr_code</span>
+                                <span class="ticket-info-text" style="color:var(--gold); font-family:monospace; letter-spacing:1px;">ACCESS: ${code}</span>
+                            </div>
+                        </div>
+                        <div class="ticket-footer">
+                            <button class="ticket-btn primary" onclick="showPass('${(booking.title||'').replace(/'/g, "\\'")}', '${(booking.location||'').replace(/'/g, "\\'")}', '${booking.date||''}', '${booking.time||''}', '${code}')">
+                                Open Pass
+                            </button>
+                            <button class="ticket-btn" onclick="deleteBooking('${booking.id}')">
+                                Release
+                            </button>
+                        </div>
+                    `;
+
+                    container.appendChild(ticket);
+                });
+
+                // Re-init reveals
+                const newReveals = container.querySelectorAll('.reveal');
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.1 });
+                newReveals.forEach(el => observer.observe(el));
             }
 
-            validEvents.forEach((eventId, index) => {
-                const booking = allEvents.find(e => e.id === eventId);
-                if (!booking) return;
+            renderBookings();
 
-                const parts = (booking.date || '').split(' ');
-                const month = parts[0].toUpperCase();
-                const day = parts[1].replace(',', '');
-                const year = parts[2] || '2024';
-                const code = booking.code || 'VIP-' + Math.floor(Math.random()*9000 + 1000);
-
-                const ticket = document.createElement('div');
-                ticket.className = 'booking-ticket reveal';
-                ticket.style.animationDelay = `${index * 0.1}s`;
-
-                ticket.innerHTML = `
-                    <div class="ticket-header">
-                        <div>
-                            <span class="ticket-category">${booking.category || 'Experience'}</span>
-                            <h2 class="ticket-title">${booking.title}</h2>
-                        </div>
-                        <div class="ticket-date-box">
-                            <div class="ticket-month">${month}</div>
-                            <div class="ticket-day">${day}</div>
-                        </div>
-                    </div>
-                    <div class="ticket-body">
-                        <div class="ticket-info-row">
-                            <span class="material-symbols-outlined">location_on</span>
-                            <span class="ticket-info-text">${booking.location}</span>
-                        </div>
-                        <div class="ticket-info-row">
-                            <span class="material-symbols-outlined">schedule</span>
-                            <span class="ticket-info-text">${booking.time} • ${year}</span>
-                        </div>
-                        <div class="ticket-info-row">
-                            <span class="material-symbols-outlined">qr_code</span>
-                            <span class="ticket-info-text" style="color:var(--gold); font-family:monospace; letter-spacing:1px;">ACCESS: ${code}</span>
-                        </div>
-                    </div>
-                    <div class="ticket-footer">
-                        <button class="ticket-btn primary" onclick="showPass('${(booking.title||'').replace(/'/g, "\\'")}', '${(booking.location||'').replace(/'/g, "\\'")}', '${booking.date||''}', '${booking.time||''}', '${code}')">
-                            Open Pass
-                        </button>
-                        <button class="ticket-btn" onclick="deleteBooking('${booking.id}')">
-                            Release
-                        </button>
-                    </div>
-                `;
-
-                container.appendChild(ticket);
+            // Sync across tabs when localStorage changes
+            window.addEventListener('storage', (e) => {
+                if (e.key === 'conclave_registered') {
+                    renderBookings();
+                }
             });
 
-            // Re-init reveals
-            const newReveals = container.querySelectorAll('.reveal');
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.1 });
-            newReveals.forEach(el => observer.observe(el));
-        }
+            let eventToRelease = null;
+            window.deleteBooking = (id) => {
+                eventToRelease = id;
+                document.getElementById('release-modal').classList.add('open');
+            };
 
-        renderBookings();
+            window.closeReleaseModal = () => {
+                eventToRelease = null;
+                document.getElementById('release-modal').classList.remove('open');
+            };
 
-        // Sync across tabs when localStorage changes
-        window.addEventListener('storage', (e) => {
-            if (e.key === 'conclave_registered') {
-                renderBookings();
-            }
-        });
+            document.getElementById('confirm-release-btn').addEventListener('click', () => {
+                if (!eventToRelease) return;
+                const id = eventToRelease;
 
-        window.deleteBooking = (id) => {
-            if (confirm("Are you sure you want to release your access to this experience?")) {
                 registeredEvents = registeredEvents.filter(eventId => eventId !== id);
                 localStorage.setItem('conclave_registered', JSON.stringify(registeredEvents));
                 
@@ -447,31 +489,31 @@
                     localStorage.setItem('conclave_seats', JSON.stringify(seatsObj));
                 }
                 let attendeesObj = JSON.parse(localStorage.getItem('conclave_attendees') || '{}');
-                if (attendeesObj[id] && attendeesObj[id] > 0) {
-                    attendeesObj[id]--;
+                if (attendeesObj[id] !== undefined) {
+                    attendeesObj[id] = Math.max(0, attendeesObj[id] - 1);
                     localStorage.setItem('conclave_attendees', JSON.stringify(attendeesObj));
                 }
 
                 renderBookings();
-            }
-        };
+                closeReleaseModal();
+            });
+            const passModal = document.getElementById('pass-modal');
+            window.showPass = (title, location, dateFormatted, time, code) => {
+                document.getElementById('pass-title').textContent = title;
+                document.getElementById('pass-location').textContent = location;
+                document.getElementById('pass-datetime').textContent = dateFormatted + ' • ' + (time || '09:00 AM');
+                document.getElementById('pass-holder').textContent = userName;
+                document.getElementById('pass-code').textContent = code;
+                passModal.classList.add('open');
+            };
 
-        const passModal = document.getElementById('pass-modal');
-        window.showPass = (title, location, dateFormatted, time, code) => {
-            document.getElementById('pass-title').textContent = title;
-            document.getElementById('pass-location').textContent = location;
-            document.getElementById('pass-datetime').textContent = dateFormatted + ' • ' + (time || '09:00 AM');
-            document.getElementById('pass-holder').textContent = userName;
-            document.getElementById('pass-code').textContent = code;
-            passModal.classList.add('open');
-        };
+            window.closePass = () => {
+                passModal.classList.remove('open');
+            };
 
-        window.closePass = () => {
-            passModal.classList.remove('open');
-        };
-
-        passModal.addEventListener('click', (e) => {
-            if (e.target === passModal) closePass();
+            passModal.addEventListener('click', (e) => {
+                if (e.target === passModal) closePass();
+            });
         });
     </script>
 </body>

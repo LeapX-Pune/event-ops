@@ -5,7 +5,7 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>Admin Dashboard | Conclave</title>
     <meta name="description" content="Manage events on the Conclave platform."/>
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/styles.css?v=2">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 
@@ -16,12 +16,13 @@
             document.documentElement.setAttribute('data-theme', theme);
         })();
     </script>
+    <script src="js/page-transition.js"></script>
     <style>
         .admin-table-wrap {
             overflow-x: auto;
             border: 1px solid var(--border-subtle);
             border-radius: 12px;
-            background: rgba(18,18,28,0.65);
+            background: var(--bg-surface);
             backdrop-filter: blur(20px);
         }
         .admin-table {
@@ -47,7 +48,7 @@
             vertical-align: middle;
         }
         .admin-table tr:last-child td { border-bottom: none; }
-        .admin-table tr:hover td { background: var(--bg-surface); }
+        .admin-table tr:hover td { background: var(--bg-surface-raised); }
         .admin-table .title-cell {
             font-weight: 500;
             color: var(--text-primary);
@@ -93,7 +94,7 @@
             pointer-events: auto;
         }
         .modal-box {
-            background: rgba(18,18,28,0.98);
+            background: var(--bg-surface);
             border: 1px solid var(--border-subtle);
             border-radius: 16px;
             padding: 32px;
@@ -266,16 +267,14 @@
                         <label class="form-label">Category *</label>
                         <select class="form-input" id="form-category" required>
                             <option value="">Select...</option>
-                            <option>Technology</option>
-                            <option>Music</option>
-                            <option>Workshop</option>
-                            <option>Social</option>
-                            <option>Celestial Gala</option>
-                            <option>Aviation Showcase</option>
-                            <option>Automotive Excellence</option>
-                            <option>Digital Art &amp; Crypto</option>
-                            <option>Gastronomic Journey</option>
-                            <option>Extreme Wellness</option>
+                            <option value="cat_tech">Technology</option>
+                            <option value="cat_music">Music</option>
+                            <option value="cat_sports">Sports</option>
+                            <option value="cat_art">Art</option>
+                            <option value="cat_business">Business</option>
+                            <option value="cat_food">Food</option>
+                            <option value="cat_health">Health</option>
+                            <option value="cat_edu">Education</option>
                         </select>
                         <div class="validation-error" id="err-category">Category is required.</div>
                     </div>
@@ -369,7 +368,7 @@
     </footer>
 
     <!-- ═══ Scripts ═══ -->
-    <script src="js/events-data.js"></script>
+    <script type="module" src="js/data/events.js"></script>
     <script src="js/animations.js"></script>
     <script src="js/toast.js"></script>
     <script src="js/app.js"></script>
@@ -472,10 +471,10 @@
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
                         <td class="title-cell">${evt.title}</td>
-                        <td>${evt.category}</td>
+                        <td>${evt.categoryName || evt.category}</td>
                         <td>${evt.date}</td>
                         <td>${evt.location}</td>
-                        <td>${evt.capacity}</td>
+                        <td>${evt.maxAttendees || 'N/A'}</td>
                         <td style="text-align:right;white-space:nowrap;">
                             <button class="admin-action-btn edit-btn" data-id="${evt.id}" ${evt.builtIn ? 'disabled title="Built-in events cannot be edited"' : ''}>
                                 <span class="material-symbols-outlined">edit</span>
@@ -617,7 +616,7 @@
                 document.getElementById('form-category').value = evt.category;
                 document.getElementById('form-date').value = evt.date;
                 document.getElementById('form-time').value = evt.time || '';
-                document.getElementById('form-capacity').value = evt.capacity;
+                document.getElementById('form-capacity').value = evt.maxAttendees || '';
                 document.getElementById('form-location').value = evt.location;
                 document.getElementById('form-price').value = evt.price !== 'Free' ? evt.price : '';
                 document.getElementById('form-duration').value = evt.duration || '';
@@ -722,9 +721,11 @@
                     description: document.getElementById('form-description').value.trim(),
                     itinerary: itineraryArray,
                     category: document.getElementById('form-category').value,
+                    categoryName: document.getElementById('form-category').options[document.getElementById('form-category').selectedIndex].text,
                     date: document.getElementById('form-date').value,
                     time: document.getElementById('form-time').value || '12:00 PM',
-                    capacity: parseInt(document.getElementById('form-capacity').value),
+                    maxAttendees: parseInt(document.getElementById('form-capacity').value),
+                    attendees: 0,
                     location: document.getElementById('form-location').value.trim(),
                     price: document.getElementById('form-price').value.trim() || 'Free',
                     duration: document.getElementById('form-duration').value.trim() || 'TBD',

@@ -65,7 +65,7 @@
             width: 64px;
             height: 64px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--gold-subtle), rgba(230,198,135,0.05));
+            background: var(--gold-subtle);
             border: 1px solid var(--border-medium);
             color: var(--gold);
             display: flex;

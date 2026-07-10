@@ -5,7 +5,7 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>Settings | Conclave</title>
     <meta name="description" content="Manage your preferences and profile settings."/>
-    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/styles.css?v=2">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 
@@ -75,8 +75,8 @@
             transition: border-color 0.3s, background 0.3s;
         }
         .form-input:focus {
-            border-color: var(--gold);
-            background: rgba(230, 198, 135, 0.05);
+            border-color: var(--gold-subtle);
+            background: var(--gold-subtle);
         }
         .toggle-switch {
             position: relative;
@@ -117,6 +117,7 @@
             border-bottom: none;
         }
     </style>
+<script src="../js/page-transition.js"></script>
 </head>
 <body>
     <canvas id="particle-canvas"></canvas>

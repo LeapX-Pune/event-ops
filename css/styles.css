@@ -103,55 +103,55 @@
 
 /* ── Light Theme: "Champagne Dawn" ─────────────────────────── */
 [data-theme="light"] {
-    /* Core Palette - Warm champagne neutrals */
-    --bg-void: #FAF8F3;
-    --bg-deep: #F0EDE6;
-    --bg-surface: #EBE6DD;
-    --bg-surface-raised: #E2DDD4;
-    --bg-surface-high: #D8D2C8;
-    --bg-card: #FFFFFF;
+    /* Core Palette - Premium Cashmere & Taupe */
+    --bg-void: #D6D0C4;
+    --bg-deep: #CAC4B6;
+    --bg-surface: #BEB7A9;
+    --bg-surface-raised: #B4ACA0;
+    --bg-surface-high: #A69E92;
+    --bg-card: #EAE5DB;
 
-    /* Accent Colors - Richer gold for contrast on light */
-    --gold: #B8860B;
-    --gold-dim: #A67F1E;
-    --gold-glow: rgba(184, 134, 11, 0.22);
-    --gold-subtle: rgba(184, 134, 11, 0.12);
-    --violet: #6B5BDD;
-    --violet-dim: #5445C7;
-    --cyan: #0096C7;
-    --cyan-dim: #0077A0;
-    --nebula: #8B5AA3;
-    --aurora-green: #00A85A;
-    --aurora-pink: #C72C7E;
+    /* Accent Colors - Burnished Gold & Jewel Tones */
+    --gold: #9C7014;
+    --gold-dim: #7A570F;
+    --gold-glow: rgba(156, 112, 20, 0.25);
+    --gold-subtle: rgba(156, 112, 20, 0.15);
+    --violet: #5A4BBD;
+    --violet-dim: #453896;
+    --cyan: #007B9E;
+    --cyan-dim: #005F7A;
+    --nebula: #7A4B91;
+    --aurora-green: #008B4B;
+    --aurora-pink: #A82469;
 
-    /* Text Colors - Deep espresso, never pure black */
-    --text-primary: #1A1612;
-    --text-secondary: #4A4338;
-    --text-muted: #7A7266;
-    --text-gold: #B8860B;
-    --text-on-gold: #1A1612;
+    /* Text Colors - Deep Espresso (No pure black) */
+    --text-primary: #26231E;
+    --text-secondary: #4A463F;
+    --text-muted: #6B655D;
+    --text-gold: #9C7014;
+    --text-on-gold: #FDFBF7;
 
-    /* Borders & Outlines - Gold-tinted warmth */
-    --border-subtle: rgba(184, 134, 11, 0.18);
-    --border-medium: rgba(184, 134, 11, 0.35);
-    --border-hover: rgba(184, 134, 11, 0.65);
-    --glass-border: rgba(184, 134, 11, 0.15);
+    /* Borders & Outlines - Burnished warmth */
+    --border-subtle: rgba(156, 112, 20, 0.20);
+    --border-medium: rgba(156, 112, 20, 0.45);
+    --border-hover: rgba(156, 112, 20, 0.85);
+    --glass-border: rgba(156, 112, 20, 0.25);
 
-    /* Glass Effects - Frosted champagne glass */
-    --glass-bg: rgba(250, 248, 243, 0.85);
-    --glass-bg-heavy: rgba(250, 248, 243, 0.95);
-    --glass-blur: 20px;
+    /* Glass Effects - Translucent Cashmere */
+    --glass-bg: rgba(234, 229, 219, 0.65);
+    --glass-bg-heavy: rgba(234, 229, 219, 0.88);
+    --glass-blur: 24px;
 
-    /* Shadows - Softer, warmer */
-    --shadow-card: 0 8px 32px rgba(26, 22, 18, 0.1);
-    --shadow-float: 0 20px 60px rgba(26, 22, 18, 0.14);
-    --shadow-glow-gold: 0 0 40px rgba(184, 134, 11, 0.25);
-    --shadow-glow-violet: 0 0 40px rgba(107, 91, 221, 0.18);
+    /* Shadows - Deep, soft, expensive */
+    --shadow-card: 0 12px 40px rgba(42, 39, 35, 0.12);
+    --shadow-float: 0 24px 64px rgba(42, 39, 35, 0.18);
+    --shadow-glow-gold: 0 0 50px rgba(156, 112, 20, 0.35);
+    --shadow-glow-violet: 0 0 50px rgba(90, 75, 189, 0.25);
 
     /* Particle colors for Three.js - darker gold for visibility */
-    --particle-bg: #FAF8F3;
-    --particle-color: 184, 134, 11;
-    --particle-ambient-color: 184, 134, 11;
+    --particle-bg: #EAE5DB;
+    --particle-color: 156, 112, 20;
+    --particle-ambient-color: 156, 112, 20;
 }
 
 /* Dark theme explicit (for clarity) */
@@ -607,7 +607,7 @@ ul, ol {
     opacity: 0;
     transform: translateY(40px);
     animation: heroReveal 2s var(--ease-out-expo) 1.5s forwards;
-    text-shadow: 0 0 80px rgba(230, 198, 135, 0.3);
+    text-shadow: var(--shadow-glow-gold);
     position: relative;
     z-index: 2;
 }
@@ -916,7 +916,7 @@ ul, ol {
 .featured-badge {
     display: inline-block;
     padding: 4px 12px;
-    border: 1px solid rgba(230, 198, 135, 0.3);
+    border: 1px solid var(--border-medium);
     color: var(--gold);
     font-size: 11px;
     font-weight: 600;
@@ -954,7 +954,7 @@ ul, ol {
     width: 4px;
     height: 4px;
     border-radius: 50%;
-    background: rgba(230, 198, 135, 0.3);
+    background: var(--border-medium);
 }
 
 .indicator-dot.active {
@@ -1279,7 +1279,7 @@ ul, ol {
 
 .modal-card {
     background: var(--bg-surface-raised);
-    border: 1px solid rgba(230, 198, 135, 0.2);
+    border: 1px solid var(--border-subtle);
     width: 100%;
     max-width: 380px;
     padding: var(--space-xl);
@@ -1579,7 +1579,7 @@ ul, ol {
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 20px rgba(230, 198, 135, 0.3);
+    box-shadow: 0 4px 20px var(--border-medium);
     transition: transform 0.3s var(--ease-spring);
     cursor: pointer;
     border: none;
@@ -2143,3 +2143,23 @@ ul, ol {
 .w-full { width: 100%; }
 .relative { position: relative; }
 .overflow-hidden { overflow: hidden; }
+
+/* ── Cinematic Page Transitions ────────────────────────────── */
+#page-transition-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: var(--bg-void);
+    z-index: 99999;
+    pointer-events: none;
+    opacity: 1;
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#page-transition-overlay.is-loaded {
+    opacity: 0;
+}
+
+#page-transition-overlay.is-exiting {
+    opacity: 1;
+    pointer-events: auto;
+}

@@ -5,7 +5,7 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>Conclave</title>
     <meta name="description" content="Journey through a surreal digital landscape of exclusive events. Immersive, cinematic, impossible to ignore."/>
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/styles.css?v=2">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
@@ -136,7 +136,7 @@
         .anchor-chip:hover {
             border-color: var(--gold);
             color: var(--gold);
-            background: rgba(230,198,135,0.06);
+            background: var(--gold-subtle);
         }
         .editions-scroll-hint {
             position: absolute;
@@ -153,9 +153,18 @@
             text-transform: uppercase;
             color: var(--text-muted);
         }
+        .hero-overlay {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 150px;
+            background: linear-gradient(to bottom, var(--gold-subtle), transparent);
+            transform: scaleY(-1);
+            pointer-events: none;
+            z-index: 1;
+        }
         .e-scroll-line {
             width: 1px; height: 36px;
-            background: linear-gradient(to bottom, rgba(230,198,135,0.4), transparent);
+            background: linear-gradient(to bottom, var(--gold-subtle), transparent);
             animation: e-scroll-pulse 2.5s ease-in-out infinite;
         }
 
@@ -229,7 +238,7 @@
             inset: -1px;
             border-radius: 13px;
             padding: 1px;
-            background: linear-gradient(135deg, var(--gold-glow), transparent, var(--violet-glow, rgba(123,104,238,0.05)));
+            background: linear-gradient(135deg, var(--gold-glow), transparent, var(--violet-glow));
             -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             -webkit-mask-composite: xor;
             mask-composite: exclude;
@@ -455,7 +464,7 @@
             left: 50%;
             transform: translateX(-50%);
             z-index: 50;
-            background: rgba(18, 18, 28, 0.6);
+            background: var(--glass-bg);
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
             border: 1px solid var(--border-subtle);
@@ -484,7 +493,7 @@
         }
         .pill-nav a:hover { color: var(--text-primary); }
         .pill-nav a.active {
-            background: rgba(230,198,135,0.1);
+            background: var(--gold-subtle);
             color: var(--gold);
         }
 
@@ -505,6 +514,7 @@
             .bento-card-body { padding: 24px; }
         }
     </style>
+    <script src="js/page-transition.js"></script>
 </head>
 <body>
 
@@ -522,7 +532,7 @@
             <div class="nav-inner">
                 <a href="index.html" class="nav-brand">CONCLAVE</a>
                 <div class="nav-links">
-                    <a class="nav-link active" href="pages/events.html">Events</a>
+                    <a class="nav-link" href="pages/events.html">Events</a>
                     <a class="nav-link" href="pages/venues.html">Venues</a>
                     <a class="nav-link" href="pages/bookings.html">My Bookings</a>
                 </div>
@@ -608,12 +618,12 @@
 
             <div class="reveal">
                 <!-- Large featured card -->
-                <a href="pages/event-detail.html?event=gala" class="bento-card" style="position:relative; max-width: 900px; margin: 0 auto;">
-                    <img class="bento-image-top" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQ4lqXmb9ohJTExZL7x1p4ucnw37r5De4sAZM1-OPdeCqA3cQq9F3YknX5Dvo519KmoeaeFLtaAjZLJldSQ_M3mS5Do1ODDtJimZ0OZ2MjTlbRtonH68WfcqHhgFqjpQzNkBFDVVq1HoFvqmLXgRH_s7aOOebT528ybpz6yOhf7GQA8eJQxhpGfKBwsMDDKteVuFUJO6Xw8Uemao8Nv9j4cvIqYxFWcSF8FYu9n4htbzHAZ8rI58WACoB5xk4ENbKTlcPCP2tRgsTi" alt="Skyline Gala" style="aspect-ratio: 21/9; object-position: center 30%;"/>
+                <a href="pages/event-detail.html?event=gala" class="bento-card" id="featured-card" style="position:relative; max-width: 900px; margin: 0 auto; opacity: 0; transition: opacity 0.5s;">
+                    <img id="featured-img" class="bento-image-top" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQ4lqXmb9ohJTExZL7x1p4ucnw37r5De4sAZM1-OPdeCqA3cQq9F3YknX5Dvo519KmoeaeFLtaAjZLJldSQ_M3mS5Do1ODDtJimZ0OZ2MjTlbRtonH68WfcqHhgFqjpQzNkBFDVVq1HoFvqmLXgRH_s7aOOebT528ybpz6yOhf7GQA8eJQxhpGfKBwsMDDKteVuFUJO6Xw8Uemao8Nv9j4cvIqYxFWcSF8FYu9n4htbzHAZ8rI58WACoB5xk4ENbKTlcPCP2tRgsTi" alt="Skyline Gala" style="aspect-ratio: 21/9; object-position: center 30%;"/>
                     <div class="bento-card-body" style="padding: 48px; text-align: center; align-items: center;">
-                        <div class="bento-label">Live Soon</div>
-                        <div class="bento-title" style="font-size: clamp(24px, 3.5vw, 40px);">Skyline Gala: The Winter Solstice</div>
-                        <div class="bento-desc" style="max-width: 600px; margin-bottom: 32px;">A curated evening above the clouds for the world's visionaries. Rooftop dining, silent auctions, and celestial views.</div>
+                        <div id="featured-category" class="bento-label">Live Soon</div>
+                        <div id="featured-title" class="bento-title" style="font-size: clamp(24px, 3.5vw, 40px);">Skyline Gala: The Winter Solstice</div>
+                        <div id="featured-desc" class="bento-desc" style="max-width: 600px; margin-bottom: 32px;">A curated evening above the clouds for the world's visionaries. Rooftop dining, silent auctions, and celestial views.</div>
                         <span class="btn-primary" style="display: inline-flex; align-items: center; gap: 8px;">View Details <span class="material-symbols-outlined" style="font-size:18px;">arrow_forward</span></span>
                     </div>
                 </a>
@@ -773,7 +783,7 @@
 
     <!-- ═══ Scripts ═══ -->
     <script src="js/three-world.js"></script>
-    <script src="js/events-data.js"></script>
+    <script type="module" src="js/data/events.js"></script>
     <script src="js/animations.js"></script>
     <script src="js/toast.js"></script>
     <script src="js/features/chat.js"></script>
@@ -815,6 +825,25 @@
             });
         }
 
+        // ── 1.5 Populate Featured Event ──
+        const featuredCard = document.getElementById('featured-card');
+        if (featuredCard) {
+            let allEvts = [];
+            if (window.CONCLAVE_EVENTS) allEvts = [...window.CONCLAVE_EVENTS];
+            const customEvts = JSON.parse(localStorage.getItem('conclave_custom_events') || '[]');
+            allEvts = [...allEvts, ...customEvts];
+
+            if (allEvts.length > 0) {
+                const randomEvt = allEvts[Math.floor(Math.random() * allEvts.length)];
+                featuredCard.href = `pages/event-detail.html?event=${randomEvt.id}`;
+                document.getElementById('featured-img').src = randomEvt.image;
+                document.getElementById('featured-category').textContent = randomEvt.categoryName || randomEvt.category || 'Featured';
+                document.getElementById('featured-title').textContent = randomEvt.title;
+                document.getElementById('featured-desc').textContent = randomEvt.description || (randomEvt.date + ' • ' + randomEvt.location);
+                featuredCard.style.opacity = '1';
+            }
+        }
+
         // ── 2. Populate event scroll cards ──
         const row = document.getElementById('events-scroll-row');
         if (row && window.CONCLAVE_EVENTS) {
@@ -825,7 +854,7 @@
                 card.innerHTML = `
                     <img class="sec-img" src="${evt.image}" alt="${evt.title}"/>
                     <div class="sec-body">
-                        <div class="sec-meta">${evt.category}</div>
+                        <div class="sec-meta">${evt.categoryName || evt.category}</div>
                         <div class="sec-title">${evt.title}</div>
                         <div class="sec-loc">${evt.location}</div>
                         <div class="sec-footer">

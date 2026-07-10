@@ -5,9 +5,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Check if Globe exists on this page
     if (!document.getElementById('globe-container')) return;
 
-    // Load from localStorage or use default (NYC)
-    let userLat = parseFloat(localStorage.getItem('conclave_user_lat')) || 40.7128;
-    let userLng = parseFloat(localStorage.getItem('conclave_user_lng')) || -74.0060;
+    // Force coordinates to center on India (Lat: 20.5937, Lng: 78.9629)
+    let userLat = 20.5937;
+    let userLng = 78.9629;
 
     initGlobe(userLat, userLng);
 
@@ -20,8 +20,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 : '../assets/img/earth-dark.jpg',
             bumpImage: '../assets/img/earth-topology.png',
             backgroundImage: isLight
-                ? '../assets/img/light-sky.png'
+                ? '../assets/img/light-sky-premium.png'
                 : '../assets/img/night-sky.png',
+            backgroundColor: isLight ? 'rgba(0,0,0,0)' : '#000000',
             atmosphereColor: isLight ? '#C49A2A' : '#E6C687'
         };
     }
@@ -37,6 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .globeImageUrl(textures.globeImage)
             .bumpImageUrl(textures.bumpImage)
             .backgroundImageUrl(textures.backgroundImage)
+            .backgroundColor(textures.backgroundColor)
             .showAtmosphere(true)
             .atmosphereColor(textures.atmosphereColor)
             .atmosphereAltitude(0.15)
@@ -94,39 +96,60 @@ document.addEventListener('DOMContentLoaded', () => {
             const newTextures = getGlobeTextures();
             world.globeImageUrl(newTextures.globeImage);
             world.backgroundImageUrl(newTextures.backgroundImage);
+            world.backgroundColor(newTextures.backgroundColor);
             world.atmosphereColor(newTextures.atmosphereColor);
         });
     }
 
     // --- 3. Procedural Event Placement ---
-    function generateNearbyEvents(centerLat, centerLng) {
-        // We take the 6 events from the global store (window.CONCLAVE_EVENTS)
-        // We will assign 5 of them to be near the user's location, and 1 far away.
+    function generateNearbyEvents() {
         if (!window.CONCLAVE_EVENTS) return [];
 
-        const events = [...window.CONCLAVE_EVENTS]; // Copy
+        const allEvents = [...window.CONCLAVE_EVENTS];
+        // Shuffle the events array
+        for (let i = allEvents.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [allEvents[i], allEvents[j]] = [allEvents[j], allEvents[i]];
+        }
+
+        // Take exactly 5 random events
+        const selectedEvents = allEvents.slice(0, 5);
         const placedEvents = [];
 
-        events.forEach((evt, index) => {
-            // First 5 events will be placed near the center coordinates
-            if (index < 5) {
-                // Generate a random offset between -5 and +5 degrees
-                const latOffset = (Math.random() - 0.5) * 8; 
-                const lngOffset = (Math.random() - 0.5) * 8;
-                
-                placedEvents.push({
-                    ...evt,
-                    lat: centerLat + latOffset,
-                    lng: centerLng + lngOffset
-                });
-            } else {
-                // 6th event placed randomly elsewhere in the world
-                placedEvents.push({
-                    ...evt,
-                    lat: (Math.random() - 0.5) * 160,
-                    lng: (Math.random() - 0.5) * 360
-                });
-            }
+        // Pre-defined safe land coordinates for major Indian cities
+        const indiaLocations = [
+            { lat: 28.7041, lng: 77.1025 }, // Delhi
+            { lat: 19.0760, lng: 72.8777 }, // Mumbai
+            { lat: 12.9716, lng: 77.5946 }, // Bangalore
+            { lat: 13.0827, lng: 80.2707 }, // Chennai
+            { lat: 22.5726, lng: 88.3639 }, // Kolkata
+            { lat: 18.5204, lng: 73.8567 }, // Pune
+            { lat: 17.3850, lng: 78.4867 }, // Hyderabad
+            { lat: 23.0225, lng: 72.5714 }, // Ahmedabad
+            { lat: 26.9124, lng: 75.7873 }, // Jaipur
+            { lat: 26.8467, lng: 80.9462 }, // Lucknow
+            { lat: 30.7333, lng: 76.7794 }, // Chandigarh
+            { lat: 23.2599, lng: 77.4126 }, // Bhopal
+            { lat: 25.5941, lng: 85.1376 }, // Patna
+            { lat: 9.9312, lng: 76.2673 },  // Kochi
+            { lat: 26.1445, lng: 91.7362 }  // Guwahati
+        ];
+
+        // Shuffle the locations array
+        for (let i = indiaLocations.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [indiaLocations[i], indiaLocations[j]] = [indiaLocations[j], indiaLocations[i]];
+        }
+
+        selectedEvents.forEach((evt, index) => {
+            // Assign a guaranteed land coordinate
+            const loc = indiaLocations[index % indiaLocations.length];
+            
+            placedEvents.push({
+                ...evt,
+                lat: loc.lat,
+                lng: loc.lng
+            });
         });
 
         return placedEvents;
