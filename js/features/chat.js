@@ -93,6 +93,41 @@
         container.scrollTop = container.scrollHeight;
     }
 
+    function createTypingIndicator() {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'chat-msg bot';
+        wrapper.id = 'chat-typing';
+
+        const bubble = document.createElement('div');
+        bubble.className = 'chat-bubble';
+
+        const dots = document.createElement('div');
+        dots.className = 'chat-typing-dots';
+        for (let i = 0; i < 3; i++) {
+            const dot = document.createElement('span');
+            dot.className = 'chat-typing-dot';
+            dots.appendChild(dot);
+        }
+        bubble.appendChild(dots);
+        wrapper.appendChild(bubble);
+        return wrapper;
+    }
+
+    function showTypingIndicator() {
+        const container = document.getElementById('chat-messages');
+        if (!container) return;
+        const el = createTypingIndicator();
+        container.appendChild(el);
+        container.scrollTop = container.scrollHeight;
+        isTyping = true;
+    }
+
+    function removeTypingIndicator() {
+        const el = document.getElementById('chat-typing');
+        if (el) el.remove();
+        isTyping = false;
+    }
+
     function handleSend() {
         const input = document.getElementById('chat-input');
         if (!input) return;
@@ -100,14 +135,14 @@
         const text = input.value.trim();
         if (!text || isTyping) return;
 
-        addMessage(text, 'user');
         input.value = '';
-        isTyping = true;
+        addMessage(text, 'user');
+        showTypingIndicator();
 
         setTimeout(() => {
+            removeTypingIndicator();
             const response = findResponse(text);
             addMessage(response, 'bot');
-            isTyping = false;
         }, 800);
     }
 
