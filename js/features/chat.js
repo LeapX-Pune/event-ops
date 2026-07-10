@@ -54,7 +54,7 @@
         }
     ];
 
-    const FALLBACK_RESPONSE = "I can help you discover events. Try asking about 'tech', 'music', 'weekend experiences', or 'pricing'.";
+    const FALLBACK_RESPONSE = "I'm not sure about that, but I can help you find something incredible. Try asking about tech events, live music, weekend getaways, or even private aviation showcases.";
 
     function formatTimestamp() {
         const now = new Date();
