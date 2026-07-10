@@ -53,6 +53,15 @@
 
     const FALLBACK_RESPONSE = "I can help you discover events. Try asking about 'tech', 'music', 'weekend experiences', or 'pricing'.";
 
+    function formatTimestamp() {
+        const now = new Date();
+        return now.toLocaleTimeString('en-US', {
+            hour: 'numeric',
+            minute: '2-digit',
+            hour12: true
+        });
+    }
+
     function findResponse(message) {
         const lower = message.toLowerCase().trim();
         for (const entry of KEYWORD_RESPONSES) {
@@ -74,6 +83,11 @@
         bubble.className = 'chat-bubble';
         bubble.textContent = text;
         wrapper.appendChild(bubble);
+
+        const time = document.createElement('div');
+        time.className = 'chat-timestamp';
+        time.textContent = formatTimestamp();
+        wrapper.appendChild(time);
 
         container.appendChild(wrapper);
         container.scrollTop = container.scrollHeight;

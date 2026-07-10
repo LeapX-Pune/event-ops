@@ -1590,6 +1590,17 @@ ul, ol {
     align-self: flex-end;
 }
 
+.chat-timestamp {
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-top: 4px;
+    padding: 0 2px;
+}
+
+.chat-msg.user .chat-timestamp {
+    text-align: right;
+}
+
 .chat-input-row {
     padding: var(--space-md);
     background: var(--bg-surface);
