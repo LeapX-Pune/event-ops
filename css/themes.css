@@ -1,0 +1,61 @@
+/* themes.css — Light & Dark mode theme tokens */
+
+/* ===== LIGHT THEME (default) ===== */
+[data-theme="light"],
+:root {
+  --bg-primary:        hsl(0, 0%, 100%);
+  --bg-secondary:      hsl(220, 14%, 96%);
+  --bg-tertiary:       hsl(220, 13%, 91%);
+
+  --text-primary:      hsl(220, 26%, 14%);
+  --text-secondary:    hsl(215, 14%, 40%);
+  --text-muted:        hsl(215, 10%, 60%);
+  --text-inverse:      hsl(0, 0%, 100%);
+
+  --border:            hsl(220, 13%, 88%);
+  --border-focus:      var(--primary);
+
+  --navbar-bg:         rgba(255, 255, 255, 0.85);
+  --navbar-border:     hsl(220, 13%, 88%);
+
+  --modal-bg:          hsl(0, 0%, 100%);
+  --modal-overlay:     rgba(0, 0, 0, 0.45);
+
+  --toast-success-bg:  hsl(142, 60%, 96%);
+  --toast-error-bg:    hsl(0, 72%, 96%);
+  --toast-info-bg:     hsl(210, 80%, 96%);
+  --toast-warning-bg:  hsl(38, 90%, 96%);
+}
+
+/* ===== DARK THEME ===== */
+[data-theme="dark"] {
+  --bg-primary:        hsl(222, 22%, 13%);
+  --bg-secondary:      hsl(222, 22%, 10%);
+  --bg-tertiary:       hsl(222, 22%, 18%);
+
+  --text-primary:      hsl(215, 20%, 90%);
+  --text-secondary:    hsl(215, 15%, 64%);
+  --text-muted:        hsl(215, 10%, 45%);
+  --text-inverse:      hsl(220, 26%, 14%);
+
+  --border:            hsl(222, 20%, 24%);
+  --border-focus:      var(--primary);
+
+  --navbar-bg:         rgba(20, 22, 33, 0.92);
+  --navbar-border:     hsl(222, 20%, 22%);
+
+  --modal-bg:          hsl(222, 22%, 16%);
+  --modal-overlay:     rgba(0, 0, 0, 0.65);
+
+  --primary-light:     hsl(245, 70%, 22%);
+
+  --toast-success-bg:  hsl(142, 40%, 14%);
+  --toast-error-bg:    hsl(0, 45%, 16%);
+  --toast-info-bg:     hsl(210, 50%, 16%);
+  --toast-warning-bg:  hsl(38, 55%, 16%);
+
+  --shadow-sm:  0 1px 2px rgba(0,0,0,0.25);
+  --shadow-md:  0 4px 6px rgba(0,0,0,0.3);
+  --shadow-lg:  0 10px 15px rgba(0,0,0,0.35);
+  --shadow-xl:  0 20px 25px rgba(0,0,0,0.4);
+}
