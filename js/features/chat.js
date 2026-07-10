@@ -4,6 +4,9 @@
     let isTyping = false;
     let chatInitialized = false;
 
+    const STORAGE_KEY = 'conclave_chat_history';
+    const MAX_HISTORY = 50;
+
     const KEYWORD_RESPONSES = [
         {
             keywords: ['tech', 'technology', 'coding', 'programming', 'developer', 'software'],
@@ -91,6 +94,7 @@
 
         container.appendChild(wrapper);
         container.scrollTop = container.scrollHeight;
+        saveHistory(sender, text);
     }
 
     function createTypingIndicator() {
@@ -133,6 +137,54 @@
         if (!input) return;
         input.value = text;
         handleSend();
+    }
+
+    function saveHistory(sender, text) {
+        try {
+            const history = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+            history.push({ sender, text, time: formatTimestamp() });
+            if (history.length > MAX_HISTORY) {
+                history.splice(0, history.length - MAX_HISTORY);
+            }
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+        } catch (e) {
+        }
+    }
+
+    function loadHistory() {
+        const container = document.getElementById('chat-messages');
+        if (!container) return;
+
+        let history;
+        try {
+            history = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        } catch (e) {
+            history = [];
+        }
+
+        if (history.length === 0) {
+            injectQuickReplies();
+            return;
+        }
+
+        history.forEach(entry => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'chat-msg ' + entry.sender;
+
+            const bubble = document.createElement('div');
+            bubble.className = 'chat-bubble';
+            bubble.textContent = entry.text;
+            wrapper.appendChild(bubble);
+
+            const time = document.createElement('div');
+            time.className = 'chat-timestamp';
+            time.textContent = entry.time || '';
+            wrapper.appendChild(time);
+
+            container.appendChild(wrapper);
+        });
+
+        container.scrollTop = container.scrollHeight;
     }
 
     function injectQuickReplies() {
@@ -211,7 +263,7 @@
             chatWindow.classList.toggle('open');
             if (!hasGreeted && chatWindow.classList.contains('open')) {
                 hasGreeted = true;
-                injectQuickReplies();
+                loadHistory();
             }
         });
 
