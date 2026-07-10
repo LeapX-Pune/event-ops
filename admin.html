@@ -5,7 +5,7 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>Admin Dashboard | Conclave</title>
     <meta name="description" content="Manage events on the Conclave platform."/>
-    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="css/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 
@@ -175,7 +175,7 @@
     <!-- ═══ Navigation ═══ -->
     <nav class="nav scrolled">
         <div class="nav-inner">
-            <a href="./index.html" class="nav-brand">CONCLAVE</a>
+            <a href="index.html" class="nav-brand">CONCLAVE</a>
             <div class="nav-links">
                 <a class="nav-link" href="pages/events.html">Events</a>
                 <a class="nav-link" href="pages/venues.html">Venues</a>
@@ -369,11 +369,11 @@
     </footer>
 
     <!-- ═══ Scripts ═══ -->
-    <script src="./js/events-data.js"></script>
-    <script src="./js/animations.js"></script>
-    <script src="./js/toast.js"></script>
-    <script src="./js/app.js"></script>
-    <script src="./js/sidebar.js"></script>
+    <script src="js/events-data.js"></script>
+    <script src="js/animations.js"></script>
+    <script src="js/toast.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/sidebar.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -407,7 +407,7 @@
                         previewImage.src = e.target.result;
                         dropZone.style.display = 'none';
                         previewContainer.style.display = 'block';
-                        urlInput.value = ''; // clear url if using file
+                        urlInput.value = '';
                     };
                     reader.readAsDataURL(file);
                 } else {
@@ -445,7 +445,7 @@
             });
             urlInput.addEventListener('input', () => {
                 if (urlInput.value.trim() !== '') {
-                    removeBtn.click(); // if they type a url, clear file state
+                    removeBtn.click();
                 }
             });
 
@@ -488,7 +488,6 @@
                     tbody.appendChild(tr);
                 });
 
-                // Attach edit/delete listeners
                 document.querySelectorAll('.edit-btn:not([disabled])').forEach(btn => {
                     btn.addEventListener('click', () => openEditModal(btn.dataset.id));
                 });
@@ -497,7 +496,6 @@
                 });
             }
 
-            // Open modals
             function openModal() { modal.classList.add('open'); }
             function closeModal() { modal.classList.remove('open'); clearValidation(); }
             function openDeleteModalUI() { deleteModal.classList.add('open'); }
@@ -547,7 +545,6 @@
                     updateItineraryNumbers();
                 });
 
-                // Drag and drop events
                 div.addEventListener('dragstart', (e) => {
                     draggedItem = div;
                     e.dataTransfer.effectAllowed = 'move';
@@ -586,9 +583,9 @@
             addBtn.addEventListener('click', () => {
                 form.reset();
                 document.getElementById('form-event-id').value = '';
-                removeBtn.click(); // Reset image upload state
+                removeBtn.click();
                 itineraryContainer.innerHTML = '';
-                addItineraryItem('01', '', ''); // Default first item
+                addItineraryItem('01', '', '');
                 modalTitle.textContent = 'Create Event';
                 submitBtn.textContent = 'Create Event';
                 openModal();
@@ -599,7 +596,6 @@
             document.getElementById('delete-cancel').addEventListener('click', closeDeleteModal);
             deleteModal.addEventListener('click', (e) => { if (e.target === deleteModal) closeDeleteModal(); });
 
-            // Edit
             function openEditModal(id) {
                 const events = getCustomEvents();
                 const evt = events.find(e => e.id === id);
@@ -627,8 +623,7 @@
                 document.getElementById('form-duration').value = evt.duration || '';
                 document.getElementById('form-difficulty').value = evt.difficulty || 'All Levels';
                 
-                // Handle image (data URL vs normal URL)
-                removeBtn.click(); // reset first
+                removeBtn.click();
                 if (evt.image && evt.image.startsWith('data:image')) {
                     imageDataInput.value = evt.image;
                     previewImage.src = evt.image;
@@ -643,7 +638,6 @@
                 openModal();
             }
 
-            // Delete
             let deleteTargetId = null;
             function openDeleteModal(id) {
                 deleteTargetId = id;
@@ -660,7 +654,6 @@
                 deleteTargetId = null;
             });
 
-            // Validation
             function clearValidation() {
                 document.querySelectorAll('.validation-error').forEach(el => el.style.display = 'none');
                 document.querySelectorAll('.form-input.error').forEach(el => el.classList.remove('error'));
@@ -705,14 +698,12 @@
                 return valid;
             }
 
-            // Submit (Create or Edit)
             form.addEventListener('submit', (e) => {
                 e.preventDefault();
                 if (!validate()) return;
 
                 const eventId = document.getElementById('form-event-id').value;
                 
-                // Parse itinerary dynamic inputs
                 let itineraryArray = [];
                 const itineraryBlocks = document.querySelectorAll('.itinerary-input-block');
                 itineraryBlocks.forEach((block, idx) => {
@@ -744,14 +735,12 @@
                 let events = getCustomEvents();
 
                 if (eventId) {
-                    // Edit
                     const idx = events.findIndex(e => e.id === eventId);
                     if (idx !== -1) {
                         events[idx] = eventData;
                     }
                     showToast('Event updated successfully.', 'success');
                 } else {
-                    // Create
                     events.push(eventData);
                     showToast('Event created successfully!', 'success');
                 }
@@ -761,7 +750,6 @@
                 closeModal();
             });
 
-            // Initial render
             renderTable();
         });
     </script>

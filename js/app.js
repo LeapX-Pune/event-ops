@@ -94,71 +94,8 @@
 
     // ── Chat Widget ─────────────────────────────────────────────
     function initChatWidget() {
-        const toggle = document.getElementById('chat-toggle');
-        const window_ = document.getElementById('chat-window');
-        const close = document.getElementById('chat-close');
-        const input = document.getElementById('chat-input');
-        const sendBtn = document.getElementById('chat-send');
-        const messages = document.getElementById('chat-messages');
-
-        if (!toggle || !window_) return;
-
-        toggle.addEventListener('click', () => {
-            window_.classList.toggle('open');
-        });
-
-        if (close) {
-            close.addEventListener('click', () => {
-                window_.classList.remove('open');
-            });
-        }
-
-        function sendMessage() {
-            if (!input || !messages) return;
-            const text = input.value.trim();
-            if (!text) return;
-
-            // User message
-            const userMsg = document.createElement('div');
-            userMsg.className = 'chat-msg user';
-            userMsg.textContent = text;
-            messages.appendChild(userMsg);
-            input.value = '';
-            messages.scrollTop = messages.scrollHeight;
-
-            // Bot response
-            setTimeout(() => {
-                const botMsg = document.createElement('div');
-                botMsg.className = 'chat-msg bot';
-
-                const lower = text.toLowerCase();
-                if (lower.includes('tech') || lower.includes('technology')) {
-                    botMsg.textContent = "We have a 'Frontend Bootcamp' coming up. Check our events page for more tech events!";
-                } else if (lower.includes('weekend')) {
-                    botMsg.textContent = "Yes, there are several workshops this weekend. Filter by date on our events page.";
-                } else if (lower.includes('music') || lower.includes('gala')) {
-                    botMsg.textContent = "Music events are available under the 'Social' category. The Skyline Gala might interest you!";
-                } else if (lower.includes('book') || lower.includes('register')) {
-                    botMsg.textContent = "To book an event, browse our Events page, select an event, and click 'Reserve Pass'!";
-                } else if (lower.includes('price') || lower.includes('cost')) {
-                    botMsg.textContent = "Prices vary by event. Check individual event pages for pricing details.";
-                } else {
-                    botMsg.textContent = "I can help you find events. Try asking about 'tech events', 'weekend workshops', or 'music events'.";
-                }
-
-                messages.appendChild(botMsg);
-                messages.scrollTop = messages.scrollHeight;
-            }, 800);
-        }
-
-        if (sendBtn) {
-            sendBtn.addEventListener('click', sendMessage);
-        }
-
-        if (input) {
-            input.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') sendMessage();
-            });
+        if (typeof window.initChat === 'function') {
+            window.initChat();
         }
     }
 

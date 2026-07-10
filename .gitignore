@@ -1,2 +1,5 @@
 PRD.pdf
 venv
+docs/
+project-docs/
+.DS_Store
