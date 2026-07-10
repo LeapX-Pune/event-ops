@@ -67,10 +67,15 @@
         const container = document.getElementById('chat-messages');
         if (!container) return;
 
-        const msg = document.createElement('div');
-        msg.className = 'chat-msg ' + sender;
-        msg.textContent = text;
-        container.appendChild(msg);
+        const wrapper = document.createElement('div');
+        wrapper.className = 'chat-msg ' + sender;
+
+        const bubble = document.createElement('div');
+        bubble.className = 'chat-bubble';
+        bubble.textContent = text;
+        wrapper.appendChild(bubble);
+
+        container.appendChild(wrapper);
         container.scrollTop = container.scrollHeight;
     }
 
