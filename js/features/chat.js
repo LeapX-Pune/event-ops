@@ -128,6 +128,54 @@
         isTyping = false;
     }
 
+    function handleQuickReply(text) {
+        const input = document.getElementById('chat-input');
+        if (!input) return;
+        input.value = text;
+        handleSend();
+    }
+
+    function injectQuickReplies() {
+        const container = document.getElementById('chat-messages');
+        if (!container) return;
+
+        const wrapper = document.createElement('div');
+        wrapper.className = 'chat-msg bot';
+
+        const bubble = document.createElement('div');
+        bubble.className = 'chat-bubble';
+        bubble.textContent = "Welcome to Conclave! I'm your event assistant. Ask me about our curated experiences, pricing, or how to book.";
+        wrapper.appendChild(bubble);
+
+        const time = document.createElement('div');
+        time.className = 'chat-timestamp';
+        time.textContent = formatTimestamp();
+        wrapper.appendChild(time);
+
+        container.appendChild(wrapper);
+
+        const replies = document.createElement('div');
+        replies.className = 'chat-quick-replies';
+
+        const buttons = [
+            { label: 'Tech Events', query: 'Show me tech events' },
+            { label: 'Music', query: 'Music events' },
+            { label: 'Pricing', query: 'How much do events cost' },
+            { label: 'Upcoming', query: 'What is upcoming this week' }
+        ];
+
+        buttons.forEach(btn => {
+            const el = document.createElement('button');
+            el.className = 'quick-reply-btn';
+            el.textContent = btn.label;
+            el.addEventListener('click', () => handleQuickReply(btn.query));
+            replies.appendChild(el);
+        });
+
+        container.appendChild(replies);
+        container.scrollTop = container.scrollHeight;
+    }
+
     function handleSend() {
         const input = document.getElementById('chat-input');
         if (!input) return;
@@ -158,8 +206,13 @@
 
         if (!toggle || !chatWindow) return;
 
+        let hasGreeted = false;
         toggle.addEventListener('click', function () {
             chatWindow.classList.toggle('open');
+            if (!hasGreeted && chatWindow.classList.contains('open')) {
+                hasGreeted = true;
+                injectQuickReplies();
+            }
         });
 
         if (closeBtn) {
