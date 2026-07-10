@@ -1515,8 +1515,8 @@ ul, ol {
 }
 
 .chat-window {
-    width: 340px;
-    height: 420px;
+    width: 380px;
+    height: 520px;
     background: var(--bg-deep);
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-lg);
@@ -1997,6 +1997,30 @@ ul, ol {
 
 ::-webkit-scrollbar-thumb:hover {
     background: var(--gold-dim);
+}
+
+/* ── Responsive Chat Widget ────────────────────────────────── */
+@media (max-width: 768px) {
+    .chat-widget {
+        right: 12px;
+        bottom: 80px;
+    }
+
+    .chat-window {
+        width: calc(100vw - 24px);
+        max-width: 380px;
+        height: 60vh;
+        max-height: 480px;
+    }
+
+    .chat-toggle {
+        width: 48px;
+        height: 48px;
+    }
+
+    .chat-toggle .material-symbols-outlined {
+        font-size: 20px;
+    }
 }
 
 /* ── Responsive Helpers ────────────────────────────────────── */
