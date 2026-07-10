@@ -1,0 +1,184 @@
+/* css/admin.css — Admin Dashboard Styling */
+
+.admin-table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    background: rgba(18,18,28,0.65);
+    backdrop-filter: blur(20px);
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-body);
+    font-size: 13px;
+}
+
+.admin-table th {
+    text-align: left;
+    padding: 14px 16px;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--border-subtle);
+    white-space: nowrap;
+}
+
+.admin-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    color: rgba(255,255,255,0.7);
+    vertical-align: middle;
+}
+
+.admin-table tr:last-child td {
+    border-bottom: none;
+}
+
+.admin-table tr:hover td {
+    background: rgba(255,255,255,0.02);
+}
+
+.admin-table .title-cell {
+    font-weight: 500;
+    color: white;
+}
+
+.admin-action-btn {
+    background: none;
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--text-secondary);
+    padding: 6px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.admin-action-btn:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+}
+
+.admin-action-btn.delete:hover {
+    border-color: #ef4444;
+    color: #ef4444;
+}
+
+.admin-action-btn .material-symbols-outlined {
+    font-size: 16px;
+}
+
+/* Modal Overlay and Layout */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(10,10,18,0.8);
+    backdrop-filter: blur(8px);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+}
+
+.modal-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-box {
+    background: rgba(18,18,28,0.98);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 32px;
+    width: 520px;
+    max-width: calc(100vw - 48px);
+    max-height: calc(100vh - 80px);
+    overflow-y: auto;
+    transform: translateY(20px);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-overlay.open .modal-box {
+    transform: translateY(0);
+}
+
+.modal-title {
+    font-family: var(--font-display);
+    font-size: 24px;
+    font-weight: 300;
+    color: white;
+    margin-bottom: 24px;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-top: 24px;
+}
+
+.btn-cancel {
+    font-family: var(--font-body);
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 12px 24px;
+    border-radius: 999px;
+    border: 1px solid var(--border-subtle);
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-cancel:hover {
+    border-color: rgba(255,255,255,0.2);
+    color: white;
+}
+
+.btn-danger {
+    font-family: var(--font-body);
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 12px 24px;
+    border-radius: 999px;
+    border: none;
+    background: rgba(239,68,68,0.2);
+    color: #ef4444;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-danger:hover {
+    background: rgba(239,68,68,0.35);
+}
+
+.validation-error {
+    color: #ef4444;
+    font-size: 11px;
+    margin-top: 4px;
+    display: none;
+}
+
+.form-input.error {
+    border-color: #ef4444 !important;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .admin-table th:nth-child(3),
+    .admin-table td:nth-child(3),
+    .admin-table th:nth-child(4),
+    .admin-table td:nth-child(4) {
+        display: none;
+    }
+}
