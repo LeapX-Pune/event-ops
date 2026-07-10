@@ -8,8 +8,9 @@
             position: fixed;
             inset: 0;
             z-index: 9998;
-            background-color: rgba(10, 10, 18, 0.7);
+            background-color: var(--glass-bg-heavy);
             backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             opacity: 0;
             transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1);
             pointer-events: none;
@@ -26,15 +27,15 @@
             max-width: 400px;
             height: 100%;
             z-index: 9999;
-            background: rgba(18, 18, 28, 0.95);
+            background: var(--glass-bg-heavy);
             backdrop-filter: blur(30px) saturate(180%);
             -webkit-backdrop-filter: blur(30px) saturate(180%);
-            border-left: 1px solid rgba(255, 255, 255, 0.06);
-            box-shadow: -10px 0 50px rgba(0, 0, 0, 0.5);
+            border-left: 1px solid var(--glass-border);
+            box-shadow: var(--shadow-float);
             transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             flex-direction: column;
-            color: white;
+            color: var(--text-primary);
             font-family: var(--font-body, 'Inter', sans-serif);
         }
         #profile-sidebar-drawer.active {
@@ -45,13 +46,13 @@
             align-items: center;
             gap: 16px;
             padding: 24px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            border-bottom: 1px solid var(--border-subtle);
         }
         .sidebar-title {
             font-family: var(--font-display, 'Montserrat', sans-serif);
             font-size: 20px;
             font-weight: 300;
-            color: white;
+            color: var(--text-primary);
             letter-spacing: -0.02em;
         }
         .sidebar-user {
@@ -64,9 +65,9 @@
             width: 64px;
             height: 64px;
             border-radius: 50%;
-            background: linear-gradient(135deg, rgba(230,198,135,0.2), rgba(230,198,135,0.05));
-            border: 1px solid rgba(230,198,135,0.2);
-            color: var(--gold, #E6C687);
+            background: linear-gradient(135deg, var(--gold-subtle), rgba(230,198,135,0.05));
+            border: 1px solid var(--border-medium);
+            color: var(--gold);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -79,11 +80,11 @@
             font-size: 20px;
             font-weight: 300;
             margin-bottom: 4px;
-            color: white;
+            color: var(--text-primary);
         }
         .sidebar-user-info p {
             font-size: 13px;
-            color: rgba(255, 255, 255, 0.4);
+            color: var(--text-secondary);
         }
         .sidebar-menu {
             flex-grow: 1;
@@ -91,8 +92,8 @@
             padding: 0 24px 24px;
         }
         .sidebar-item-card {
-            background: rgba(18, 18, 28, 0.65);
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
             border-radius: 12px;
             transition: all 0.3s ease;
             display: flex;
@@ -100,12 +101,12 @@
             justify-content: space-between;
             padding: 16px 20px;
             text-decoration: none;
-            color: white;
+            color: var(--text-primary);
             margin-bottom: 12px;
         }
         .sidebar-item-card:hover {
-            border-color: rgba(230, 198, 135, 0.2);
-            background: rgba(230, 198, 135, 0.03);
+            border-color: var(--border-hover);
+            background: var(--gold-glow);
             transform: translateX(4px);
         }
         .sidebar-item-card .flex {
@@ -114,14 +115,14 @@
             gap: 16px;
         }
         .sidebar-item-card .flex span.material-symbols-outlined {
-            color: var(--gold, #E6C687);
+            color: var(--gold);
             font-size: 20px;
         }
         .sidebar-item-card .flex span:last-child {
             font-family: var(--font-body, 'Inter', sans-serif);
             font-size: 14px;
             font-weight: 400;
-            color: rgba(255, 255, 255, 0.8);
+            color: var(--text-primary);
         }
         .sidebar-section-title {
             font-family: var(--font-body, 'Inter', sans-serif);
@@ -129,16 +130,16 @@
             font-weight: 500;
             letter-spacing: 3px;
             text-transform: uppercase;
-            color: rgba(255, 255, 255, 0.3);
+            color: var(--text-muted);
             margin: 32px 0 16px;
             display: block;
         }
         .sidebar-item-card.logout:hover {
-            border-color: rgba(255, 77, 77, 0.3);
-            background: rgba(255, 77, 77, 0.05);
+            border-color: rgba(239, 68, 68, 0.3);
+            background: rgba(239, 68, 68, 0.05);
         }
         .sidebar-item-card.logout .flex span.material-symbols-outlined {
-            color: #ff4d4d;
+            color: #ef4444;
         }
     `;
     document.head.appendChild(style);
@@ -204,7 +205,7 @@
                         </div>
                         <span class="material-symbols-outlined" style="opacity:0.5; font-size:20px;">chevron_right</span>
                     </a>
-                    <a href="${isSubdirectory ? 'admin.html' : 'pages/admin.html'}" class="sidebar-item-card" style="margin-bottom:0; border-radius:0; border-bottom:none;">
+                    <a href="${isSubdirectory ? '../admin.html' : 'admin.html'}" class="sidebar-item-card" style="margin-bottom:0; border-radius:0; border-bottom:none;">
                         <div class="flex">
                             <span class="material-symbols-outlined">admin_panel_settings</span>
                             <span style="font-size:14px; font-weight:500;">Admin Dashboard</span>

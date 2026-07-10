@@ -10,6 +10,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+    <!-- ═══ Anti-Flash Theme Script ═══ -->
+    <script>
+        (function() {
+            var theme = localStorage.getItem('conclave_theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
     
     <!-- ═══ Background Cache / Prefetch for Venues Globe ═══ -->
     <link rel="prefetch" href="pages/venues.html" as="document"/>
@@ -19,10 +27,19 @@
     <link rel="prefetch" href="https://unpkg.com/three-globe/example/img/earth-dark.jpg" as="image"/>
     <link rel="prefetch" href="https://unpkg.com/three-globe/example/img/earth-topology.png" as="image"/>
     <link rel="prefetch" href="https://unpkg.com/three-globe/example/img/night-sky.png" as="image"/>
+
+    <!-- ═══ Anti-Flash Theme Script ═══ -->
+    <script>
+        (function() {
+            var theme = localStorage.getItem('conclave_theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+
     <style>
 
         html { scroll-behavior: smooth; }
-        body { background: #0a0a12; overflow-x: hidden; }
+        body { background: var(--bg-void); overflow-x: hidden; }
 
         /* ── Fixed Particle Canvas ── */
         #world-canvas {
@@ -75,7 +92,7 @@
             font-family: var(--font-body);
             font-size: 15px;
             line-height: 1.7;
-            color: rgba(255,255,255,0.45);
+            color: var(--text-secondary);
             max-width: 420px;
             margin: 0 auto 40px;
             opacity: 0;
@@ -110,8 +127,8 @@
             text-transform: uppercase;
             padding: 8px 16px;
             border-radius: 999px;
-            border: 1px solid rgba(255,255,255,0.08);
-            color: rgba(255,255,255,0.4);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
             text-decoration: none;
             transition: all 0.3s ease;
             background: transparent;
@@ -134,7 +151,7 @@
             font-family: var(--font-body);
             font-size: 9px; letter-spacing: 4px;
             text-transform: uppercase;
-            color: rgba(255,255,255,0.2);
+            color: var(--text-muted);
         }
         .e-scroll-line {
             width: 1px; height: 36px;
@@ -169,14 +186,14 @@
             font-weight: 200;
             letter-spacing: -0.03em;
             line-height: 1;
-            color: white;
+            color: var(--text-primary);
             margin-bottom: 20px;
         }
         .section-header p {
             font-family: var(--font-body);
             font-size: 15px;
             line-height: 1.8;
-            color: rgba(255,255,255,0.4);
+            color: var(--text-secondary);
             max-width: 480px;
         }
 
@@ -190,10 +207,10 @@
         .bento-featured { grid-template-columns: 1.4fr 1fr; }
 
         .bento-card {
-            background: rgba(18, 18, 28, 0.65);
+            background: var(--bg-card);
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255,255,255,0.06);
+            border: 1px solid var(--border-subtle);
             border-radius: 12px;
             overflow: hidden;
             transition: border-color 0.4s ease;
@@ -203,7 +220,7 @@
             flex-direction: column;
         }
         .bento-card:hover {
-            border-color: rgba(230,198,135,0.2);
+            border-color: var(--border-hover);
         }
         /* Border glow effect (refracted light from canvas) */
         .bento-card::before {
@@ -212,7 +229,7 @@
             inset: -1px;
             border-radius: 13px;
             padding: 1px;
-            background: linear-gradient(135deg, rgba(230,198,135,0.1), transparent, rgba(123,104,238,0.05));
+            background: linear-gradient(135deg, var(--gold-glow), transparent, var(--violet-glow, rgba(123,104,238,0.05)));
             -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             -webkit-mask-composite: xor;
             mask-composite: exclude;
@@ -240,7 +257,7 @@
             font-family: var(--font-display);
             font-size: clamp(18px, 2.5vw, 28px);
             font-weight: 300;
-            color: white;
+            color: var(--text-primary);
             line-height: 1.2;
             margin-bottom: 12px;
             letter-spacing: -0.02em;
@@ -249,7 +266,7 @@
             font-family: var(--font-body);
             font-size: 13px;
             line-height: 1.7;
-            color: rgba(255,255,255,0.4);
+            color: var(--text-secondary);
             margin-bottom: 20px;
             flex: 1;
         }
@@ -269,7 +286,7 @@
             font-family: var(--font-display);
             font-size: clamp(40px, 5vw, 64px);
             font-weight: 100;
-            color: white;
+            color: var(--text-primary);
             line-height: 1;
         }
         .bento-metric-label {
@@ -277,7 +294,7 @@
             font-size: 11px;
             letter-spacing: 2px;
             text-transform: uppercase;
-            color: rgba(255,255,255,0.3);
+            color: var(--text-muted);
             margin-top: 8px;
         }
         .bento-link {
@@ -312,8 +329,8 @@
             justify-content: space-between;
             gap: 24px;
             padding: 48px 0;
-            border-top: 1px solid rgba(255,255,255,0.06);
-            border-bottom: 1px solid rgba(255,255,255,0.06);
+            border-top: 1px solid var(--border-subtle);
+            border-bottom: 1px solid var(--border-subtle);
             margin: 80px 0;
         }
         .stat-block { text-align: center; flex: 1; }
@@ -321,7 +338,7 @@
             font-family: var(--font-display);
             font-size: clamp(32px, 5vw, 56px);
             font-weight: 100;
-            color: white;
+            color: var(--text-primary);
             line-height: 1;
             margin-bottom: 8px;
         }
@@ -330,7 +347,7 @@
             font-size: 10px;
             letter-spacing: 3px;
             text-transform: uppercase;
-            color: rgba(255,255,255,0.25);
+            color: var(--text-muted);
         }
 
         /* ═══ EVENTS SCROLL ROW ═══ */
@@ -346,10 +363,10 @@
         .scroll-event-card {
             flex: 0 0 300px;
             scroll-snap-align: start;
-            background: rgba(18, 18, 28, 0.65);
+            background: var(--bg-card);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255,255,255,0.06);
+            border: 1px solid var(--border-subtle);
             border-radius: 12px;
             overflow: hidden;
             text-decoration: none;
@@ -357,7 +374,7 @@
             transition: border-color 0.4s ease, transform 0.4s ease;
         }
         .scroll-event-card:hover {
-            border-color: rgba(230,198,135,0.2);
+            border-color: var(--border-hover);
             transform: translateY(-4px);
         }
         .sec-img { width: 100%; height: 180px; object-fit: cover; }
@@ -371,12 +388,12 @@
         .sec-title {
             font-family: var(--font-display);
             font-size: 16px; font-weight: 400;
-            color: white; margin-bottom: 6px;
+            color: var(--text-primary); margin-bottom: 6px;
         }
         .sec-loc {
             font-family: var(--font-body);
             font-size: 12px;
-            color: rgba(255,255,255,0.35);
+            color: var(--text-muted);
             margin-bottom: 14px;
         }
         .sec-footer {
@@ -385,21 +402,21 @@
         }
         .sec-price {
             font-family: var(--font-display);
-            font-size: 14px; font-weight: 500; color: white;
+            font-size: 14px; font-weight: 500; color: var(--text-primary);
         }
         .sec-arrow {
             width: 28px; height: 28px;
             display: flex; align-items: center; justify-content: center;
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid var(--border-subtle);
             border-radius: 50%;
-            color: rgba(255,255,255,0.3);
+            color: var(--text-muted);
             font-size: 14px;
             transition: all 0.3s ease;
         }
         .scroll-event-card:hover .sec-arrow {
             background: var(--gold);
             border-color: var(--gold);
-            color: #0a0a12;
+            color: var(--text-primary);
         }
 
         /* ═══ CTA ═══ */
@@ -412,7 +429,7 @@
             font-size: clamp(40px, 8vw, 100px);
             font-weight: 100;
             letter-spacing: -0.03em;
-            color: white; line-height: 0.95;
+            color: var(--text-primary); line-height: 0.95;
             margin-bottom: 24px;
         }
         .editions-cta h2 em {
@@ -425,7 +442,7 @@
         .editions-cta p {
             font-family: var(--font-body);
             font-size: 14px;
-            color: rgba(255,255,255,0.35);
+            color: var(--text-muted);
             max-width: 340px;
             margin: 0 auto 40px;
             line-height: 1.7;
@@ -441,7 +458,7 @@
             background: rgba(18, 18, 28, 0.6);
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255,255,255,0.06);
+            border: 1px solid var(--border-subtle);
             border-radius: 999px;
             padding: 6px;
             display: flex;
@@ -460,12 +477,12 @@
             letter-spacing: 0.5px;
             padding: 8px 14px;
             border-radius: 999px;
-            color: rgba(255,255,255,0.4);
+            color: var(--text-muted);
             text-decoration: none;
             transition: all 0.3s ease;
             white-space: nowrap;
         }
-        .pill-nav a:hover { color: rgba(255,255,255,0.8); }
+        .pill-nav a:hover { color: var(--text-primary); }
         .pill-nav a.active {
             background: rgba(230,198,135,0.1);
             color: var(--gold);
@@ -509,12 +526,15 @@
                     <a class="nav-link" href="pages/venues.html">Venues</a>
                     <a class="nav-link" href="pages/bookings.html">My Bookings</a>
                 </div>
-                <div class="nav-actions">
+<div class="nav-actions">
 
-                    <a href="pages/bookings.html" class="nav-avatar" style="display: flex; align-items: center; justify-content: center; color: var(--text-secondary); text-decoration: none;">
-                        <span class="material-symbols-outlined" style="font-size: 24px;">person</span>
-                    </a>
-                </div>
+                <button class="nav-icon-btn theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+                    <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
+                </button>
+                <a href="pages/bookings.html" class="nav-avatar" style="display: flex; align-items: center; justify-content: center; color: var(--text-secondary); text-decoration: none;">
+                    <span class="material-symbols-outlined" style="font-size: 24px;">person</span>
+                </a>
+            </div>
             </div>
         </nav>
 

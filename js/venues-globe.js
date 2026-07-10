@@ -11,18 +11,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initGlobe(userLat, userLng);
 
+    // Theme-aware texture URLs
+    function getGlobeTextures() {
+        const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+        return {
+            globeImage: isLight 
+                ? '../assets/img/earth-light.png' // Custom light theme earth texture
+                : '../assets/img/earth-dark.jpg',
+            bumpImage: '../assets/img/earth-topology.png',
+            backgroundImage: isLight
+                ? '../assets/img/light-sky.png'
+                : '../assets/img/night-sky.png',
+            atmosphereColor: isLight ? '#C49A2A' : '#E6C687'
+        };
+    }
+
     // --- 2. Globe Initialization ---
     function initGlobe(lat, lng) {
         const container = document.getElementById('globe-container');
+        const textures = getGlobeTextures();
         
         // Setup Globe
         const world = Globe()
             (container)
-            .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-dark.jpg')
-            .bumpImageUrl('https://unpkg.com/three-globe/example/img/earth-topology.png')
-            .backgroundImageUrl('https://unpkg.com/three-globe/example/img/night-sky.png')
+            .globeImageUrl(textures.globeImage)
+            .bumpImageUrl(textures.bumpImage)
+            .backgroundImageUrl(textures.backgroundImage)
             .showAtmosphere(true)
-            .atmosphereColor('#E6C687')
+            .atmosphereColor(textures.atmosphereColor)
             .atmosphereAltitude(0.15)
             .htmlElementsData(generateNearbyEvents(lat, lng))
             .htmlElement(d => {
@@ -35,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="marker-core"></div>
                     <div class="marker-popup">
                         <span class="text-label" style="color:var(--gold); display:block; margin-bottom:8px;">${d.category}</span>
-                        <h4 style="font-family:var(--font-display); font-size:16px; font-weight:400; color:white; margin-bottom:6px;">${d.title}</h4>
+                        <h4 style="font-family:var(--font-display); font-size:16px; font-weight:400; color:var(--text-primary); margin-bottom:6px;">${d.title}</h4>
                         <p style="font-size:12px; color:var(--text-secondary); margin-bottom: 16px;">
                             ${d.date} • ${d.time}
                         </p>
@@ -71,6 +87,14 @@ document.addEventListener('DOMContentLoaded', () => {
         window.addEventListener('resize', () => {
             world.width(window.innerWidth);
             world.height(window.innerHeight);
+        });
+
+        // Theme change handler - update globe textures
+        window.addEventListener('themechange', (e) => {
+            const newTextures = getGlobeTextures();
+            world.globeImageUrl(newTextures.globeImage);
+            world.backgroundImageUrl(newTextures.backgroundImage);
+            world.atmosphereColor(newTextures.atmosphereColor);
         });
     }
 

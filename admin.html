@@ -5,9 +5,17 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>Admin Dashboard | Conclave</title>
     <meta name="description" content="Manage events on the Conclave platform."/>
-    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="./css/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+    <!-- ═══ Anti-Flash Theme Script ═══ -->
+    <script>
+        (function() {
+            var theme = localStorage.getItem('conclave_theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
     <style>
         .admin-table-wrap {
             overflow-x: auto;
@@ -34,19 +42,19 @@
         }
         .admin-table td {
             padding: 12px 16px;
-            border-bottom: 1px solid rgba(255,255,255,0.03);
-            color: rgba(255,255,255,0.7);
+            border-bottom: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
             vertical-align: middle;
         }
         .admin-table tr:last-child td { border-bottom: none; }
-        .admin-table tr:hover td { background: rgba(255,255,255,0.02); }
+        .admin-table tr:hover td { background: var(--bg-surface); }
         .admin-table .title-cell {
             font-weight: 500;
-            color: white;
+            color: var(--text-primary);
         }
         .admin-action-btn {
             background: none;
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid var(--border-subtle);
             color: var(--text-secondary);
             padding: 6px 8px;
             border-radius: 6px;
@@ -86,7 +94,7 @@
         }
         .modal-box {
             background: rgba(18,18,28,0.98);
-            border: 1px solid rgba(255,255,255,0.08);
+            border: 1px solid var(--border-subtle);
             border-radius: 16px;
             padding: 32px;
             width: 520px;
@@ -103,7 +111,7 @@
             font-family: var(--font-display);
             font-size: 24px;
             font-weight: 300;
-            color: white;
+            color: var(--text-primary);
             margin-bottom: 24px;
         }
         .modal-actions {
@@ -125,7 +133,7 @@
             cursor: pointer;
             transition: all 0.3s;
         }
-        .btn-cancel:hover { border-color: rgba(255,255,255,0.2); color: white; }
+        .btn-cancel:hover { border-color: var(--gold); color: var(--text-primary); }
         .btn-danger {
             font-family: var(--font-body);
             font-size: 13px;
@@ -167,14 +175,17 @@
     <!-- ═══ Navigation ═══ -->
     <nav class="nav scrolled">
         <div class="nav-inner">
-            <a href="../index.html" class="nav-brand">CONCLAVE</a>
+            <a href="./index.html" class="nav-brand">CONCLAVE</a>
             <div class="nav-links">
-                <a class="nav-link" href="events.html">Events</a>
-                <a class="nav-link" href="venues.html">Venues</a>
-                <a class="nav-link" href="bookings.html">My Bookings</a>
+                <a class="nav-link" href="pages/events.html">Events</a>
+                <a class="nav-link" href="pages/venues.html">Venues</a>
+                <a class="nav-link" href="pages/bookings.html">My Bookings</a>
             </div>
             <div class="nav-actions">
-                <a href="bookings.html" class="nav-avatar" style="display: flex; align-items: center; justify-content: center; color: var(--text-secondary); text-decoration: none;">
+                <button class="nav-icon-btn theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+                    <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
+                </button>
+                <a href="pages/bookings.html" class="nav-avatar" style="display: flex; align-items: center; justify-content: center; color: var(--text-secondary); text-decoration: none;">
                     <span class="material-symbols-outlined" style="font-size: 24px;">person</span>
                 </a>
             </div>
@@ -183,9 +194,9 @@
 
     <!-- ═══ Mobile Menu ═══ -->
     <div class="mobile-menu" id="mobile-menu">
-        <a class="mobile-menu-link" href="events.html">Events</a>
-        <a class="mobile-menu-link" href="venues.html">Venues</a>
-        <a class="mobile-menu-link" href="bookings.html">My Bookings</a>
+        <a class="mobile-menu-link" href="pages/events.html">Events</a>
+        <a class="mobile-menu-link" href="pages/venues.html">Venues</a>
+        <a class="mobile-menu-link" href="pages/bookings.html">My Bookings</a>
         <button class="mobile-menu-close material-symbols-outlined" id="mobile-menu-close">close</button>
     </div>
 
@@ -311,15 +322,15 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label">Banner Image</label>
-                    <div id="image-upload-zone" style="border: 2px dashed rgba(255,255,255,0.2); border-radius: 12px; padding: 24px; text-align: center; margin-bottom: 12px; cursor: pointer; transition: all 0.3s; background: rgba(0,0,0,0.2);">
+                    <div id="image-upload-zone" style="border: 2px dashed var(--border-subtle); border-radius: 12px; padding: 24px; text-align: center; margin-bottom: 12px; cursor: pointer; transition: all 0.3s; background: var(--bg-surface-high);">
                         <span class="material-symbols-outlined" style="font-size: 32px; color: var(--text-secondary); margin-bottom: 8px;">cloud_upload</span>
                         <div style="font-size: 13px; color: var(--text-secondary);">Click to upload or drag and drop</div>
-                        <div style="font-size: 11px; color: rgba(255,255,255,0.3); margin-top: 4px;">PNG, JPG up to 5MB</div>
+                        <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">PNG, JPG up to 5MB</div>
                         <input type="file" id="form-image-file" accept="image/*" style="display: none;" />
                     </div>
-                    <div id="image-preview-container" style="display: none; margin-bottom: 12px; position: relative; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1);">
+                    <div id="image-preview-container" style="display: none; margin-bottom: 12px; position: relative; border-radius: 12px; overflow: hidden; border: 1px solid var(--border-subtle);">
                         <img id="image-preview" src="" style="width: 100%; height: 160px; object-fit: cover; display: block;" />
-                        <button type="button" id="remove-image-btn" class="material-symbols-outlined" style="position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.6); color: white; border: none; border-radius: 50%; padding: 4px; cursor: pointer; font-size: 18px;">close</button>
+                        <button type="button" id="remove-image-btn" class="material-symbols-outlined" style="position: absolute; top: 8px; right: 8px; background: var(--glass-bg-heavy); color: var(--text-primary); border: none; border-radius: 50%; padding: 4px; cursor: pointer; font-size: 18px;">close</button>
                     </div>
                     <div style="text-align: center; font-size: 12px; color: var(--text-secondary); margin-bottom: 12px;">OR</div>
                     <input type="url" class="form-input" id="form-image" placeholder="Image URL (https://...)"/>
@@ -358,11 +369,11 @@
     </footer>
 
     <!-- ═══ Scripts ═══ -->
-    <script src="../js/events-data.js"></script>
-    <script src="../js/animations.js"></script>
-    <script src="../js/toast.js"></script>
-    <script src="../js/app.js"></script>
-    <script src="../js/sidebar.js"></script>
+    <script src="./js/events-data.js"></script>
+    <script src="./js/animations.js"></script>
+    <script src="./js/toast.js"></script>
+    <script src="./js/app.js"></script>
+    <script src="./js/sidebar.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -411,14 +422,16 @@
                 dropZone.style.borderColor = 'var(--gold)';
                 dropZone.style.background = 'rgba(230,198,135,0.1)';
             });
+            function resetDropZoneStyles() {
+                dropZone.style.borderColor = 'var(--border-subtle)';
+                dropZone.style.background = 'var(--bg-surface-high)';
+            }
             dropZone.addEventListener('dragleave', () => {
-                dropZone.style.borderColor = 'rgba(255,255,255,0.2)';
-                dropZone.style.background = 'rgba(0,0,0,0.2)';
+                resetDropZoneStyles();
             });
             dropZone.addEventListener('drop', (e) => {
                 e.preventDefault();
-                dropZone.style.borderColor = 'rgba(255,255,255,0.2)';
-                dropZone.style.background = 'rgba(0,0,0,0.2)';
+                resetDropZoneStyles();
                 if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
                     handleFile(e.dataTransfer.files[0]);
                 }
@@ -510,8 +523,8 @@
                 const div = document.createElement('div');
                 div.className = 'itinerary-input-block';
                 div.draggable = true;
-                div.style.background = 'rgba(255,255,255,0.02)';
-                div.style.border = '1px solid rgba(255,255,255,0.1)';
+                div.style.background = 'var(--bg-surface)';
+                div.style.border = '1px solid var(--border-subtle)';
                 div.style.padding = '12px';
                 div.style.borderRadius = '8px';
                 div.style.display = 'grid';

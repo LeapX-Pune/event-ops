@@ -8,14 +8,24 @@
     <link rel="stylesheet" href="../css/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <!-- ═══ Anti-Flash Theme Script ═══ -->
+    <script>
+        (function() {
+            var theme = localStorage.getItem('conclave_theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+
     <style>
         .bookings-hero {
             position: relative;
             height: 50vh;
+            min-height: 400px;
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
+            padding-top: 100px; /* Prevents overlap with fixed nav */
             overflow: hidden;
             border-bottom: 1px solid var(--border-subtle);
             background: radial-gradient(circle at 50% 100%, rgba(230, 198, 135, 0.1) 0%, transparent 50%);
@@ -47,7 +57,7 @@
             overflow: hidden;
             transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
             transform-style: preserve-3d;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            box-shadow: var(--shadow-card);
             display: flex;
             flex-direction: column;
             gap: 24px;
@@ -88,7 +98,7 @@
             font-family: var(--font-display);
             font-size: 24px;
             font-weight: 300;
-            color: white;
+            color: var(--text-primary);
             line-height: 1.2;
         }
 
@@ -109,8 +119,8 @@
         .ticket-day {
             font-family: var(--font-display);
             font-size: 24px;
-            color: white;
             font-weight: 300;
+            color: var(--text-primary);
         }
 
         .ticket-body {
@@ -145,9 +155,9 @@
         .ticket-btn {
             flex: 1;
             padding: 12px;
-            background: rgba(255,255,255,0.05);
+            background: var(--bg-surface);
             border: 1px solid var(--border-subtle);
-            color: white;
+            color: var(--text-primary);
             border-radius: 8px;
             font-size: 11px;
             text-transform: uppercase;
@@ -200,6 +210,9 @@
                 <a class="nav-link active" href="bookings.html">My Bookings</a>
             </div>
             <div class="nav-actions">
+                <button class="nav-icon-btn theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+                    <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
+                </button>
                 <a href="#" class="nav-avatar" style="display: flex; align-items: center; justify-content: center; color: var(--text-secondary); text-decoration: none;">
                     <span class="material-symbols-outlined" style="font-size: 24px;">person</span>
                 </a>
@@ -264,10 +277,10 @@
                 <p id="pass-location" style="font-size:14px;color:var(--gold);">Venue Location</p>
                 <p id="pass-datetime" style="font-size:14px;color:var(--text-secondary);margin-top:6px;">Oct 12, 2024 • 09:00 AM</p>
             </div>
-            <div style="width:100%;display:flex;justify-content:space-between;gap:16px; margin-top: 32px; background: rgba(0,0,0,0.3); padding: 16px; border-radius: 8px;">
+            <div style="width:100%;display:flex;justify-content:space-between;gap:16px; margin-top: 32px; background: var(--bg-surface-high); padding: 16px; border-radius: 8px;">
                 <div>
                     <span class="text-label-sm text-secondary" style="display:block;">Holder</span>
-                    <span style="font-size:14px;font-weight:500;color:white;" id="pass-holder">Member Guest</span>
+                    <span style="font-size:14px;font-weight:500;color:var(--text-primary);" id="pass-holder">Member Guest</span>
                 </div>
                 <div style="text-align:right;">
                     <span class="text-label-sm text-secondary" style="display:block;">Access Code</span>
@@ -310,13 +323,18 @@
         const userName = localStorage.getItem('conclave_user_name') || 'Member Guest';
 
         function renderBookings() {
+            // Re-read localStorage to catch cross-tab updates
+            registeredEvents = JSON.parse(localStorage.getItem('conclave_registered') || '[]');
             container.innerHTML = '';
 
-            if (registeredEvents.length === 0) {
+            // Filter out null/undefined event IDs
+            const validEvents = registeredEvents.filter(id => id && typeof id === 'string');
+
+            if (validEvents.length === 0) {
                 container.innerHTML = `
                     <div class="empty-portal" style="grid-column: 1 / -1;">
                         <span class="material-symbols-outlined">explore</span>
-                        <h2 class="text-display-sm" style="color:white; margin-bottom: 16px;">The Void Awaits</h2>
+                        <h2 class="text-display-sm" style="color:var(--text-primary); margin-bottom: 16px;">The Void Awaits</h2>
                         <p style="color:var(--text-secondary); margin-bottom: 32px;">You currently have no scheduled journeys. Step into a new dimension.</p>
                         <a href="events.html" class="btn-primary" style="display:inline-flex;">Discover Events</a>
                     </div>
@@ -324,7 +342,7 @@
                 return;
             }
 
-            registeredEvents.forEach((eventId, index) => {
+            validEvents.forEach((eventId, index) => {
                 const booking = allEvents.find(e => e.id === eventId);
                 if (!booking) return;
 
@@ -390,6 +408,13 @@
         }
 
         renderBookings();
+
+        // Sync across tabs when localStorage changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'conclave_registered') {
+                renderBookings();
+            }
+        });
 
         window.deleteBooking = (id) => {
             if (confirm("Are you sure you want to release your access to this experience?")) {

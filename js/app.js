@@ -6,6 +6,34 @@
 (function () {
     'use strict';
 
+    // ── Theme Management ────────────────────────────────────────
+    const THEME_KEY = 'conclave_theme';
+    const THEME_ATTR = 'data-theme';
+
+    function getStoredTheme() {
+        return localStorage.getItem(THEME_KEY) || 'dark';
+    }
+
+    function applyTheme(theme) {
+        document.documentElement.setAttribute(THEME_ATTR, theme);
+        localStorage.setItem(THEME_KEY, theme);
+        updateThemeIcons(theme);
+        // Dispatch event for other components (three-world, globe, etc.)
+        window.dispatchEvent(new CustomEvent('themechange', { detail: { theme } }));
+    }
+
+    function updateThemeIcons(theme) {
+        const icons = document.querySelectorAll('#theme-toggle .material-symbols-outlined, #theme-icon');
+        icons.forEach(icon => {
+            icon.textContent = theme === 'dark' ? 'light_mode' : 'dark_mode';
+        });
+    }
+
+    function initTheme() {
+        const theme = getStoredTheme();
+        applyTheme(theme);
+    }
+
     // ── Nav Scroll Effect ───────────────────────────────────────
     function initNavScroll() {
         const nav = document.querySelector('.nav');
@@ -54,10 +82,13 @@
         const btn = document.getElementById('theme-toggle');
         if (!btn) return;
 
+        // Set initial icon state
+        updateThemeIcons(getStoredTheme());
+
         btn.addEventListener('click', () => {
-            // For now, keep dark mode only (the design is built for dark)
-            // Can add light mode later
-            btn.textContent = btn.textContent === 'light_mode' ? 'dark_mode' : 'light_mode';
+            const currentTheme = getStoredTheme();
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            applyTheme(newTheme);
         });
     }
 
@@ -141,6 +172,13 @@
         const particles = [];
         const PARTICLE_COUNT = 80;
 
+        // Read theme-aware colors from CSS variables
+        function getParticleColor() {
+            const root = document.documentElement;
+            const color = getComputedStyle(root).getPropertyValue('--particle-ambient-color').trim();
+            return color || '230, 198, 135';
+        }
+
         function resize() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
@@ -164,6 +202,7 @@
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             const time = Date.now() * 0.001;
+            const color = getParticleColor();
 
             particles.forEach(p => {
                 p.x += p.vx;
@@ -179,7 +218,7 @@
 
                 ctx.beginPath();
                 ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(230, 198, 135, ${opacity})`;
+                ctx.fillStyle = `rgba(${color}, ${opacity})`;
                 ctx.fill();
             });
 
@@ -189,6 +228,11 @@
         resize();
         createParticles();
         draw();
+
+        // Re-read color on theme change
+        window.addEventListener('themechange', () => {
+            // Particles will pick up new color on next frame
+        });
 
         window.addEventListener('resize', () => {
             resize();
@@ -263,6 +307,7 @@
 
     // ── Initialize All ──────────────────────────────────────────
     function initAll() {
+        initTheme();
         initLoader();
         initNavScroll();
         initMobileMenu();

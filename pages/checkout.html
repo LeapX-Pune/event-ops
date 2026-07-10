@@ -8,6 +8,14 @@
     <link rel="stylesheet" href="../css/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+    <!-- ═══ Anti-Flash Theme Script ═══ -->
+    <script>
+        (function() {
+            var theme = localStorage.getItem('conclave_theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
 </head>
 <body>
 
@@ -25,6 +33,9 @@
                 <a href="../index.html" class="nav-brand" style="pointer-events:auto;">CONCLAVE</a>
             </div>
             <div class="nav-actions" style="z-index:2;">
+                <button class="nav-icon-btn theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+                    <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
+                </button>
                 <a href="bookings.html" class="nav-avatar" style="display: flex; align-items: center; justify-content: center; color: var(--text-secondary); text-decoration: none;">
                     <span class="material-symbols-outlined" style="font-size: 24px;">person</span>
                 </a>
@@ -249,7 +260,7 @@
 
                 // Register the event
                 let registered = JSON.parse(localStorage.getItem('conclave_registered')) || [];
-                if (!registered.includes(eventKey)) {
+                if (eventKey && !registered.includes(eventKey)) {
                     // Only decrement seats and increment attendees if not already registered
                     registered.push(eventKey);
                     localStorage.setItem('conclave_registered', JSON.stringify(registered));

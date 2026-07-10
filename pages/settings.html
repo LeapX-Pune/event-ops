@@ -8,6 +8,14 @@
     <link rel="stylesheet" href="../css/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+    <!-- ═══ Anti-Flash Theme Script ═══ -->
+    <script>
+        (function() {
+            var theme = localStorage.getItem('conclave_theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
     <style>
         .settings-layout {
             display: grid;
@@ -59,10 +67,10 @@
         .form-input {
             width: 100%;
             padding: 16px;
-            background: rgba(255, 255, 255, 0.03);
+            background: var(--bg-surface);
             border: 1px solid var(--border-subtle);
             border-radius: var(--radius-md);
-            color: white;
+            color: var(--text-primary);
             font-family: var(--font-body);
             transition: border-color 0.3s, background 0.3s;
         }
@@ -103,7 +111,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 20px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid var(--border-subtle);
         }
         .setting-row:last-child {
             border-bottom: none;
@@ -123,6 +131,9 @@
                 <a class="nav-link" href="bookings.html">My Bookings</a>
             </div>
             <div class="nav-actions">
+                <button class="nav-icon-btn theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+                    <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
+                </button>
                 <a href="#" class="nav-avatar" style="display: flex; align-items: center; justify-content: center; color: var(--text-secondary); text-decoration: none;">
                     <span class="material-symbols-outlined" style="font-size: 24px;">person</span>
                 </a>
