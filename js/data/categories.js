@@ -54,5 +54,19 @@ export const categories = [
     icon: '📚',
     color: '#34495e',
     description: 'Workshops, lectures, and educational courses.'
+  },
+  {
+    id: 'cat_auto',
+    name: 'Automotive Excellence',
+    icon: '🏎️',
+    color: '#c0392b',
+    description: 'Car shows, racing events, and automotive showcases.'
+  },
+  {
+    id: 'cat_aviation',
+    name: 'Aviation Showcase',
+    icon: '✈️',
+    color: '#2980b9',
+    description: 'Airshows, aerospace expos, and flight demonstrations.'
   }
 ];
