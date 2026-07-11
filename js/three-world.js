@@ -15,8 +15,43 @@
     const MOUSE_RADIUS = 0.15;
     const MOUSE_PUSH = 0.02;
     const RETURN_SPEED = 0.12;
-    const BASE_COLOR = { r: 230, g: 198, b: 135 }; // Gold
-    const BG_COLOR = { r: 10, g: 10, b: 18 };
+
+    // Read colors from CSS custom properties (theme-aware)
+    function getThemeColors() {
+        const rootStyles = getComputedStyle(document.documentElement);
+        const particleColor = rootStyles.getPropertyValue('--particle-color').trim();
+        const particleBg = rootStyles.getPropertyValue('--particle-bg').trim();
+        
+        // Parse particle color (format: "r, g, b")
+        let color = { r: 230, g: 198, b: 135 }; // Default gold
+        if (particleColor) {
+            const parts = particleColor.split(',').map(n => parseInt(n.trim(), 10));
+            if (parts.length === 3) {
+                color = { r: parts[0], g: parts[1], b: parts[2] };
+            }
+        }
+        
+        // Parse background color
+        let bg = { r: 10, g: 10, b: 18 }; // Default dark
+        if (particleBg) {
+            // Could be hex or rgb
+            if (particleBg.startsWith('#')) {
+                const hex = particleBg.slice(1);
+                bg = {
+                    r: parseInt(hex.slice(0, 2), 16),
+                    g: parseInt(hex.slice(2, 4), 16),
+                    b: parseInt(hex.slice(4, 6), 16)
+                };
+            } else if (particleBg.startsWith('rgb')) {
+                const parts = particleBg.match(/\d+/g);
+                if (parts && parts.length >= 3) {
+                    bg = { r: parseInt(parts[0]), g: parseInt(parts[1]), b: parseInt(parts[2]) };
+                }
+            }
+        }
+        
+        return { color, bg };
+    }
 
     let width, height, dpr;
     let ctx;
@@ -25,6 +60,7 @@
     let mouseNorm = { x: -999, y: -999 };
     let scrollProgress = 0;
     let animId;
+    let currentColors = getThemeColors();
 
     // ── Init ──
     function init() {
@@ -97,6 +133,7 @@
 
     // ── Create Particles ──
     function createParticles() {
+        currentColors = getThemeColors();
         particles = [];
         const count = Math.min(PARTICLE_COUNT, textPositions.length);
 
@@ -150,8 +187,8 @@
         animId = requestAnimationFrame(animate);
         const time = performance.now() * 0.001;
 
-        // Clear
-        ctx.fillStyle = `rgb(${BG_COLOR.r}, ${BG_COLOR.g}, ${BG_COLOR.b})`;
+        // Clear with theme-aware background
+        ctx.fillStyle = `rgb(${currentColors.bg.r}, ${currentColors.bg.g}, ${currentColors.bg.b})`;
         ctx.fillRect(0, 0, width, height);
 
         // Determine text formation vs scatter based on scroll
@@ -178,7 +215,7 @@
 
                 ctx.beginPath();
                 ctx.arc(p.x, p.y, Math.max(0.2, size), 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(${BASE_COLOR.r}, ${BASE_COLOR.g}, ${BASE_COLOR.b}, ${alpha})`;
+                ctx.fillStyle = `rgba(${currentColors.color.r}, ${currentColors.color.g}, ${currentColors.color.b}, ${alpha})`;
                 ctx.fill();
                 continue;
             }
@@ -210,7 +247,7 @@
 
             ctx.beginPath();
             ctx.arc(p.x, p.y, Math.max(0.2, size), 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(${BASE_COLOR.r}, ${BASE_COLOR.g}, ${BASE_COLOR.b}, ${alpha})`;
+            ctx.fillStyle = `rgba(${currentColors.color.r}, ${currentColors.color.g}, ${currentColors.color.b}, ${alpha})`;
             ctx.fill();
         }
     }
@@ -241,6 +278,13 @@
             const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
             scrollProgress = scrollHeight > 0 ? window.scrollY / scrollHeight : 0;
         }, { passive: true });
+
+        // Theme change handler
+        window.addEventListener('themechange', () => {
+            currentColors = getThemeColors();
+            // Recreate particles with new colors
+            createParticles();
+        });
     }
 
     // ── Start ──
