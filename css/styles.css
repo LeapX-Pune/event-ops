@@ -5,7 +5,7 @@
 
 /* ── CSS Custom Properties ─────────────────────────────────── */
 :root {
-    /* Core Palette */
+    /* Core Palette - Dark (Default) */
     --bg-void: #0a0a12;
     --bg-deep: #0e0e1a;
     --bg-surface: #131320;
@@ -50,6 +50,14 @@
     --shadow-glow-gold: 0 0 40px rgba(230, 198, 135, 0.15);
     --shadow-glow-violet: 0 0 40px rgba(123, 104, 238, 0.15);
 
+    /* Toast/Notification colors (theme-aware) */
+    --success-glow: var(--gold-glow);
+    --success-border: var(--border-hover);
+    --error-glow: rgba(239, 68, 68, 0.15);
+    --error-border: rgba(239, 68, 68, 0.3);
+    --info-glow: rgba(123, 104, 238, 0.15);
+    --info-border: rgba(123, 104, 238, 0.3);
+
     /* Typography */
     --font-display: 'Montserrat', sans-serif;
     --font-body: 'Inter', sans-serif;
@@ -88,6 +96,78 @@
     --z-nav: 50;
     --z-modal: 100;
     --z-loader: 200;
+
+    /* Theme Transition */
+    --theme-transition: background 0.4s var(--ease-out-expo), color 0.4s var(--ease-out-expo), border-color 0.4s var(--ease-out-expo), box-shadow 0.4s var(--ease-out-expo);
+}
+
+/* ── Light Theme: "Champagne Dawn" ─────────────────────────── */
+[data-theme="light"] {
+    /* Core Palette - Premium Cashmere & Taupe */
+    --bg-void: #D6D0C4;
+    --bg-deep: #CAC4B6;
+    --bg-surface: #BEB7A9;
+    --bg-surface-raised: #B4ACA0;
+    --bg-surface-high: #A69E92;
+    --bg-card: #EAE5DB;
+
+    /* Accent Colors - Burnished Gold & Jewel Tones */
+    --gold: #9C7014;
+    --gold-dim: #7A570F;
+    --gold-glow: rgba(156, 112, 20, 0.25);
+    --gold-subtle: rgba(156, 112, 20, 0.15);
+    --violet: #5A4BBD;
+    --violet-dim: #453896;
+    --cyan: #007B9E;
+    --cyan-dim: #005F7A;
+    --nebula: #7A4B91;
+    --aurora-green: #008B4B;
+    --aurora-pink: #A82469;
+
+    /* Text Colors - Deep Espresso (No pure black) */
+    --text-primary: #26231E;
+    --text-secondary: #4A463F;
+    --text-muted: #6B655D;
+    --text-gold: #9C7014;
+    --text-on-gold: #FDFBF7;
+
+    /* Borders & Outlines - Burnished warmth */
+    --border-subtle: rgba(156, 112, 20, 0.20);
+    --border-medium: rgba(156, 112, 20, 0.45);
+    --border-hover: rgba(156, 112, 20, 0.85);
+    --glass-border: rgba(156, 112, 20, 0.25);
+
+    /* Glass Effects - Translucent Cashmere */
+    --glass-bg: rgba(234, 229, 219, 0.65);
+    --glass-bg-heavy: rgba(234, 229, 219, 0.88);
+    --glass-blur: 24px;
+
+    /* Shadows - Deep, soft, expensive */
+    --shadow-card: 0 12px 40px rgba(42, 39, 35, 0.12);
+    --shadow-float: 0 24px 64px rgba(42, 39, 35, 0.18);
+    --shadow-glow-gold: 0 0 50px rgba(156, 112, 20, 0.35);
+    --shadow-glow-violet: 0 0 50px rgba(90, 75, 189, 0.25);
+
+    /* Particle colors for Three.js - darker gold for visibility */
+    --particle-bg: #EAE5DB;
+    --particle-color: 156, 112, 20;
+    --particle-ambient-color: 156, 112, 20;
+}
+
+/* Dark theme explicit (for clarity) */
+[data-theme="dark"] {
+    --particle-bg: #0a0a12;
+    --particle-color: 230, 198, 135;
+    --particle-ambient-color: 230, 198, 135;
+}
+
+/* Global theme transition */
+html {
+    transition: var(--theme-transition);
+}
+
+body {
+    transition: var(--theme-transition);
 }
 
 /* ── Reset & Base ──────────────────────────────────────────── */
@@ -527,7 +607,7 @@ ul, ol {
     opacity: 0;
     transform: translateY(40px);
     animation: heroReveal 2s var(--ease-out-expo) 1.5s forwards;
-    text-shadow: 0 0 80px rgba(230, 198, 135, 0.3);
+    text-shadow: var(--shadow-glow-gold);
     position: relative;
     z-index: 2;
 }
@@ -836,7 +916,7 @@ ul, ol {
 .featured-badge {
     display: inline-block;
     padding: 4px 12px;
-    border: 1px solid rgba(230, 198, 135, 0.3);
+    border: 1px solid var(--border-medium);
     color: var(--gold);
     font-size: 11px;
     font-weight: 600;
@@ -850,14 +930,14 @@ ul, ol {
     font-family: var(--font-display);
     font-size: clamp(24px, 3vw, 36px);
     font-weight: 200;
-    color: white;
+    color: var(--text-primary);
     letter-spacing: 0.05em;
     margin-bottom: var(--space-sm);
 }
 
 .featured-desc {
     font-size: 14px;
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--text-secondary);
 }
 
 .featured-indicators {
@@ -874,7 +954,7 @@ ul, ol {
     width: 4px;
     height: 4px;
     border-radius: 50%;
-    background: rgba(230, 198, 135, 0.3);
+    background: var(--border-medium);
 }
 
 .indicator-dot.active {
@@ -1199,7 +1279,7 @@ ul, ol {
 
 .modal-card {
     background: var(--bg-surface-raised);
-    border: 1px solid rgba(230, 198, 135, 0.2);
+    border: 1px solid var(--border-subtle);
     width: 100%;
     max-width: 380px;
     padding: var(--space-xl);
@@ -1499,7 +1579,7 @@ ul, ol {
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 20px rgba(230, 198, 135, 0.3);
+    box-shadow: 0 4px 20px var(--border-medium);
     transition: transform 0.3s var(--ease-spring);
     cursor: pointer;
     border: none;
@@ -2063,3 +2143,23 @@ ul, ol {
 .w-full { width: 100%; }
 .relative { position: relative; }
 .overflow-hidden { overflow: hidden; }
+
+/* ── Cinematic Page Transitions ────────────────────────────── */
+#page-transition-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: var(--bg-void);
+    z-index: 99999;
+    pointer-events: none;
+    opacity: 1;
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#page-transition-overlay.is-loaded {
+    opacity: 0;
+}
+
+#page-transition-overlay.is-exiting {
+    opacity: 1;
+    pointer-events: auto;
+}
