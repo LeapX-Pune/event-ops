@@ -1,6 +1,6 @@
 // js/admin/eventForm.js — Create & Edit form handling
 
-import { addEvent, updateEvent } from './crud.js';
+import { addEvent, updateEvent, getEventById } from './crud.js';
 
 let isEditing = false;
 let editingEventId = null;
@@ -95,24 +95,36 @@ export function setupFormHandlers(onSuccess) {
       }
     });
 
+    const categorySelect = document.getElementById('form-category');
+    const category = categorySelect.value;
+    const categoryName = categorySelect.options[categorySelect.selectedIndex].text;
+    const capacityVal = parseInt(document.getElementById('form-capacity').value, 10);
+
     const eventData = {
       id: eventId || 'custom_' + Date.now(),
       title: document.getElementById('form-title').value.trim(),
       description: document.getElementById('form-description').value.trim(),
       itinerary: itineraryArray,
-      category: document.getElementById('form-category').value,
+      category: category,
+      categoryName: categoryName,
       date: document.getElementById('form-date').value,
       time: document.getElementById('form-time').value || '12:00 PM',
-      capacity: parseInt(document.getElementById('form-capacity').value, 10),
+      capacity: capacityVal,
+      maxAttendees: capacityVal,
       location: document.getElementById('form-location').value.trim(),
       price: document.getElementById('form-price').value.trim() || 'Free',
       duration: document.getElementById('form-duration').value.trim() || 'TBD',
       difficulty: document.getElementById('form-difficulty').value || 'All Levels',
-      image: document.getElementById('form-image-data').value || document.getElementById('form-image').value.trim() || ''
+      image: document.getElementById('form-image-data').value || document.getElementById('form-image').value.trim() || '',
+      attendees: 0
     };
 
     let result;
     if (eventId) {
+      // Preserve existing attendees count
+      const oldEvent = getEventById(eventId);
+      eventData.attendees = oldEvent ? (oldEvent.attendees || 0) : 0;
+
       result = updateEvent(eventId, eventData);
       if (result.success) {
         if (typeof window.showToast === 'function') window.showToast('Event updated successfully.', 'success');
@@ -290,14 +302,24 @@ function validate() {
   let valid = true;
 
   const title = document.getElementById('form-title');
+  const description = document.getElementById('form-description');
   const category = document.getElementById('form-category');
   const date = document.getElementById('form-date');
+  const time = document.getElementById('form-time');
   const capacity = document.getElementById('form-capacity');
   const location = document.getElementById('form-location');
+  const image = document.getElementById('form-image');
 
-  if (!title.value.trim()) {
+  if (!title.value.trim() || title.value.trim().length < 3) {
     title.classList.add('error');
-    document.getElementById('err-title').style.display = 'block';
+    const errTitle = document.getElementById('err-title');
+    errTitle.textContent = title.value.trim() ? 'Event title must be at least 3 characters.' : 'Event title is required.';
+    errTitle.style.display = 'block';
+    valid = false;
+  }
+  if (!description.value.trim() || description.value.trim().length < 10) {
+    description.classList.add('error');
+    document.getElementById('err-description').style.display = 'block';
     valid = false;
   }
   if (!category.value) {
@@ -310,15 +332,31 @@ function validate() {
     document.getElementById('err-date').style.display = 'block';
     valid = false;
   }
+  if (!time.value) {
+    time.classList.add('error');
+    document.getElementById('err-time').style.display = 'block';
+    valid = false;
+  }
   if (!capacity.value || parseInt(capacity.value, 10) < 1) {
     capacity.classList.add('error');
     document.getElementById('err-capacity').style.display = 'block';
     valid = false;
   }
-  if (!location.value.trim()) {
+  if (!location.value.trim() || location.value.trim().length < 3) {
     location.classList.add('error');
-    document.getElementById('err-location').style.display = 'block';
+    const errLoc = document.getElementById('err-location');
+    errLoc.textContent = location.value.trim() ? 'Location must be at least 3 characters.' : 'Location is required.';
+    errLoc.style.display = 'block';
     valid = false;
+  }
+  if (image.value.trim()) {
+    try {
+      new URL(image.value.trim());
+    } catch {
+      image.classList.add('error');
+      document.getElementById('err-image').style.display = 'block';
+      valid = false;
+    }
   }
 
   return valid;

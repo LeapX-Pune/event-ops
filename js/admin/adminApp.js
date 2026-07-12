@@ -26,6 +26,7 @@ function initAdmin() {
 function renderTable() {
   const events = getAllEvents();
   renderEventTable(events, handleEdit, handleDelete);
+  updateStats(events);
 }
 
 function handleEdit(id) {
@@ -120,6 +121,48 @@ function setupDeleteHandlers() {
       eventToDelete = null;
     });
   }
+}
+
+function updateStats(events) {
+  const totalEventsEl = document.getElementById('stat-total-events');
+  const totalAttendeesEl = document.getElementById('stat-total-attendees');
+  const totalCategoriesEl = document.getElementById('stat-total-categories');
+
+  if (!totalEventsEl || !totalAttendeesEl || !totalCategoriesEl) return;
+
+  const totalEvents = events.length;
+
+  const localAttendees = JSON.parse(localStorage.getItem('conclave_attendees') || '{}');
+  let totalAttendees = 0;
+  events.forEach(evt => {
+    totalAttendees += (evt.attendees || 0) + (localAttendees[evt.id] || 0);
+  });
+
+  const uniqueCats = new Set(events.map(evt => evt.categoryName || evt.category).filter(Boolean));
+  const totalCategories = uniqueCats.size;
+
+  animateCounter(totalEventsEl, totalEvents);
+  animateCounter(totalAttendeesEl, totalAttendees);
+  animateCounter(totalCategoriesEl, totalCategories);
+}
+
+function animateCounter(el, targetValue) {
+  const start = parseInt(el.textContent.replace(/,/g, ''), 10) || 0;
+  const duration = 500; // ms
+  const startTime = performance.now();
+
+  function update(currentTime) {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const current = Math.floor(start + progress * (targetValue - start));
+    el.textContent = current.toLocaleString();
+    if (progress < 1) {
+      requestAnimationFrame(update);
+    } else {
+      el.textContent = targetValue.toLocaleString();
+    }
+  }
+  requestAnimationFrame(update);
 }
 
 document.addEventListener('DOMContentLoaded', initAdmin);

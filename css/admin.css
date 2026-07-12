@@ -182,3 +182,87 @@
         display: none;
     }
 }
+
+/* Stats Cards */
+.stats-grid {
+    margin-bottom: 30px;
+}
+.stat-card {
+    background: rgba(18,18,28,0.65);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    backdrop-filter: blur(20px);
+    transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+.stat-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(230,198,135,0.3);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+}
+.stat-icon-wrap {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    background: rgba(230,198,135,0.08);
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.stat-icon-wrap .material-symbols-outlined {
+    font-size: 24px;
+}
+.stat-info {
+    display: flex;
+    flex-direction: column;
+}
+.stat-label {
+    font-family: var(--font-body);
+    font-size: 11px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0;
+}
+.stat-value {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 300;
+    color: white;
+    margin: 4px 0 0 0;
+}
+
+/* Category Badges */
+.category-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 99px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.category-badge.cat_tech { background: rgba(59,130,246,0.1); color: #3b82f6; border: 1px solid rgba(59,130,246,0.2); }
+.category-badge.cat_music { background: rgba(168,85,247,0.1); color: #a855f7; border: 1px solid rgba(168,85,247,0.2); }
+.category-badge.cat_edu { background: rgba(234,179,8,0.1); color: #eab308; border: 1px solid rgba(234,179,8,0.2); }
+.category-badge.cat_sports { background: rgba(16,185,129,0.1); color: #10b981; border: 1px solid rgba(16,185,129,0.2); }
+.category-badge.cat_business { background: rgba(249,115,22,0.1); color: #f97316; border: 1px solid rgba(249,115,22,0.2); }
+.category-badge.cat_art { background: rgba(236,72,153,0.1); color: #ec4899; border: 1px solid rgba(236,72,153,0.2); }
+.category-badge.cat_food { background: rgba(239,68,68,0.1); color: #ef4444; border: 1px solid rgba(239,68,68,0.2); }
+.category-badge.cat_health { background: rgba(20,184,166,0.1); color: #14b8a6; border: 1px solid rgba(20,184,166,0.2); }
+
+/* Table Thumbnail */
+.event-thumb img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+}
+.event-thumb:hover img {
+    transform: scale(1.1);
+}
