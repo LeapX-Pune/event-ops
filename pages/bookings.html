@@ -193,6 +193,38 @@
             opacity: 0.5;
             margin-bottom: 24px;
         }
+
+        /* ── Mobile Redesign ── */
+        @media (max-width: 768px) {
+            .bookings-hero {
+                height: 35vh;
+                min-height: 280px;
+                padding-top: 80px;
+            }
+            .bookings-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+                padding: 40px 16px;
+            }
+            .booking-ticket {
+                padding: 24px;
+                gap: 16px;
+            }
+            .ticket-title {
+                font-size: 20px;
+            }
+            .ticket-date-box {
+                padding: 8px;
+                min-width: 60px;
+            }
+            .ticket-day {
+                font-size: 20px;
+            }
+            .ticket-btn {
+                padding: 10px;
+                font-size: 10px;
+            }
+        }
     </style>
 <script src="../js/page-transition.js"></script>
 </head>
@@ -211,6 +243,9 @@
                 <a class="nav-link active" href="bookings.html">My Bookings</a>
             </div>
             <div class="nav-actions">
+                <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Open menu">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
                 <button class="nav-icon-btn theme-toggle" id="theme-toggle" aria-label="Toggle theme">
                     <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
                 </button>
@@ -306,7 +341,7 @@
                 </div>
             </div>
             <div class="text-center" style="margin-top: 32px;">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=CONCLAVE_ENTRY&color=E6C687&bgcolor=131320" alt="QR Code" style="margin: 0 auto; border-radius: 8px; padding: 8px; background: var(--bg-surface);"/>
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=CONCLAVE_ENTRY&color=D4A843&bgcolor=F1EDE6" alt="QR Code" style="margin: 0 auto; border-radius: 8px; padding: 8px; background: var(--bg-surface);"/>
                 <span class="text-label-sm text-secondary" style="display:block; margin-top: 16px;">Scan at Portal Gate</span>
             </div>
         </div>
@@ -365,24 +400,28 @@
                 registeredEvents = JSON.parse(localStorage.getItem('conclave_registered') || '[]');
                 container.innerHTML = '';
 
-                // Filter out null/undefined event IDs
-                const validEvents = registeredEvents.filter(id => id && typeof id === 'string');
+                // Filter out null/undefined event IDs and find actual event objects
+                const validBookings = registeredEvents
+                    .filter(id => id && typeof id === 'string')
+                    .map(id => allEvents.find(e => e.id === id))
+                    .filter(booking => booking); // Only keep found events
 
-                if (validEvents.length === 0) {
+                if (validBookings.length === 0) {
                     container.innerHTML = `
-                        <div class="empty-portal" style="grid-column: 1 / -1;">
+                        <div class="empty-portal" style="grid-column: 1 / -1; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height: 200px;">
                             <span class="material-symbols-outlined">explore</span>
-                            <h2 class="text-display-sm" style="color:var(--text-primary); margin-bottom: 16px;">The Void Awaits</h2>
-                            <p style="color:var(--text-secondary); margin-bottom: 32px;">You currently have no scheduled journeys. Step into a new dimension.</p>
-                            <a href="events.html" class="btn-primary" style="display:inline-flex;">Discover Events</a>
+                            <h2 class="text-display-sm" style="color:var(--text-primary); margin-bottom: 16px; font-size:24px;">No Scheduled Journeys</h2>
+                            <p style="color:var(--text-secondary); margin-bottom: 32px; max-width: 400px; text-align: center;">You currently have no scheduled events. Step into a new dimension and explore upcoming exclusive gatherings.</p>
+                            <a href="events.html" class="btn-primary" style="display:inline-flex; align-items:center; gap:8px;">
+                                Explore Events
+                                <span class="material-symbols-outlined" style="font-size:18px;">arrow_forward</span>
+                            </a>
                         </div>
                     `;
                     return;
                 }
 
-                validEvents.forEach((eventId, index) => {
-                    const booking = allEvents.find(e => e.id === eventId);
-                    if (!booking) return;
+                validBookings.forEach((booking, index) => {
 
                     let month = "TBD", day = "00", year = "2024";
                     if (booking.date) {

@@ -16,6 +16,13 @@
             document.documentElement.setAttribute('data-theme', theme);
         })();
     </script>
+    <style>
+        @media (max-width: 768px) {
+            .desktop-filters { display: none !important; }
+            .mobile-filters { display: block !important; width: 100%; max-width: 100% !important; font-size: 16px !important; }
+            .mobile-filters option { font-size: 16px; }
+        }
+    </style>
 <script src="../js/page-transition.js"></script>
 </head>
 <body>
@@ -34,6 +41,9 @@
             </div>
             <div class="nav-actions">
 
+                <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Open menu">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
                 <button class="nav-icon-btn theme-toggle" id="theme-toggle" aria-label="Toggle theme">
                     <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
                 </button>
@@ -74,15 +84,67 @@
 
         <!-- Filter Bar -->
         <div class="filter-bar reveal" style="margin-bottom:48px;">
-            <button class="filter-btn active" data-filter="all">All</button>
-            <button class="filter-btn" data-filter="cat_tech">Technology</button>
-            <button class="filter-btn" data-filter="cat_music">Music</button>
-            <button class="filter-btn" data-filter="cat_sports">Sports</button>
-            <button class="filter-btn" data-filter="cat_art">Art</button>
-            <button class="filter-btn" data-filter="cat_business">Business</button>
-            <button class="filter-btn" data-filter="cat_food">Food</button>
-            <button class="filter-btn" data-filter="cat_health">Health</button>
-            <button class="filter-btn" data-filter="cat_edu">Education</button>
+            <div class="desktop-filters" style="display:flex; flex-wrap:wrap; justify-content:center; gap:var(--space-md); align-items:center;">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="cat_tech">Technology</button>
+                <button class="filter-btn" data-filter="cat_music">Music</button>
+                <button class="filter-btn" data-filter="cat_sports">Sports</button>
+                <button class="filter-btn" data-filter="cat_art">Art</button>
+                <button class="filter-btn" data-filter="cat_business">Business</button>
+                <button class="filter-btn" data-filter="cat_food">Food</button>
+                <button class="filter-btn" data-filter="cat_health">Health</button>
+                <button class="filter-btn" data-filter="cat_edu">Education</button>
+            </div>
+            <button id="mobile-filter-btn" class="form-input mobile-filters" style="display:none; display:flex; justify-content:space-between; align-items:center;">
+                <span id="mobile-filter-label">All Categories</span>
+                <span class="material-symbols-outlined">expand_more</span>
+            </button>
+
+            <!-- Custom Mobile Filter Modal -->
+            <div id="mobile-filter-modal" class="custom-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; align-items:flex-end; justify-content:center;">
+                <div class="modal-content" style="background:var(--bg-surface); width:100%; border-top-left-radius:24px; border-top-right-radius:24px; padding:24px; animation: slideUp 0.3s ease-out;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+                        <h3 style="margin:0; font-family:var(--font-display); font-size:20px; font-weight:300;">Filter by Category</h3>
+                        <button id="close-filter-modal" style="background:transparent; border:none; color:var(--text-primary); cursor:pointer;">
+                            <span class="material-symbols-outlined">close</span>
+                        </button>
+                    </div>
+                    <div class="modal-options" style="display:flex; flex-wrap:wrap; gap:12px; justify-content:flex-start;">
+                        <button class="modal-filter-option active" data-filter="all">All Categories</button>
+                        <button class="modal-filter-option" data-filter="cat_tech">Technology</button>
+                        <button class="modal-filter-option" data-filter="cat_music">Music</button>
+                        <button class="modal-filter-option" data-filter="cat_sports">Sports</button>
+                        <button class="modal-filter-option" data-filter="cat_art">Art</button>
+                        <button class="modal-filter-option" data-filter="cat_business">Business</button>
+                        <button class="modal-filter-option" data-filter="cat_food">Food</button>
+                        <button class="modal-filter-option" data-filter="cat_health">Health</button>
+                        <button class="modal-filter-option" data-filter="cat_edu">Education</button>
+                    </div>
+                </div>
+            </div>
+
+            <style>
+                @keyframes slideUp {
+                    from { transform: translateY(100%); }
+                    to { transform: translateY(0); }
+                }
+                .modal-filter-option {
+                    background: transparent;
+                    border: 1px solid var(--border-subtle);
+                    color: var(--text-primary);
+                    padding: 10px 16px;
+                    border-radius: 999px;
+                    text-align: center;
+                    font-size: 14px;
+                    transition: all 0.2s;
+                }
+                .modal-filter-option.active {
+                    background: var(--gold);
+                    color: #000;
+                    border-color: var(--gold);
+                }
+            </style>
+            
             <div style="width:1px;height:32px;background:var(--border-subtle);margin:0 8px;" class="hide-mobile"></div>
             <div style="display:flex;align-items:center;gap:8px;">
                 <span class="material-symbols-outlined" style="color:var(--text-secondary);font-size:18px;">calendar_month</span>
@@ -218,9 +280,62 @@
                     filterBtns.forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
                     currentCategory = btn.getAttribute('data-filter');
+                    
+                    // Sync mobile modal options
+                    const modalOptions = document.querySelectorAll('.modal-filter-option');
+                    modalOptions.forEach(b => b.classList.remove('active'));
+                    const activeModalBtn = document.querySelector(`.modal-filter-option[data-filter="${currentCategory}"]`);
+                    if (activeModalBtn) activeModalBtn.classList.add('active');
+                    
+                    // Update mobile label
+                    const mobileLabel = document.getElementById('mobile-filter-label');
+                    if (mobileLabel) mobileLabel.textContent = btn.textContent;
+
                     applyFilters();
                 });
             });
+
+            // Mobile Modal Logic
+            const mobileFilterBtn = document.getElementById('mobile-filter-btn');
+            const mobileFilterModal = document.getElementById('mobile-filter-modal');
+            const closeFilterModal = document.getElementById('close-filter-modal');
+            const modalFilterOptions = document.querySelectorAll('.modal-filter-option');
+            
+            if (mobileFilterBtn && mobileFilterModal) {
+                mobileFilterBtn.addEventListener('click', () => {
+                    mobileFilterModal.style.display = 'flex';
+                });
+                
+                closeFilterModal.addEventListener('click', () => {
+                    mobileFilterModal.style.display = 'none';
+                });
+                
+                mobileFilterModal.addEventListener('click', (e) => {
+                    if (e.target === mobileFilterModal) {
+                        mobileFilterModal.style.display = 'none';
+                    }
+                });
+
+                modalFilterOptions.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        modalFilterOptions.forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        currentCategory = btn.getAttribute('data-filter');
+                        
+                        // Sync desktop buttons
+                        filterBtns.forEach(b => b.classList.remove('active'));
+                        const activeBtn = document.querySelector(`.filter-btn[data-filter="${currentCategory}"]`);
+                        if (activeBtn) activeBtn.classList.add('active');
+                        
+                        // Update mobile label
+                        const mobileLabel = document.getElementById('mobile-filter-label');
+                        if (mobileLabel) mobileLabel.textContent = btn.textContent;
+
+                        applyFilters();
+                        mobileFilterModal.style.display = 'none';
+                    });
+                });
+            }
 
             dateFilter.addEventListener('change', applyFilters);
             searchInput.addEventListener('input', applyFilters);

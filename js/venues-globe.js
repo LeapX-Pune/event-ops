@@ -11,19 +11,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initGlobe(userLat, userLng);
 
-    // Theme-aware texture URLs
+// Theme-aware texture URLs
     function getGlobeTextures() {
         const isLight = document.documentElement.getAttribute('data-theme') === 'light';
         return {
             globeImage: isLight 
-                ? '../assets/img/earth-light.png' // Custom light theme earth texture
+                ? '../assets/img/earth-light.png' // Light theme earth texture
                 : '../assets/img/earth-dark.jpg',
             bumpImage: '../assets/img/earth-topology.png',
             backgroundImage: isLight
                 ? '../assets/img/light-sky-premium.png'
                 : '../assets/img/night-sky.png',
             backgroundColor: isLight ? 'rgba(0,0,0,0)' : '#000000',
-            atmosphereColor: isLight ? '#C49A2A' : '#E6C687'
+            atmosphereColor: isLight ? '#D4A843' : '#E6C687'
         };
     }
 
@@ -75,8 +75,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Animate Zoom in after 0.5 seconds to feel more immediate
         setTimeout(() => {
             world.controls().autoRotate = false; // Stop rotation during zoom
-            // Fly to the user's location, very close for "zoom" effect
-            world.pointOfView({ lat: lat, lng: lng, altitude: 0.15 }, 4000);
+            // Fly to the user's location, less aggressively zoomed
+            const zoomAlt = window.innerWidth < 768 ? 0.9 : 0.6;
+            world.pointOfView({ lat: lat, lng: lng, altitude: zoomAlt }, 4000);
             
             // Resume very slow rotation after zoom
             setTimeout(() => {

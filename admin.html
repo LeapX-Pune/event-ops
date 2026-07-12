@@ -70,8 +70,8 @@
             color: var(--gold);
         }
         .admin-action-btn.delete:hover {
-            border-color: #ef4444;
-            color: #ef4444;
+            border-color: var(--error-border);
+            color: var(--aurora-pink);
         }
         .admin-action-btn .material-symbols-outlined { font-size: 16px; }
 
@@ -143,28 +143,149 @@
             padding: 12px 24px;
             border-radius: 999px;
             border: none;
-            background: rgba(239,68,68,0.2);
-            color: #ef4444;
+            background: var(--error-glow);
+            color: var(--aurora-pink);
             cursor: pointer;
             transition: all 0.3s;
         }
-        .btn-danger:hover { background: rgba(239,68,68,0.35); }
+        .btn-danger:hover { background: var(--error-glow); }
+        .btn-danger:hover { box-shadow: var(--error-glow); }
 
         .validation-error {
-            color: #ef4444;
+            color: var(--aurora-pink);
             font-size: 11px;
             margin-top: 4px;
             display: none;
         }
         .form-input.error {
-            border-color: #ef4444 !important;
+            border-color: var(--aurora-pink) !important;
         }
 
+        .actions-cell {
+            text-align: right;
+            white-space: nowrap;
+        }
+
+        /* ── Mobile Redesign ── */
         @media (max-width: 768px) {
-            .admin-table th:nth-child(3),
-            .admin-table td:nth-child(3),
-            .admin-table th:nth-child(4),
-            .admin-table td:nth-child(4) { display: none; }
+            main.container {
+                padding-top: 100px !important;
+                padding-bottom: 80px !important;
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+            .page-header {
+                margin-bottom: 32px;
+            }
+            #add-event-btn {
+                width: 100% !important;
+                margin-top: 16px;
+            }
+            
+            /* Table to Cards */
+            .admin-table-wrap {
+                border: none;
+                background: transparent;
+                backdrop-filter: none;
+                overflow-x: visible !important;
+                padding: 0;
+            }
+            .admin-table thead {
+                display: none;
+            }
+            .admin-table, .admin-table tbody, .admin-table tr {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+            }
+            .admin-table tr {
+                margin-bottom: 16px;
+                border: 1px solid var(--border-subtle);
+                border-radius: 12px;
+                padding: 16px;
+                background: var(--bg-card);
+            }
+            .admin-table td {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 10px 0;
+                border-bottom: 1px solid var(--border-subtle);
+                text-align: right;
+                width: 100%;
+            }
+            .admin-table td:last-child {
+                border-bottom: none;
+                padding-bottom: 0;
+            }
+            .admin-table td::before {
+                content: attr(data-label);
+                font-weight: 600;
+                font-size: 10px;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+                color: var(--text-muted);
+                text-align: left;
+                margin-right: 16px;
+                flex-shrink: 0;
+            }
+            .admin-table .actions-cell {
+                justify-content: flex-end;
+                gap: 8px;
+                margin-top: 8px;
+                padding-top: 16px;
+            }
+            .admin-table .actions-cell::before {
+                display: none;
+            }
+            
+            /* Fullscreen Modal */
+            .modal-box {
+                width: 100%;
+                max-width: 100%;
+                height: 100%;
+                max-height: 100%;
+                border-radius: 0;
+                padding: 24px 16px;
+                border: none;
+                display: flex;
+                flex-direction: column;
+            }
+            #event-form {
+                flex: 1;
+                overflow-y: auto;
+            }
+            .modal-actions {
+                flex-direction: column;
+                gap: 12px;
+                margin-top: 32px;
+                padding-bottom: 32px;
+            }
+            .btn-cancel, .btn-danger, .modal-actions .btn-primary {
+                width: 100%;
+                text-align: center;
+                margin: 0;
+            }
+        }
+        .admin-form-row-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        .admin-form-row-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        @media (max-width: 640px) {
+            .admin-form-row-2, .admin-form-row-3 {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            .admin-form-row-3 .form-group {
+                margin-bottom: 12px !important;
+            }
         }
     </style>
 </head>
@@ -183,6 +304,9 @@
                 <a class="nav-link" href="pages/bookings.html">My Bookings</a>
             </div>
             <div class="nav-actions">
+                <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Open menu">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
                 <button class="nav-icon-btn theme-toggle" id="theme-toggle" aria-label="Toggle theme">
                     <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
                 </button>
@@ -262,7 +386,7 @@
                         <!-- Items injected here by JS -->
                     </div>
                 </div>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+                <div class="admin-form-row-2">
                     <div class="form-group">
                         <label class="form-label">Category *</label>
                         <select class="form-input" id="form-category" required>
@@ -284,7 +408,7 @@
                         <div class="validation-error" id="err-date">A valid date is required.</div>
                     </div>
                 </div>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+                <div class="admin-form-row-2">
                     <div class="form-group">
                         <label class="form-label">Time</label>
                         <input type="time" class="form-input" id="form-time"/>
@@ -300,7 +424,7 @@
                     <input type="text" class="form-input" id="form-location" placeholder="e.g. Community Hall" required/>
                     <div class="validation-error" id="err-location">Location is required.</div>
                 </div>
-                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:24px;">
+                <div class="admin-form-row-3">
                     <div class="form-group" style="margin-bottom:0;">
                         <label class="form-label">Price (e.g. $100)</label>
                         <input type="text" class="form-input" id="form-price" placeholder="Free"/>
@@ -346,7 +470,7 @@
     <!-- ═══ Delete Confirm Modal ═══ -->
     <div class="modal-overlay" id="delete-modal">
         <div class="modal-box" style="max-width:400px;text-align:center;">
-            <span class="material-symbols-outlined" style="font-size:48px;color:#ef4444;margin-bottom:16px;">warning</span>
+            <span class="material-symbols-outlined" style="font-size:48px;color:var(--aurora-pink);margin-bottom:16px;">warning</span>
             <h2 class="modal-title" style="margin-bottom:12px;">Delete Event?</h2>
             <p style="font-family:var(--font-body);font-size:14px;color:var(--text-secondary);margin-bottom:24px;">This action cannot be undone. The event will be permanently removed.</p>
             <div class="modal-actions" style="justify-content:center;">
@@ -456,11 +580,20 @@
                 localStorage.setItem('conclave_custom_events', JSON.stringify(events));
             }
 
-            // Get all events (built-in + custom)
+            // Get all events (built-in + custom overridden)
             function getAllEvents() {
-                const builtIn = (window.CONCLAVE_EVENTS || []).map(e => ({ ...e, builtIn: true }));
-                const custom = getCustomEvents().map(e => ({ ...e, builtIn: false }));
-                return [...builtIn, ...custom];
+                const builtInRaw = window.CONCLAVE_EVENTS || [];
+                const custom = getCustomEvents();
+                const deletedIds = JSON.parse(localStorage.getItem('conclave_deleted_events') || '[]');
+                
+                let activeBuiltIn = builtInRaw.filter(e => !deletedIds.includes(e.id));
+                activeBuiltIn = activeBuiltIn.map(e => {
+                    const override = custom.find(c => c.id === e.id);
+                    return override ? override : e;
+                });
+                
+                const newCustom = custom.filter(c => !builtInRaw.some(b => b.id === c.id));
+                return [...activeBuiltIn, ...newCustom];
             }
 
             // Render table
@@ -470,16 +603,16 @@
                 events.forEach(evt => {
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
-                        <td class="title-cell">${evt.title}</td>
-                        <td>${evt.categoryName || evt.category}</td>
-                        <td>${evt.date}</td>
-                        <td>${evt.location}</td>
-                        <td>${evt.maxAttendees || 'N/A'}</td>
-                        <td style="text-align:right;white-space:nowrap;">
-                            <button class="admin-action-btn edit-btn" data-id="${evt.id}" ${evt.builtIn ? 'disabled title="Built-in events cannot be edited"' : ''}>
+                        <td class="title-cell" data-label="Event">${evt.title}</td>
+                        <td data-label="Category">${evt.categoryName || evt.category}</td>
+                        <td data-label="Date">${evt.date}</td>
+                        <td data-label="Location">${evt.location}</td>
+                        <td data-label="Capacity">${evt.maxAttendees || 'N/A'}</td>
+                        <td data-label="Actions" class="actions-cell">
+                            <button class="admin-action-btn edit-btn" data-id="${evt.id}">
                                 <span class="material-symbols-outlined">edit</span>
                             </button>
-                            <button class="admin-action-btn delete delete-btn" data-id="${evt.id}" ${evt.builtIn ? 'disabled title="Built-in events cannot be deleted"' : ''}>
+                            <button class="admin-action-btn delete delete-btn" data-id="${evt.id}">
                                 <span class="material-symbols-outlined">delete</span>
                             </button>
                         </td>
@@ -487,10 +620,10 @@
                     tbody.appendChild(tr);
                 });
 
-                document.querySelectorAll('.edit-btn:not([disabled])').forEach(btn => {
+                document.querySelectorAll('.edit-btn').forEach(btn => {
                     btn.addEventListener('click', () => openEditModal(btn.dataset.id));
                 });
-                document.querySelectorAll('.delete-btn:not([disabled])').forEach(btn => {
+                document.querySelectorAll('.delete-btn').forEach(btn => {
                     btn.addEventListener('click', () => openDeleteModal(btn.dataset.id));
                 });
             }
@@ -596,7 +729,7 @@
             deleteModal.addEventListener('click', (e) => { if (e.target === deleteModal) closeDeleteModal(); });
 
             function openEditModal(id) {
-                const events = getCustomEvents();
+                const events = getAllEvents();
                 const evt = events.find(e => e.id === id);
                 if (!evt) return;
 
@@ -647,6 +780,13 @@
                 let events = getCustomEvents();
                 events = events.filter(e => e.id !== deleteTargetId);
                 saveCustomEvents(events);
+                
+                const deletedIds = JSON.parse(localStorage.getItem('conclave_deleted_events') || '[]');
+                if (!deletedIds.includes(deleteTargetId)) {
+                    deletedIds.push(deleteTargetId);
+                    localStorage.setItem('conclave_deleted_events', JSON.stringify(deletedIds));
+                }
+                
                 renderTable();
                 closeDeleteModal();
                 showToast('Event deleted successfully.', 'success');
@@ -739,6 +879,8 @@
                     const idx = events.findIndex(e => e.id === eventId);
                     if (idx !== -1) {
                         events[idx] = eventData;
+                    } else {
+                        events.push(eventData);
                     }
                     showToast('Event updated successfully.', 'success');
                 } else {

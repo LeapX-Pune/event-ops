@@ -17,15 +17,23 @@
         })();
     </script>
     <style>
+        html {
+            overflow-y: scroll;
+        }
         .settings-layout {
             display: grid;
-            grid-template-columns: 280px 1fr;
+            grid-template-columns: 280px minmax(0, 1fr);
             gap: 48px;
             margin-top: 40px;
+            width: 100%;
+        }
+        .settings-layout > div:last-child {
+            min-width: 0;
+            width: 100%;
         }
         @media (max-width: 900px) {
             .settings-layout {
-                grid-template-columns: 1fr;
+                grid-template-columns: minmax(0, 1fr);
             }
         }
         .settings-nav {
@@ -54,6 +62,8 @@
             border-radius: var(--radius-xl);
             padding: 40px;
             margin-bottom: 32px;
+            width: 100%;
+            box-sizing: border-box;
         }
         .form-group {
             margin-bottom: 24px;
@@ -112,9 +122,51 @@
             align-items: center;
             padding: 20px 0;
             border-bottom: 1px solid var(--border-subtle);
+            gap: 16px;
+        }
+        .setting-row > div:first-child {
+            flex: 1;
         }
         .setting-row:last-child {
             border-bottom: none;
+        }
+
+        /* ── Mobile Redesign ── */
+        @media (max-width: 768px) {
+            main.container {
+                padding-top: 100px !important;
+                padding-bottom: 80px !important;
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+            .settings-layout {
+                gap: 24px;
+                margin-top: 24px;
+            }
+            .settings-nav {
+                flex-direction: row;
+                overflow-x: auto;
+                padding-bottom: 8px;
+                -webkit-overflow-scrolling: touch;
+            }
+            .settings-nav::-webkit-scrollbar {
+                display: none;
+            }
+            .settings-nav-item {
+                flex-shrink: 0;
+                padding: 12px 16px;
+            }
+            .settings-section {
+                padding: 24px;
+            }
+            .setting-row {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 16px;
+            }
+            .toggle-switch {
+                align-self: flex-start;
+            }
         }
     </style>
 <script src="../js/page-transition.js"></script>
@@ -132,6 +184,9 @@
                 <a class="nav-link" href="bookings.html">My Bookings</a>
             </div>
             <div class="nav-actions">
+                <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Open menu">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
                 <button class="nav-icon-btn theme-toggle" id="theme-toggle" aria-label="Toggle theme">
                     <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
                 </button>
