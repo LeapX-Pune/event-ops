@@ -55,8 +55,39 @@
             </div>
         </header>
 
+        <!-- Stats Cards -->
+        <div class="stats-grid reveal" style="margin-top:40px; display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:24px;">
+            <div class="stat-card">
+                <div class="stat-icon-wrap">
+                    <span class="material-symbols-outlined">event</span>
+                </div>
+                <div class="stat-info">
+                    <h3 class="stat-label">Total Events</h3>
+                    <p class="stat-value" id="stat-total-events">0</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon-wrap">
+                    <span class="material-symbols-outlined">groups</span>
+                </div>
+                <div class="stat-info">
+                    <h3 class="stat-label">Total Attendees</h3>
+                    <p class="stat-value" id="stat-total-attendees">0</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon-wrap">
+                    <span class="material-symbols-outlined">category</span>
+                </div>
+                <div class="stat-info">
+                    <h3 class="stat-label">Categories</h3>
+                    <p class="stat-value" id="stat-total-categories">0</p>
+                </div>
+            </div>
+        </div>
+
         <!-- Events Table -->
-        <div class="admin-table-wrap reveal" style="margin-top:40px;">
+        <div class="admin-table-wrap reveal" style="margin-top:30px;">
             <table class="admin-table">
                 <thead>
                     <tr>
@@ -87,8 +118,9 @@
                     <div class="validation-error" id="err-title">Event title is required.</div>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Description</label>
-                    <textarea class="form-input" id="form-description" rows="3" placeholder="Brief description..." style="resize:vertical;"></textarea>
+                    <label class="form-label">Description *</label>
+                    <textarea class="form-input" id="form-description" rows="3" placeholder="Brief description (min 10 chars)..." style="resize:vertical;" required></textarea>
+                    <div class="validation-error" id="err-description">Description must be at least 10 characters.</div>
                 </div>
                 <div class="form-group">
                     <label class="form-label" style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 8px;">
@@ -106,16 +138,14 @@
                         <label class="form-label">Category *</label>
                         <select class="form-input" id="form-category" required>
                             <option value="">Select...</option>
-                            <option>Technology</option>
-                            <option>Music</option>
-                            <option>Workshop</option>
-                            <option>Social</option>
-                            <option>Celestial Gala</option>
-                            <option>Aviation Showcase</option>
-                            <option>Automotive Excellence</option>
-                            <option>Digital Art &amp; Crypto</option>
-                            <option>Gastronomic Journey</option>
-                            <option>Extreme Wellness</option>
+                            <option value="cat_tech">Technology</option>
+                            <option value="cat_music">Music</option>
+                            <option value="cat_edu">Workshop / Education</option>
+                            <option value="cat_sports">Social / Sports</option>
+                            <option value="cat_business">Business</option>
+                            <option value="cat_art">Digital Art &amp; Crypto</option>
+                            <option value="cat_food">Gastronomic Journey / Food</option>
+                            <option value="cat_health">Extreme Wellness / Health</option>
                         </select>
                         <div class="validation-error" id="err-category">Category is required.</div>
                     </div>
@@ -127,8 +157,9 @@
                 </div>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
                     <div class="form-group">
-                        <label class="form-label">Time</label>
-                        <input type="time" class="form-input" id="form-time"/>
+                        <label class="form-label">Time *</label>
+                        <input type="time" class="form-input" id="form-time" required/>
+                        <div class="validation-error" id="err-time">Time is required.</div>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Max Attendees *</label>
@@ -174,6 +205,7 @@
                     </div>
                     <div style="text-align: center; font-size: 12px; color: var(--text-secondary); margin-bottom: 12px;">OR</div>
                     <input type="url" class="form-input" id="form-image" placeholder="Image URL (https://...)"/>
+                    <div class="validation-error" id="err-image">Please enter a valid URL.</div>
                     <input type="hidden" id="form-image-data" />
                 </div>
                 <div class="modal-actions">
@@ -209,7 +241,7 @@
     </footer>
 
     <!-- ═══ Scripts ═══ -->
-    <script src="js/events-data.js"></script>
+    <script type="module" src="js/data/events.js"></script>
     <script src="js/animations.js"></script>
     <script src="js/toast.js"></script>
     <script src="js/app.js"></script>
