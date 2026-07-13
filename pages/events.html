@@ -147,10 +147,32 @@
             
             <div style="width:1px;height:32px;background:var(--border-subtle);margin:0 8px;" class="hide-mobile"></div>
             <div style="display:flex;align-items:center;gap:8px;">
+        <div class="filter-bar reveal" style="margin-bottom:48px; display: flex; flex-direction: column; align-items: center; gap: 24px;">
+            <div class="categories-scroll" style="display: flex; flex-wrap: nowrap; overflow-x: auto; max-width: 100%; gap: 16px; padding-bottom: 8px; width: 100%; justify-content: flex-start; -ms-overflow-style: none; scrollbar-width: none;">
+                <button class="filter-btn active" data-filter="all" style="flex-shrink: 0;">All</button>
+                <button class="filter-btn" data-filter="cat_tech" style="flex-shrink: 0;">Technology</button>
+                <button class="filter-btn" data-filter="cat_music" style="flex-shrink: 0;">Music</button>
+                <button class="filter-btn" data-filter="cat_sports" style="flex-shrink: 0;">Sports</button>
+                <button class="filter-btn" data-filter="cat_art" style="flex-shrink: 0;">Art</button>
+                <button class="filter-btn" data-filter="cat_business" style="flex-shrink: 0;">Business</button>
+                <button class="filter-btn" data-filter="cat_food" style="flex-shrink: 0;">Food</button>
+                <button class="filter-btn" data-filter="cat_health" style="flex-shrink: 0;">Health</button>
+                <button class="filter-btn" data-filter="cat_edu" style="flex-shrink: 0;">Education</button>
+                <button class="filter-btn" data-filter="cat_auto" style="flex-shrink: 0;">Automotive</button>
+                <button class="filter-btn" data-filter="cat_aviation" style="flex-shrink: 0;">Aviation</button>
+            </div>
+            
+            <div style="display:flex;align-items:center;gap:8px;justify-content:center;">
                 <span class="material-symbols-outlined" style="color:var(--text-secondary);font-size:18px;">calendar_month</span>
                 <input type="date" id="date-filter" class="filter-date">
             </div>
         </div>
+        
+        <style>
+            .categories-scroll::-webkit-scrollbar {
+                display: none;
+            }
+        </style>
 
         <!-- Events Grid (Rendered Dynamically) -->
         <div class="grid-events stagger-children" id="events-grid">

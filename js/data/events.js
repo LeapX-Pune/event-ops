@@ -1,664 +1,456 @@
 export const events = [
+  // 12 Indian Events, 8 International Events mixed randomly
   {
-    "id": "evt_001",
-    "title": "AI Innovation Summit India",
-    "description": "Join top AI researchers and industry leaders in India. Discussing the future of artificial intelligence.",
-    "category": "cat_tech",
-    "date": "2026-08-10",
-    "time": "09:00",
-    "location": "Bharat Mandapam, New Delhi",
-    "image": "https://images.unsplash.com/photo-1540317580384-e5d43616b9aa?q=80&w=2940&auto=format&fit=crop",
-    "attendees": 1200,
-    "maxAttendees": 1500,
-    "price": "Free",
-    "duration": "2 Hours",
-    "difficulty": "Beginner",
-    "itinerary": [
-      {
-        "num": "01",
-        "title": "Registration & Welcome",
-        "desc": "Settle in and grab your event badge."
-      },
-      {
-        "num": "02",
-        "title": "Main Session",
-        "desc": "Dive into the core topic with our expert speakers."
-      },
-      {
-        "num": "03",
-        "title": "Networking & Wrap-up",
-        "desc": "Connect with peers and discuss key takeaways."
-      }
-    ],
-    "categoryName": "Technology"
+    id: 'evt_001',
+    title: 'AI Innovation Summit',
+    description: 'Join top AI researchers and industry leaders to discuss the future of artificial intelligence in enterprise.',
+    category: 'cat_tech',
+    date: '2026-08-10',
+    time: '09:00 AM',
+    location: 'Hall A, Bharat Mandapam, New Delhi',
+    image: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?q=80&w=2940&auto=format&fit=crop',
+    price: '$150',
+    attendees: 120,
+    maxAttendees: 200
   },
   {
-    "id": "evt_002",
-    "title": "Startup Maharashtra Meetup",
-    "description": "A premier networking event for founders and investors. Explore emerging startup trends in Maharashtra.",
-    "category": "cat_business",
-    "date": "2026-08-18",
-    "time": "10:30",
-    "location": "Mahalaxmi Racecourse, Mumbai",
-    "image": "https://images.unsplash.com/photo-1556761175-5973dc0f32d7?q=80&w=2940&auto=format&fit=crop",
-    "attendees": 450,
-    "maxAttendees": 600,
-    "price": "$100",
-    "duration": "3 Hours",
-    "difficulty": "Intermediate",
-    "itinerary": [
-      {
-        "num": "01",
-        "title": "Registration & Welcome",
-        "desc": "Settle in and grab your event badge."
-      },
-      {
-        "num": "02",
-        "title": "Main Session",
-        "desc": "Dive into the core topic with our expert speakers."
-      },
-      {
-        "num": "03",
-        "title": "Networking & Wrap-up",
-        "desc": "Connect with peers and discuss key takeaways."
-      }
-    ],
-    "categoryName": "Business"
+    id: 'evt_002',
+    title: 'Global Tech Symposium',
+    description: 'Uniting global minds to showcase next-generation hardware and software breakthroughs.',
+    category: 'cat_tech',
+    date: '2026-09-15',
+    time: '09:00 AM',
+    location: 'Grand Ballroom, Marina Bay Sands, Singapore',
+    image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=2940&auto=format&fit=crop',
+    price: '$450',
+    attendees: 300,
+    maxAttendees: 500
   },
   {
-    "id": "evt_003",
-    "title": "Frontend India Conference",
-    "description": "The largest gathering of frontend developers in India. Dive deep into React, Vue, and modern web architecture.",
-    "category": "cat_tech",
-    "date": "2026-08-25",
-    "time": "09:30",
-    "location": "HITEX, Hyderabad",
-    "image": "https://images.unsplash.com/photo-1540317580384-e5d43616b9aa?q=80&w=2940&auto=format&fit=crop",
-    "attendees": 800,
-    "maxAttendees": 1000,
-    "price": "$150",
-    "duration": "4 Hours",
-    "difficulty": "Expert",
-    "itinerary": [
-      {
-        "num": "01",
-        "title": "Registration & Welcome",
-        "desc": "Settle in and grab your event badge."
-      },
-      {
-        "num": "02",
-        "title": "Main Session",
-        "desc": "Dive into the core topic with our expert speakers."
-      },
-      {
-        "num": "03",
-        "title": "Networking & Wrap-up",
-        "desc": "Connect with peers and discuss key takeaways."
-      }
-    ],
-    "categoryName": "Technology"
+    id: 'evt_003',
+    title: 'Startup Maharashtra Meetup',
+    description: 'A premier networking event for founders and investors. Explore emerging startup trends in Maharashtra.',
+    category: 'cat_business',
+    date: '2026-08-18',
+    time: '10:30 AM',
+    location: 'Auditorium 1, Shanmukhananda Hall, Mumbai',
+    image: 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?q=80&w=2940&auto=format&fit=crop',
+    price: '$75',
+    attendees: 85,
+    maxAttendees: 150
   },
   {
-    "id": "evt_004",
-    "title": "Ganesh Utsav Cultural Fest",
-    "description": "Celebrate the spirit of Ganesh Chaturthi with music, dance, and art. A cultural extravaganza for all ages.",
-    "category": "cat_art",
-    "date": "2026-09-05",
-    "time": "18:00",
-    "location": "Shanmukhananda Hall, Mumbai",
-    "image": "https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?q=80&w=2940&auto=format&fit=crop",
-    "attendees": 2200,
-    "maxAttendees": 2500,
-    "price": "Free",
-    "duration": "2 Hours",
-    "difficulty": "All Levels",
-    "itinerary": [
-      {
-        "num": "01",
-        "title": "Registration & Welcome",
-        "desc": "Settle in and grab your event badge."
-      },
-      {
-        "num": "02",
-        "title": "Main Session",
-        "desc": "Dive into the core topic with our expert speakers."
-      },
-      {
-        "num": "03",
-        "title": "Networking & Wrap-up",
-        "desc": "Connect with peers and discuss key takeaways."
-      }
-    ],
-    "categoryName": "Art"
+    id: 'evt_004',
+    title: 'Fintech World Expo',
+    description: 'Discover the future of finance, blockchain, and decentralized banking with leading economists.',
+    category: 'cat_business',
+    date: '2026-10-05',
+    time: '10:00 AM',
+    location: 'North Hall, Excel London, UK',
+    image: 'https://images.unsplash.com/photo-1591696205602-2f950c417cb9?q=80&w=2940&auto=format&fit=crop',
+    price: '$299',
+    attendees: 210,
+    maxAttendees: 300
   },
   {
-    "id": "evt_005",
-    "title": "React Pune Meetup",
-    "description": "Monthly meetup for React developers in Pune. Sharing knowledge, best practices, and open source contributions.",
-    "category": "cat_tech",
-    "date": "2026-09-12",
-    "time": "14:00",
-    "location": "Balewadi Stadium Complex, Pune",
-    "image": "https://images.unsplash.com/photo-1540317580384-e5d43616b9aa?q=80&w=2940&auto=format&fit=crop",
-    "attendees": 120,
-    "maxAttendees": 150,
-    "price": "$250",
-    "duration": "3 Hours",
-    "difficulty": "Beginner",
-    "itinerary": [
-      {
-        "num": "01",
-        "title": "Registration & Welcome",
-        "desc": "Settle in and grab your event badge."
-      },
-      {
-        "num": "02",
-        "title": "Main Session",
-        "desc": "Dive into the core topic with our expert speakers."
-      },
-      {
-        "num": "03",
-        "title": "Networking & Wrap-up",
-        "desc": "Connect with peers and discuss key takeaways."
-      }
-    ],
-    "categoryName": "Technology"
+    id: 'evt_005',
+    title: 'Frontend India Conference',
+    description: 'The largest gathering of frontend developers in India. Dive deep into React, Vue, and modern web architecture.',
+    category: 'cat_tech',
+    date: '2026-08-25',
+    time: '09:30 AM',
+    location: 'Main Pavilion, HITEX Exhibition Centre, Hyderabad',
+    image: 'https://images.unsplash.com/photo-1591115765373-5207764f72e7?q=80&w=2940&auto=format&fit=crop',
+    price: '$120',
+    attendees: 180,
+    maxAttendees: 250
   },
   {
-    "id": "evt_006",
-    "title": "Cricket Analytics Workshop",
-    "description": "Learn how data science is revolutionizing the game of cricket. Hands-on workshop with real match datasets.",
-    "category": "cat_sports",
-    "date": "2026-09-20",
-    "time": "10:00",
-    "location": "JLN Stadium, Delhi",
-    "image": "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?q=80&w=2940&auto=format&fit=crop",
-    "attendees": 85,
-    "maxAttendees": 100,
-    "price": "$50",
-    "duration": "4 Hours",
-    "difficulty": "Intermediate",
-    "itinerary": [
-      {
-        "num": "01",
-        "title": "Registration & Welcome",
-        "desc": "Settle in and grab your event badge."
-      },
-      {
-        "num": "02",
-        "title": "Main Session",
-        "desc": "Dive into the core topic with our expert speakers."
-      },
-      {
-        "num": "03",
-        "title": "Networking & Wrap-up",
-        "desc": "Connect with peers and discuss key takeaways."
-      }
-    ],
-    "categoryName": "Sports"
+    id: 'evt_006',
+    title: 'Desert Music Festival',
+    description: 'A multi-day music experience featuring top international artists under the stars.',
+    category: 'cat_music',
+    date: '2026-11-20',
+    time: '08:00 PM',
+    location: 'Open Air Arena, Dubai World Trade Centre, UAE',
+    image: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=2940&auto=format&fit=crop',
+    price: '$350',
+    attendees: 400,
+    maxAttendees: 500
   },
   {
-    "id": "evt_007",
-    "title": "Food Carnival Pune",
-    "description": "Taste a diverse range of street foods and regional delicacies. Live cooking stations and music performances.",
-    "category": "cat_food",
-    "date": "2026-10-02",
-    "time": "16:30",
-    "location": "Kalyani Nagar Ground, Pune",
-    "image": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=2940&auto=format&fit=crop",
-    "attendees": 3500,
-    "maxAttendees": 5000,
-    "price": "Free",
-    "duration": "2 Hours",
-    "difficulty": "Expert",
-    "itinerary": [
-      {
-        "num": "01",
-        "title": "Registration & Welcome",
-        "desc": "Settle in and grab your event badge."
-      },
-      {
-        "num": "02",
-        "title": "Main Session",
-        "desc": "Dive into the core topic with our expert speakers."
-      },
-      {
-        "num": "03",
-        "title": "Networking & Wrap-up",
-        "desc": "Connect with peers and discuss key takeaways."
-      }
-    ],
-    "categoryName": "Food"
+    id: 'evt_007',
+    title: 'Ganesh Utsav Cultural Fest',
+    description: 'Celebrate the spirit of Ganesh Chaturthi with music, dance, and art. A cultural extravaganza for all ages.',
+    category: 'cat_art',
+    date: '2026-09-05',
+    time: '06:00 PM',
+    location: 'Cultural Grounds, Deccan, Pune',
+    image: 'https://images.unsplash.com/photo-1531058020387-3be344556be6?q=80&w=2940&auto=format&fit=crop',
+    price: 'Free',
+    attendees: 300,
+    maxAttendees: 400
   },
   {
-    "id": "evt_008",
-    "title": "Startup India Bootcamp",
-    "description": "Intensive 3-day bootcamp for aspiring entrepreneurs. Get mentored by successful founders and venture capitalists.",
-    "category": "cat_business",
-    "date": "2026-10-15",
-    "time": "09:00",
-    "location": "BIEC, Bengaluru",
-    "image": "https://images.unsplash.com/photo-1556761175-5973dc0f32d7?q=80&w=2940&auto=format&fit=crop",
-    "attendees": 220,
-    "maxAttendees": 300,
-    "price": "$150",
-    "duration": "3 Hours",
-    "difficulty": "All Levels",
-    "itinerary": [
-      {
-        "num": "01",
-        "title": "Registration & Welcome",
-        "desc": "Settle in and grab your event badge."
-      },
-      {
-        "num": "02",
-        "title": "Main Session",
-        "desc": "Dive into the core topic with our expert speakers."
-      },
-      {
-        "num": "03",
-        "title": "Networking & Wrap-up",
-        "desc": "Connect with peers and discuss key takeaways."
-      }
-    ],
-    "categoryName": "Business"
+    id: 'evt_008',
+    title: 'Web3 & AI Summit',
+    description: 'Pioneering talks on Web3, AI, and the creator economy. Mingle with Silicon Valley leaders.',
+    category: 'cat_tech',
+    date: '2026-08-30',
+    time: '09:30 AM',
+    location: 'South Hall, Moscone Center, San Francisco',
+    image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2940&auto=format&fit=crop',
+    price: '$500',
+    attendees: 280,
+    maxAttendees: 350
   },
   {
-    "id": "evt_009",
-    "title": "Digital India Expo",
-    "description": "Showcasing the latest digital innovations and e-governance solutions. Network with key government and tech stakeholders.",
-    "category": "cat_tech",
-    "date": "2026-10-28",
-    "time": "10:00",
-    "location": "Eco Park, Kolkata",
-    "image": "https://images.unsplash.com/photo-1540317580384-e5d43616b9aa?q=80&w=2940&auto=format&fit=crop",
-    "attendees": 1500,
-    "maxAttendees": 2000,
-    "price": "$200",
-    "duration": "4 Hours",
-    "difficulty": "Beginner",
-    "itinerary": [
-      {
-        "num": "01",
-        "title": "Registration & Welcome",
-        "desc": "Settle in and grab your event badge."
-      },
-      {
-        "num": "02",
-        "title": "Main Session",
-        "desc": "Dive into the core topic with our expert speakers."
-      },
-      {
-        "num": "03",
-        "title": "Networking & Wrap-up",
-        "desc": "Connect with peers and discuss key takeaways."
-      }
-    ],
-    "categoryName": "Technology"
+    id: 'evt_009',
+    title: 'Cricket Analytics Workshop',
+    description: 'Learn how data science is revolutionizing the game of cricket. Hands-on workshop with real match datasets.',
+    category: 'cat_sports',
+    date: '2026-09-20',
+    time: '10:00 AM',
+    location: 'Conference Room 2, JLN Stadium, Delhi',
+    image: 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?q=80&w=2940&auto=format&fit=crop',
+    price: '$50',
+    attendees: 45,
+    maxAttendees: 60
   },
   {
-    "id": "evt_010",
-    "title": "Hackathon India",
-    "description": "48-hour nationwide hackathon to build solutions for social impact. Exciting prizes and hiring opportunities.",
-    "category": "cat_edu",
-    "date": "2026-11-08",
-    "time": "08:30",
-    "location": "IIT Bombay Campus, Mumbai",
-    "image": "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=2940&auto=format&fit=crop",
-    "attendees": 500,
-    "maxAttendees": 700,
-    "price": "Free",
-    "duration": "2 Hours",
-    "difficulty": "Intermediate",
-    "itinerary": [
-      {
-        "num": "01",
-        "title": "Registration & Welcome",
-        "desc": "Settle in and grab your event badge."
-      },
-      {
-        "num": "02",
-        "title": "Main Session",
-        "desc": "Dive into the core topic with our expert speakers."
-      },
-      {
-        "num": "03",
-        "title": "Networking & Wrap-up",
-        "desc": "Connect with peers and discuss key takeaways."
-      }
-    ],
-    "categoryName": "Education"
+    id: 'evt_010',
+    title: 'Anime & Manga Creators Summit',
+    description: 'Celebrating the global phenomenon of anime with exclusive creator interviews and previews.',
+    category: 'cat_art',
+    date: '2026-12-10',
+    time: '10:00 AM',
+    location: 'East Promenade, Tokyo Big Sight, Japan',
+    image: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=2940&auto=format&fit=crop',
+    price: '$120',
+    attendees: 250,
+    maxAttendees: 300
   },
   {
-    "id": "evt_011",
-    "title": "Yoga for Wellness",
-    "description": "A transformative yoga retreat focusing on mental and physical health. Open to beginners and advanced practitioners.",
-    "category": "cat_health",
-    "date": "2026-11-15",
-    "time": "06:00",
-    "location": "Ashram Grounds, Goa",
-    "image": "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=2940&auto=format&fit=crop",
-    "attendees": 60,
-    "maxAttendees": 100,
-    "price": "$50",
-    "duration": "3 Hours",
-    "difficulty": "Expert",
-    "itinerary": [
-      {
-        "num": "01",
-        "title": "Registration & Welcome",
-        "desc": "Settle in and grab your event badge."
-      },
-      {
-        "num": "02",
-        "title": "Main Session",
-        "desc": "Dive into the core topic with our expert speakers."
-      },
-      {
-        "num": "03",
-        "title": "Networking & Wrap-up",
-        "desc": "Connect with peers and discuss key takeaways."
-      }
-    ],
-    "categoryName": "Health"
+    id: 'evt_011',
+    title: 'Startup India Bootcamp',
+    description: 'Intensive 3-day bootcamp for aspiring entrepreneurs. Get mentored by successful founders and venture capitalists.',
+    category: 'cat_business',
+    date: '2026-10-15',
+    time: '09:00 AM',
+    location: 'Incubation Center, BIEC Bengaluru',
+    image: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=2940&auto=format&fit=crop',
+    price: '$99',
+    attendees: 90,
+    maxAttendees: 120
   },
   {
-    "id": "evt_012",
-    "title": "Women Techmakers Pune",
-    "description": "Empowering women in technology through inspiring talks and workshops. Build your network and enhance your skills.",
-    "category": "cat_tech",
-    "date": "2026-11-22",
-    "time": "11:00",
-    "location": "Tech Park, Hinjewadi, Pune",
-    "image": "https://images.unsplash.com/photo-1540317580384-e5d43616b9aa?q=80&w=2940&auto=format&fit=crop",
-    "attendees": 300,
-    "maxAttendees": 400,
-    "price": "$100",
-    "duration": "4 Hours",
-    "difficulty": "All Levels",
-    "itinerary": [
-      {
-        "num": "01",
-        "title": "Registration & Welcome",
-        "desc": "Settle in and grab your event badge."
-      },
-      {
-        "num": "02",
-        "title": "Main Session",
-        "desc": "Dive into the core topic with our expert speakers."
-      },
-      {
-        "num": "03",
-        "title": "Networking & Wrap-up",
-        "desc": "Connect with peers and discuss key takeaways."
-      }
-    ],
-    "categoryName": "Technology"
+    id: 'evt_012',
+    title: 'Louvre Classic Art Gala',
+    description: 'An exclusive evening viewing classical art masterpieces with curated networking.',
+    category: 'cat_art',
+    date: '2026-09-25',
+    time: '07:00 PM',
+    location: 'The Pyramid Atrium, Louvre Museum, Paris',
+    image: 'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?q=80&w=2940&auto=format&fit=crop',
+    price: '$1,200',
+    attendees: 80,
+    maxAttendees: 100
   },
   {
-    "id": "evt_013",
-    "title": "Cloud India Summit",
-    "description": "Explore the latest advancements in cloud computing, AWS, and Azure. Expert panels and technical deep dives.",
-    "category": "cat_tech",
-    "date": "2026-12-05",
-    "time": "09:00",
-    "location": "Chennai Convention Centre, Chennai",
-    "image": "https://images.unsplash.com/photo-1540317580384-e5d43616b9aa?q=80&w=2940&auto=format&fit=crop",
-    "attendees": 900,
-    "maxAttendees": 1200,
-    "price": "Free",
-    "duration": "2 Hours",
-    "difficulty": "Beginner",
-    "itinerary": [
-      {
-        "num": "01",
-        "title": "Registration & Welcome",
-        "desc": "Settle in and grab your event badge."
-      },
-      {
-        "num": "02",
-        "title": "Main Session",
-        "desc": "Dive into the core topic with our expert speakers."
-      },
-      {
-        "num": "03",
-        "title": "Networking & Wrap-up",
-        "desc": "Connect with peers and discuss key takeaways."
-      }
-    ],
-    "categoryName": "Technology"
+    id: 'evt_013',
+    title: 'Digital India Expo',
+    description: 'Showcasing the latest digital innovations and e-governance solutions. Network with key government and tech stakeholders.',
+    category: 'cat_tech',
+    date: '2026-10-28',
+    time: '10:00 AM',
+    location: 'Exhibition Hall B, Eco Park, Kolkata',
+    image: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2940&auto=format&fit=crop',
+    price: 'Free',
+    attendees: 300,
+    maxAttendees: 500
   },
   {
-    "id": "evt_014",
-    "title": "Cyber Security India",
-    "description": "Annual conference addressing emerging cyber threats and defense strategies. Essential for security professionals.",
-    "category": "cat_tech",
-    "date": "2026-12-12",
-    "time": "10:30",
-    "location": "Gujarat University Convention Centre, Ahmedabad",
-    "image": "https://images.unsplash.com/photo-1540317580384-e5d43616b9aa?q=80&w=2940&auto=format&fit=crop",
-    "attendees": 550,
-    "maxAttendees": 800,
-    "price": "$200",
-    "duration": "3 Hours",
-    "difficulty": "Intermediate",
-    "itinerary": [
-      {
-        "num": "01",
-        "title": "Registration & Welcome",
-        "desc": "Settle in and grab your event badge."
-      },
-      {
-        "num": "02",
-        "title": "Main Session",
-        "desc": "Dive into the core topic with our expert speakers."
-      },
-      {
-        "num": "03",
-        "title": "Networking & Wrap-up",
-        "desc": "Connect with peers and discuss key takeaways."
-      }
-    ],
-    "categoryName": "Technology"
+    id: 'evt_014',
+    title: 'European Startup Conference',
+    description: 'Connecting top European startups with global venture capital firms.',
+    category: 'cat_business',
+    date: '2026-10-18',
+    time: '09:00 AM',
+    location: 'Hub27, Messe Berlin, Germany',
+    image: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2940&auto=format&fit=crop',
+    price: '$180',
+    attendees: 150,
+    maxAttendees: 200
   },
   {
-    "id": "evt_015",
-    "title": "UI/UX India Workshop",
-    "description": "Master the principles of user-centric design and accessibility. Hands-on design sprints and portfolio reviews.",
-    "category": "cat_art",
-    "date": "2026-12-20",
-    "time": "14:00",
-    "location": "Design Institute, Jaipur",
-    "image": "https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?q=80&w=2940&auto=format&fit=crop",
-    "attendees": 180,
-    "maxAttendees": 200,
-    "price": "$250",
-    "duration": "4 Hours",
-    "difficulty": "Expert",
-    "itinerary": [
-      {
-        "num": "01",
-        "title": "Registration & Welcome",
-        "desc": "Settle in and grab your event badge."
-      },
-      {
-        "num": "02",
-        "title": "Main Session",
-        "desc": "Dive into the core topic with our expert speakers."
-      },
-      {
-        "num": "03",
-        "title": "Networking & Wrap-up",
-        "desc": "Connect with peers and discuss key takeaways."
-      }
-    ],
-    "categoryName": "Art"
+    id: 'evt_015',
+    title: 'Yoga for Wellness Retreat',
+    description: 'A transformative yoga retreat focusing on mental and physical health. Open to beginners and advanced practitioners.',
+    category: 'cat_health',
+    date: '2026-11-15',
+    time: '06:00 AM',
+    location: 'Ashram Grounds, Palolem Beach, Goa',
+    image: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=2940&auto=format&fit=crop',
+    price: '$45',
+    attendees: 30,
+    maxAttendees: 50
   },
   {
-    "id": "evt_016",
-    "title": "Open Source India Meetup",
-    "description": "Gathering of open source enthusiasts and maintainers. Learn how to effectively contribute to global projects.",
-    "category": "cat_tech",
-    "date": "2027-01-08",
-    "time": "16:00",
-    "location": "InfoPark, Kochi",
-    "image": "https://images.unsplash.com/photo-1540317580384-e5d43616b9aa?q=80&w=2940&auto=format&fit=crop",
-    "attendees": 140,
-    "maxAttendees": 200,
-    "price": "Free",
-    "duration": "2 Hours",
-    "difficulty": "All Levels",
-    "itinerary": [
-      {
-        "num": "01",
-        "title": "Registration & Welcome",
-        "desc": "Settle in and grab your event badge."
-      },
-      {
-        "num": "02",
-        "title": "Main Session",
-        "desc": "Dive into the core topic with our expert speakers."
-      },
-      {
-        "num": "03",
-        "title": "Networking & Wrap-up",
-        "desc": "Connect with peers and discuss key takeaways."
-      }
-    ],
-    "categoryName": "Technology"
+    id: 'evt_016',
+    title: 'Global Auto Expo',
+    description: 'Experience the future of electric vehicles, supercars, and autonomous driving.',
+    category: 'cat_auto',
+    date: '2027-01-15',
+    time: '11:00 AM',
+    location: 'Darling Harbour, Sydney, Australia',
+    image: 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=2940&auto=format&fit=crop',
+    price: '$25',
+    attendees: 220,
+    maxAttendees: 300
   },
   {
-    "id": "evt_017",
-    "title": "College Placement Drive",
-    "description": "Mega placement drive connecting top tech companies with fresh graduates. Multiple interview rounds on site.",
-    "category": "cat_edu",
-    "date": "2027-01-15",
-    "time": "08:30",
-    "location": "NIT Campus, Bhopal",
-    "image": "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=2940&auto=format&fit=crop",
-    "attendees": 1200,
-    "maxAttendees": 1500,
-    "price": "$100",
-    "duration": "3 Hours",
-    "difficulty": "Beginner",
-    "itinerary": [
-      {
-        "num": "01",
-        "title": "Registration & Welcome",
-        "desc": "Settle in and grab your event badge."
-      },
-      {
-        "num": "02",
-        "title": "Main Session",
-        "desc": "Dive into the core topic with our expert speakers."
-      },
-      {
-        "num": "03",
-        "title": "Networking & Wrap-up",
-        "desc": "Connect with peers and discuss key takeaways."
-      }
-    ],
-    "categoryName": "Education"
+    id: 'evt_017',
+    title: 'Aero India Showcase',
+    description: 'Asia premier air show and aviation exhibition featuring spectacular flying displays and aerospace defense innovations.',
+    category: 'cat_aviation',
+    date: '2026-12-12',
+    time: '10:30 AM',
+    location: 'Yelahanka Air Force Station, Bengaluru, India',
+    image: 'https://images.unsplash.com/photo-1540962351504-03099e0a754b?q=80&w=2940&auto=format&fit=crop',
+    price: '$85',
+    attendees: 160,
+    maxAttendees: 200
   },
   {
-    "id": "evt_018",
-    "title": "AI Healthcare Summit",
-    "description": "Bridging the gap between artificial intelligence and medical science. Innovations in diagnostics and patient care.",
-    "category": "cat_health",
-    "date": "2027-01-25",
-    "time": "09:30",
-    "location": "Indore Medical College, Indore",
-    "image": "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=2940&auto=format&fit=crop",
-    "attendees": 350,
-    "maxAttendees": 500,
-    "price": "$150",
-    "duration": "4 Hours",
-    "difficulty": "Intermediate",
-    "itinerary": [
-      {
-        "num": "01",
-        "title": "Registration & Welcome",
-        "desc": "Settle in and grab your event badge."
-      },
-      {
-        "num": "02",
-        "title": "Main Session",
-        "desc": "Dive into the core topic with our expert speakers."
-      },
-      {
-        "num": "03",
-        "title": "Networking & Wrap-up",
-        "desc": "Connect with peers and discuss key takeaways."
-      }
-    ],
-    "categoryName": "Health"
+    id: 'evt_018',
+    title: 'UI/UX Design Masterclass',
+    description: 'Master the principles of user-centric design and accessibility. Hands-on design sprints and portfolio reviews.',
+    category: 'cat_art',
+    date: '2026-12-20',
+    time: '02:00 PM',
+    location: 'Design Studio 1, Jawahar Kala Kendra, Jaipur',
+    image: 'https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?q=80&w=2940&auto=format&fit=crop',
+    price: '$40',
+    attendees: 40,
+    maxAttendees: 60
   },
   {
-    "id": "evt_019",
-    "title": "Data Science Bootcamp",
-    "description": "Comprehensive training in Python, machine learning, and data visualization. Launch your career as a data scientist.",
-    "category": "cat_edu",
-    "date": "2027-02-10",
-    "time": "10:00",
-    "location": "Lucknow IT Hub, Lucknow",
-    "image": "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=2940&auto=format&fit=crop",
-    "attendees": 110,
-    "maxAttendees": 150,
-    "price": "Free",
-    "duration": "2 Hours",
-    "difficulty": "Expert",
-    "itinerary": [
-      {
-        "num": "01",
-        "title": "Registration & Welcome",
-        "desc": "Settle in and grab your event badge."
-      },
-      {
-        "num": "02",
-        "title": "Main Session",
-        "desc": "Dive into the core topic with our expert speakers."
-      },
-      {
-        "num": "03",
-        "title": "Networking & Wrap-up",
-        "desc": "Connect with peers and discuss key takeaways."
-      }
-    ],
-    "categoryName": "Education"
+    id: 'evt_019',
+    title: 'Cloud India Summit',
+    description: 'Explore the latest advancements in cloud computing, AWS, and Azure. Expert panels and technical deep dives.',
+    category: 'cat_tech',
+    date: '2026-12-05',
+    time: '09:00 AM',
+    location: 'Main Auditorium, Chennai Trade Centre, Chennai',
+    image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2940&auto=format&fit=crop',
+    price: '$110',
+    attendees: 190,
+    maxAttendees: 250
   },
   {
-    "id": "evt_020",
-    "title": "National Coding Challenge",
-    "description": "Compete with the best programmers across India in this algorithmic contest. Massive cash prizes to be won.",
-    "category": "cat_tech",
-    "date": "2027-02-20",
-    "time": "09:00",
-    "location": "Surat Convention Centre, Surat",
-    "image": "https://images.unsplash.com/photo-1540317580384-e5d43616b9aa?q=80&w=2940&auto=format&fit=crop",
-    "attendees": 2000,
-    "maxAttendees": 2500,
-    "price": "$250",
-    "duration": "3 Hours",
-    "difficulty": "All Levels",
-    "itinerary": [
-      {
-        "num": "01",
-        "title": "Registration & Welcome",
-        "desc": "Settle in and grab your event badge."
-      },
-      {
-        "num": "02",
-        "title": "Main Session",
-        "desc": "Dive into the core topic with our expert speakers."
-      },
-      {
-        "num": "03",
-        "title": "Networking & Wrap-up",
-        "desc": "Connect with peers and discuss key takeaways."
-      }
-    ],
-    "categoryName": "Technology"
-  }
+    id: 'evt_020',
+    title: 'Food Carnival India',
+    description: 'Taste a diverse range of street foods and regional delicacies. Live cooking stations and music performances.',
+    category: 'cat_food',
+    date: '2026-10-02',
+    time: '04:30 PM',
+    location: 'Open Grounds, Futala Lake, Nagpur',
+    image: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=2940&auto=format&fit=crop',
+    price: '$15',
+    attendees: 350,
+    maxAttendees: 500
+  },
+  {
+    id: 'evt_021',
+    title: 'Geneva International Motor Show',
+    description: 'The world premier auto show featuring the latest concept cars, hypercars, and automotive innovations.',
+    category: 'cat_auto',
+    date: '2027-02-18',
+    time: '10:00 AM',
+    location: 'Palexpo, Geneva, Switzerland',
+    image: 'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?q=80&w=2940&auto=format&fit=crop',
+    price: '$80',
+    attendees: 400,
+    maxAttendees: 500
+  },
+  {
+    id: 'evt_022',
+    title: 'Farnborough International Airshow',
+    description: 'A global showcase for the aerospace and defense industries, featuring spectacular aerial displays.',
+    category: 'cat_aviation',
+    date: '2026-07-22',
+    time: '09:00 AM',
+    location: 'Farnborough Airport, Hampshire, UK',
+    image: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=2940&auto=format&fit=crop',
+    price: '$120',
+    attendees: 300,
+    maxAttendees: 400
+  },
+  {
+    id: 'evt_023',
+    title: 'Tokyo Auto Salon',
+    description: 'Japan top automotive extravaganza focusing on performance tuning, custom cars, and aftermarket parts.',
+    category: 'cat_auto',
+    date: '2027-01-10',
+    time: '09:30 AM',
+    location: 'Makuhari Messe, Chiba, Japan',
+    image: 'https://images.unsplash.com/photo-1560958089-b8a1929cea89?q=80&w=2940&auto=format&fit=crop',
+    price: '$50',
+    attendees: 350,
+    maxAttendees: 450
+  },
+  {
+    id: 'evt_024',
+    title: 'Dubai Airshow',
+    description: 'The leading aerospace event in the Middle East, bringing together commercial and military aviation leaders.',
+    category: 'cat_aviation',
+    date: '2027-11-14',
+    time: '10:00 AM',
+    location: 'Dubai World Central (DWC), Dubai, UAE',
+    image: 'https://images.unsplash.com/photo-1500835556837-99ac94a94552?q=80&w=2940&auto=format&fit=crop',
+    price: '$200',
+    attendees: 280,
+    maxAttendees: 400
+  },
+  {
+    id: 'evt_025',
+    title: 'Delhi Auto Expo',
+    description: 'India largest automotive show highlighting sustainable mobility and EV adoption.',
+    category: 'cat_auto',
+    date: '2027-03-05',
+    time: '09:00 AM',
+    location: 'India Expo Mart, Greater Noida, India',
+    image: 'https://acko-cms.ackoassets.com/Whats_App_Image_2024_02_05_at_3_00_11_PM_4bc764ff80.jpeg',
+    price: '$15',
+    attendees: 300,
+    maxAttendees: 500
+  },
+  {
+    id: 'evt_026',
+    title: 'Hyderabad Aviation Summit',
+    description: 'A key regional event focusing on civil aviation growth and aerospace manufacturing in South Asia.',
+    category: 'cat_aviation',
+    date: '2027-04-12',
+    time: '10:00 AM',
+    location: 'Begumpet Airport, Hyderabad, India',
+    image: 'https://www.travelandtourworld.com/wp-content/uploads/2026/01/international-aviation-expo-at-airport-e_LX6GMpfOSwWElOh-UVQ1Ww_X1lcbS8eReGFSKCeT_LugQ.jpeg',
+    price: '$45',
+    attendees: 200,
+    maxAttendees: 300
+  },
+  {
+    id: 'evt_027',
+    title: 'Detroit Auto Show',
+    description: 'The iconic North American International Auto Show featuring legendary American muscle and electric trucks.',
+    category: 'cat_auto',
+    date: '2027-09-18',
+    time: '09:00 AM',
+    location: 'Huntington Place, Detroit, USA',
+    image: 'https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=2940&auto=format&fit=crop',
+    price: '$65',
+    attendees: 400,
+    maxAttendees: 500
+  },
+  {
+    id: 'evt_028',
+    title: 'Paris Air Show',
+    description: 'The world oldest and largest air show, a massive display of commercial and military aircraft.',
+    category: 'cat_aviation',
+    date: '2027-06-21',
+    time: '08:30 AM',
+    location: 'Le Bourget Airport, Paris, France',
+    image: 'https://etimg.etb2bimg.com/photo/126640137.cms',
+    price: '$150',
+    attendees: 450,
+    maxAttendees: 600
+  },
+  {
+    id: 'evt_029',
+    title: 'Mumbai Vintage Car Show',
+    description: 'A spectacular showcase of perfectly restored classic and vintage automobiles parading through Mumbai.',
+    category: 'cat_auto',
+    date: '2027-01-26',
+    time: '08:00 AM',
+    location: 'Marine Drive, Mumbai, India',
+    image: 'https://akm-img-a-in.tosshub.com/businesstoday/images/story/202201/vintagestock1200-sixteen_nine.jpg?size=948:533',
+    price: 'Free',
+    attendees: 350,
+    maxAttendees: 500
+  },
+  {
+    id: 'evt_030',
+    title: 'Wings India 2026',
+    description: 'The flagship event on civil aviation in Asia, promoting regional connectivity and aviation business.',
+    category: 'cat_aviation',
+    date: '2026-08-10',
+    time: '10:00 AM',
+    location: 'Begumpet Airport, Hyderabad, India',
+    image: 'https://img.etimg.com/thumb/width-1200,height-900,imgsize-77680,resizemode-75,msid-127767794/industry/transportation/airlines-/-aviation/economic-survey-2026-indias-civil-aviation-sector-on-sustained-growth-trajectory-says-survey.jpg',
+    price: '$40',
+    attendees: 220,
+    maxAttendees: 300
+  },
+  {
+    id: 'evt_031',
+    title: 'Shanghai Auto Show',
+    description: 'One of the most important automotive exhibitions globally, spotlighting the fast-paced Chinese auto market.',
+    category: 'cat_auto',
+    date: '2027-04-20',
+    time: '09:00 AM',
+    location: 'National Exhibition and Convention Center, Shanghai, China',
+    image: 'https://images.unsplash.com/photo-1511919884226-fd3cad34687c?q=80&w=2940&auto=format&fit=crop',
+    price: '$90',
+    attendees: 480,
+    maxAttendees: 600
+  },
+  {
+    id: 'evt_032',
+    title: 'Singapore Airshow',
+    description: 'Asia most influential aerospace and defence exhibition.',
+    category: 'cat_aviation',
+    date: '2028-02-15',
+    time: '10:00 AM',
+    location: 'Changi Exhibition Centre, Singapore',
+    image: 'https://images.unsplash.com/photo-1542296332-2e4473faf563?q=80&w=2940&auto=format&fit=crop',
+    price: '$180',
+    attendees: 350,
+    maxAttendees: 400
+  },
+  { id: 'evt_033', title: 'Symphony in the Park', description: 'A beautiful evening of classical music in the open air.', category: 'cat_music', date: '2026-08-15', time: '18:00', location: 'Central Park, NY', image: 'https://loremflickr.com/800/600/symphony,orchestra?lock=033', price: '$20', attendees: 1200, maxAttendees: 2000 },
+  { id: 'evt_034', title: 'Electronic Music Festival', description: 'Experience the best DJs from around the world.', category: 'cat_music', date: '2026-09-10', time: '14:00', location: 'Ibiza, Spain', image: 'https://loremflickr.com/800/600/dj,festival?lock=034', price: '$150', attendees: 5000, maxAttendees: 10000 },
+  { id: 'evt_035', title: 'Jazz Night', description: 'Smooth jazz vibes in an intimate setting.', category: 'cat_music', date: '2026-10-05', time: '20:00', location: 'New Orleans, LA', image: 'https://loremflickr.com/800/600/jazz,band?lock=035', price: '$40', attendees: 150, maxAttendees: 200 },
+  { id: 'evt_036', title: 'Rock & Roll Arena', description: 'Legendary rock bands perform live.', category: 'cat_music', date: '2026-11-20', time: '19:30', location: 'London, UK', image: 'https://loremflickr.com/800/600/rock,concert?lock=036', price: '$80', attendees: 8000, maxAttendees: 15000 },
+  { id: 'evt_037', title: 'Classical Piano Recital', description: 'An elegant showcase of piano masterpieces.', category: 'cat_music', date: '2026-12-01', time: '17:00', location: 'Vienna, Austria', image: 'https://loremflickr.com/800/600/piano,recital?lock=037', price: '$60', attendees: 400, maxAttendees: 500 },
+  { id: 'evt_038', title: 'Marathon City', description: 'Join thousands of runners in the annual city marathon.', category: 'cat_sports', date: '2026-09-25', time: '06:00', location: 'Boston, MA', image: 'https://loremflickr.com/800/600/marathon,runner?lock=038', price: '$100', attendees: 25000, maxAttendees: 30000 },
+  { id: 'evt_039', title: 'Championship Tennis', description: 'Watch the best tennis players compete for the title.', category: 'cat_sports', date: '2026-07-10', time: '10:00', location: 'Wimbledon, UK', image: 'https://loremflickr.com/800/600/tennis,match?lock=039', price: '$200', attendees: 15000, maxAttendees: 15000 },
+  { id: 'evt_040', title: 'World Cup Football', description: 'The grand finale of the football world cup.', category: 'cat_sports', date: '2026-08-20', time: '15:00', location: 'Rio, Brazil', image: 'https://loremflickr.com/800/600/football,stadium?lock=040', price: '$300', attendees: 80000, maxAttendees: 80000 },
+  { id: 'evt_041', title: 'Extreme X-Games', description: 'Adrenaline-pumping extreme sports action.', category: 'cat_sports', date: '2027-01-15', time: '09:00', location: 'Aspen, CO', image: 'https://loremflickr.com/800/600/snowboard,extreme?lock=041', price: '$50', attendees: 5000, maxAttendees: 8000 },
+  { id: 'evt_042', title: 'Pro Basketball Finals', description: 'Courtside action at the biggest basketball event.', category: 'cat_sports', date: '2027-06-05', time: '20:30', location: 'Los Angeles, CA', image: 'https://loremflickr.com/800/600/basketball,court?lock=042', price: '$250', attendees: 18000, maxAttendees: 20000 },
+  { id: 'evt_043', title: 'Modern Art Expo', description: 'Discover cutting-edge modern artworks.', category: 'cat_art', date: '2026-10-12', time: '11:00', location: 'Paris, France', image: 'https://loremflickr.com/800/600/modern,art?lock=043', price: '$25', attendees: 3000, maxAttendees: 5000 },
+  { id: 'evt_044', title: 'Sculpture Walk', description: 'An outdoor exhibition of contemporary sculptures.', category: 'cat_art', date: '2026-11-05', time: '10:00', location: 'Florence, Italy', image: 'https://loremflickr.com/800/600/sculpture,museum?lock=044', price: 'Free', attendees: 1500, maxAttendees: 3000 },
+  { id: 'evt_045', title: 'Digital Art Fair', crypto: true, description: 'NFTs, VR experiences, and digital masterpieces.', category: 'cat_art', date: '2027-02-20', time: '12:00', location: 'Tokyo, Japan', image: 'https://loremflickr.com/800/600/digital,vr?lock=045', price: '$35', attendees: 4000, maxAttendees: 5000 },
+  { id: 'evt_046', title: 'Renaissance Canvas', description: 'A curated collection of classical paintings.', category: 'cat_art', date: '2027-03-15', time: '09:00', location: 'Rome, Italy', image: 'https://loremflickr.com/800/600/renaissance,painting?lock=046', price: '$20', attendees: 2000, maxAttendees: 2500 },
+  { id: 'evt_047', title: 'Abstract Exhibition', description: 'Dive deep into the world of abstract expressionism.', category: 'cat_art', date: '2027-05-10', time: '10:30', location: 'Berlin, Germany', image: 'https://loremflickr.com/800/600/abstract,art?lock=047', price: '$15', attendees: 1200, maxAttendees: 2000 },
+  { id: 'evt_048', title: 'Startup Pitch Deck', description: 'Innovative startups pitch to top-tier investors.', category: 'cat_business', date: '2026-11-15', time: '09:00', location: 'Silicon Valley, CA', image: 'https://loremflickr.com/800/600/startup,pitch?lock=048', price: '$50', attendees: 500, maxAttendees: 800 },
+  { id: 'evt_049', title: 'Global FinTech Summit', description: 'The future of finance and blockchain technology.', category: 'cat_business', date: '2027-04-10', time: '08:00', location: 'Singapore', image: 'https://loremflickr.com/800/600/fintech,finance?lock=049', price: '$300', attendees: 1200, maxAttendees: 1500 },
+  { id: 'evt_050', title: 'Leadership Conference', description: 'Inspiring keynotes from industry titans.', category: 'cat_business', date: '2027-06-25', time: '10:00', location: 'New York, NY', image: 'https://loremflickr.com/800/600/leadership,speaker?lock=050', price: '$150', attendees: 800, maxAttendees: 1000 },
+  { id: 'evt_051', title: 'E-commerce Expo', description: 'The latest trends and tools for online retail.', category: 'cat_business', date: '2027-08-12', time: '09:30', location: 'London, UK', image: 'https://loremflickr.com/800/600/ecommerce,laptop?lock=051', price: '$75', attendees: 2000, maxAttendees: 3000 },
+  { id: 'evt_052', title: 'Real Estate Seminar', description: 'Insights into global property markets and investing.', category: 'cat_business', date: '2027-09-05', time: '11:00', location: 'Dubai, UAE', image: 'https://loremflickr.com/800/600/realestate,building?lock=052', price: '$100', attendees: 600, maxAttendees: 1000 },
+  { id: 'evt_053', title: 'Gourmet Street Food', description: 'A culinary journey through international street food.', category: 'cat_food', date: '2026-10-20', time: '17:00', location: 'Bangkok, Thailand', image: 'https://loremflickr.com/800/600/streetfood,market?lock=053', price: '$10', attendees: 4000, maxAttendees: 6000 },
+  { id: 'evt_054', title: 'Wine Tasting Masterclass', description: 'Sample the finest vintages with expert sommeliers.', category: 'cat_food', date: '2026-11-12', time: '15:00', location: 'Bordeaux, France', image: 'https://loremflickr.com/800/600/wine,tasting?lock=054', price: '$120', attendees: 100, maxAttendees: 150 },
+  { id: 'evt_055', title: 'Vegan Culinary Fest', description: 'The best plant-based dishes from top chefs.', category: 'cat_food', date: '2027-01-08', time: '11:00', location: 'Los Angeles, CA', image: 'https://loremflickr.com/800/600/vegan,salad?lock=055', price: '$25', attendees: 2000, maxAttendees: 3000 },
+  { id: 'evt_056', title: 'International Baking Expo', description: 'Discover new techniques, ingredients, and sweet treats.', category: 'cat_food', date: '2027-03-22', time: '09:00', location: 'Paris, France', image: 'https://loremflickr.com/800/600/baking,pastry?lock=056', price: '$40', attendees: 1500, maxAttendees: 2500 },
+  { id: 'evt_057', title: 'Seafood & Grill Fest', description: 'Fresh catch and barbecue by the beach.', category: 'cat_food', date: '2027-05-18', time: '12:00', location: 'Sydney, Australia', image: 'https://loremflickr.com/800/600/seafood,grill?lock=057', price: '$35', attendees: 3000, maxAttendees: 5000 },
+  { id: 'evt_058', title: 'Wellness Retreat', description: 'Recharge your mind and body in a serene environment.', category: 'cat_health', date: '2026-12-05', time: '08:00', location: 'Bali, Indonesia', image: 'https://loremflickr.com/800/600/spa,retreat?lock=058', price: '$500', attendees: 50, maxAttendees: 80 },
+  { id: 'evt_059', title: 'Global Yoga Summit', description: 'Join leading yogis for a weekend of practice and meditation.', category: 'cat_health', date: '2027-02-14', time: '06:30', location: 'Rishikesh, India', image: 'https://loremflickr.com/800/600/yoga,meditation?lock=059', price: '$150', attendees: 500, maxAttendees: 1000 },
+  { id: 'evt_060', title: 'Future of Medicine', description: 'Explore breakthroughs in healthcare and biotechnology.', category: 'cat_health', date: '2027-04-20', time: '09:00', location: 'Boston, MA', image: 'https://loremflickr.com/800/600/medicine,doctor?lock=060', price: '$200', attendees: 800, maxAttendees: 1200 },
+  { id: 'evt_061', title: 'Mental Health Symposium', description: 'Conversations on well-being and psychological resilience.', category: 'cat_health', date: '2027-07-11', time: '10:00', location: 'Toronto, Canada', image: 'https://loremflickr.com/800/600/therapy,mentalhealth?lock=061', price: '$80', attendees: 400, maxAttendees: 600 },
+  { id: 'evt_062', title: 'Holistic Nutrition Fair', description: 'Learn about superfoods, organic diets, and healthy living.', category: 'cat_health', date: '2027-09-22', time: '11:00', location: 'Amsterdam, Netherlands', image: 'https://loremflickr.com/800/600/nutrition,healthy?lock=062', price: '$30', attendees: 1500, maxAttendees: 2000 },
+  { id: 'evt_063', title: 'EdTech Conference', description: 'The intersection of technology and modern education.', category: 'cat_edu', date: '2026-11-28', time: '09:00', location: 'London, UK', image: 'https://loremflickr.com/800/600/edtech,classroom?lock=063', price: '$120', attendees: 1000, maxAttendees: 1500 },
+  { id: 'evt_064', title: 'University Open Day', description: 'Explore campus life and academic programs.', category: 'cat_edu', date: '2027-01-20', time: '10:00', location: 'Oxford, UK', image: 'https://loremflickr.com/800/600/university,campus?lock=064', price: 'Free', attendees: 5000, maxAttendees: 8000 },
+  { id: 'evt_065', title: 'Language Learning Summit', description: 'Mastering new languages with polyglots and experts.', category: 'cat_edu', date: '2027-03-12', time: '09:30', location: 'Madrid, Spain', image: 'https://loremflickr.com/800/600/language,study?lock=065', price: '$60', attendees: 600, maxAttendees: 1000 },
+  { id: 'evt_066', title: 'Science & Tech Fair', description: 'Student projects and innovations in STEM.', category: 'cat_edu', date: '2027-05-08', time: '08:30', location: 'MIT, MA', image: 'https://loremflickr.com/800/600/science,laboratory?lock=066', price: 'Free', attendees: 2000, maxAttendees: 3000 },
+  { id: 'evt_067', title: 'Creative Writing Workshop', description: 'Hone your storytelling skills with bestselling authors.', category: 'cat_edu', date: '2027-08-19', time: '14:00', location: 'Dublin, Ireland', image: 'https://loremflickr.com/800/600/writing,notebook?lock=067', price: '$90', attendees: 150, maxAttendees: 200 }
 ];
 
 window.CONCLAVE_EVENTS = events;
