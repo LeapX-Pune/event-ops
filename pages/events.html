@@ -134,16 +134,17 @@
 
             events.forEach((evt, idx) => {
                 const categoryMapping = {
-                    "Celestial Gala": "social",
-                    "Aviation Showcase": "aviation",
-                    "Automotive Excellence": "automotive",
-                    "Digital Art & Crypto": "masterclass",
-                    "Gastronomic Journey": "social",
-                    "Extreme Wellness": "masterclass",
-                    "Technology": "masterclass",
-                    "Music": "social",
-                    "Workshop": "masterclass",
-                    "Social": "social"
+                    "cat_auto": "automotive",
+                    "cat_aviation": "aviation",
+                    "cat_tech": "masterclass",
+                    "cat_art": "masterclass",
+                    "cat_edu": "masterclass",
+                    "cat_business": "masterclass",
+                    "cat_music": "social",
+                    "cat_food": "social",
+                    "cat_health": "social",
+                    "cat_sports": "social",
+                    "cat_social": "social"
                 };
                 
                 const filterCat = categoryMapping[evt.category] || "social";
