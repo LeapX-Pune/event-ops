@@ -520,7 +520,7 @@ ul, ol {
     font-family: var(--font-display);
     font-size: 28px;
     font-weight: 400;
-    color: var(--gold);
+    color: var(--text-gold, var(--gold));
     letter-spacing: 0.25em;
     text-transform: uppercase;
     transition: opacity 0.3s;
@@ -556,7 +556,7 @@ ul, ol {
 
 .nav-link:hover,
 .nav-link.active {
-    color: var(--gold);
+    color: var(--text-gold, var(--gold));
 }
 
 .nav-link.active::after {
@@ -566,7 +566,7 @@ ul, ol {
     left: 0;
     width: 100%;
     height: 1px;
-    background: var(--gold);
+    background: var(--text-gold, var(--gold));
 }
 
 .nav-actions {
@@ -588,7 +588,7 @@ ul, ol {
 }
 
 .nav-icon-btn:hover {
-    color: var(--gold);
+    color: var(--text-gold, var(--gold));
 }
 
 .nav-avatar {
@@ -1024,8 +1024,8 @@ ul, ol {
 .featured-badge {
     display: inline-block;
     padding: 4px 12px;
-    border: 1px solid var(--border-medium);
-    color: var(--gold);
+    border: 1px solid var(--text-gold, var(--border-medium));
+    color: var(--text-gold, var(--gold));
     font-size: 11px;
     font-weight: 600;
     letter-spacing: 0.2em;
@@ -1199,6 +1199,13 @@ ul, ol {
     background: var(--btn-ghost-hover-bg, var(--gold-subtle));
 }
 
+.btn-primary:focus-visible,
+.btn-outline:focus-visible,
+.btn-ghost:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+}
+
 /* ── Form Inputs ───────────────────────────────────────────── */
 .form-group {
     margin-bottom: var(--space-lg);
@@ -1235,8 +1242,20 @@ ul, ol {
     box-shadow: var(--focus-ring);
 }
 
+.form-input:disabled {
+    background: var(--bg-deep);
+    color: var(--text-disabled);
+    cursor: not-allowed;
+    border-color: var(--border-subtle);
+}
+
+.form-input option {
+    background: var(--bg-surface);
+    color: var(--text-primary);
+}
+
 .form-group:focus-within .form-label {
-    color: var(--gold);
+    color: var(--text-gold, var(--gold));
 }
 
 /* Payment Method Radio */
@@ -1257,7 +1276,7 @@ ul, ol {
     padding: 14px;
     text-align: center;
     transition: all 0.3s;
-    background: transparent;
+    background: var(--bg-surface);
 }
 
 .payment-option-card:hover {
@@ -1309,7 +1328,7 @@ ul, ol {
     font-family: var(--font-display);
     font-size: 52px;
     font-weight: 200;
-    color: var(--gold);
+    color: var(--text-gold, var(--gold));
     line-height: 1;
     letter-spacing: 0.05em;
 }
@@ -1317,7 +1336,7 @@ ul, ol {
 .booking-widget-badge {
     font-size: 10px;
     font-weight: 600;
-    color: var(--gold);
+    color: var(--text-gold, var(--gold));
     background: var(--gold-subtle);
     padding: 4px 10px;
     letter-spacing: 0.15em;
@@ -1421,7 +1440,7 @@ ul, ol {
 }
 
 .modal-close:hover {
-    color: var(--gold);
+    color: var(--text-gold, var(--gold));
 }
 
 /* ── Section Headers ───────────────────────────────────────── */
@@ -1430,7 +1449,7 @@ ul, ol {
     font-weight: 600;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: var(--gold);
+    color: var(--text-gold, var(--gold));
     margin-bottom: var(--space-md);
 }
 
@@ -1561,14 +1580,17 @@ ul, ol {
 }
 
 .perk-card {
+    background: var(--bg-card);
     border: 1px solid var(--border-subtle);
     padding: var(--space-xl);
     border-radius: var(--radius-lg);
-    transition: background 0.5s;
+    transition: background 0.5s, border-color 0.4s, box-shadow 0.4s;
 }
 
 .perk-card:hover {
     background: var(--bg-surface-raised);
+    border-color: var(--border-hover);
+    box-shadow: var(--shadow-card);
 }
 
 .perk-card .material-symbols-outlined {
@@ -1902,7 +1924,7 @@ ul, ol {
     font-family: var(--font-display);
     font-size: 20px;
     font-weight: 100;
-    color: var(--gold);
+    color: var(--text-gold, var(--gold));
     letter-spacing: 0.2em;
     text-transform: uppercase;
     margin-bottom: var(--space-md);
@@ -1932,7 +1954,7 @@ ul, ol {
 }
 
 .footer-link:hover {
-    color: var(--gold);
+    color: var(--text-gold, var(--gold));
 }
 
 .footer-copy {
@@ -1960,11 +1982,18 @@ ul, ol {
 .concierge-card {
     padding: var(--space-2xl);
     background: var(--bg-surface-raised);
+    border: 1px solid var(--border-subtle);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     min-height: 360px;
     border-radius: var(--radius-md);
+    transition: border-color 0.4s, box-shadow 0.4s;
+}
+
+.concierge-card:hover {
+    border-color: var(--border-hover);
+    box-shadow: var(--shadow-card);
 }
 
 .concierge-image {
