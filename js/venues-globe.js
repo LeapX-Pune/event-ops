@@ -107,19 +107,26 @@ document.addEventListener('DOMContentLoaded', () => {
         world.controls().autoRotate = true;
         world.controls().autoRotateSpeed = 0.5;
 
-        // Animate Zoom in after 0.5 seconds to feel more immediate
-        setTimeout(() => {
-            world.controls().autoRotate = false; // Stop rotation during zoom
-            // Fly to the user's location, less aggressively zoomed
-            const zoomAlt = window.innerWidth < 768 ? 0.9 : 0.6;
-            world.pointOfView({ lat: lat, lng: lng, altitude: zoomAlt }, 4000);
-            
-            // Resume very slow rotation after zoom
+        // Animate Zoom in after 0.5 seconds to feel more immediate (Desktop only)
+        if (window.innerWidth >= 768) {
             setTimeout(() => {
-                world.controls().autoRotate = true;
-                world.controls().autoRotateSpeed = 0.02; // very slow
-            }, 4500);
-        }, 500);
+                world.controls().autoRotate = false; // Stop rotation during zoom
+                // Fly to the user's location, less aggressively zoomed
+                const zoomAlt = 0.6;
+                world.pointOfView({ lat: lat, lng: lng, altitude: zoomAlt }, 4000);
+                
+                // Resume very slow rotation after zoom
+                setTimeout(() => {
+                    world.controls().autoRotate = true;
+                    world.controls().autoRotateSpeed = 0.02; // very slow
+                }, 4500);
+            }, 500);
+        } else {
+            // Mobile: set comfortable initial altitude without triggering aggressive pointOfView zoom flight
+            world.pointOfView({ lat: lat, lng: lng, altitude: 2.2 });
+            world.controls().autoRotate = true;
+            world.controls().autoRotateSpeed = 0.2;
+        }
 
         // Handle window resize
         window.addEventListener('resize', () => {

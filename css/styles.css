@@ -2241,7 +2241,7 @@ ul, ol {
 @media (max-width: 768px) {
     .chat-widget {
         right: 16px;
-        bottom: 120px;
+        bottom: calc(16px + env(safe-area-inset-bottom));
     }
 
     .chat-window {
@@ -2605,4 +2605,83 @@ ul, ol {
     background: var(--gold);
     color: var(--text-on-gold);
     border-color: var(--gold);
+}
+
+/* ── Mobile UI & Responsive Polish Overrides ────────────────── */
+[data-theme="light"] .mobile-menu-close,
+[data-theme="light"] .mobile-menu-link:hover,
+[data-theme="light"] .mobile-menu-link.active {
+    color: var(--text-gold, var(--gold));
+}
+
+@media (max-width: 768px) {
+    /* Fullscreen-ish mobile chat widget */
+    .chat-window {
+        width: calc(100vw - 32px);
+        max-width: 100%;
+        height: calc(100vh - 150px);
+        max-height: 100%;
+    }
+    .chat-input {
+        padding: 12px 16px;
+        font-size: 14px;
+    }
+    .chat-send {
+        font-size: 24px;
+        padding: 8px;
+    }
+    .chat-close {
+        padding: 12px !important;
+        min-width: 44px;
+        min-height: 44px;
+    }
+    
+    /* Full-screen profile drawer */
+    body #profile-sidebar-drawer {
+        max-width: 100%;
+        right: -100%;
+    }
+    body #profile-sidebar-drawer.active {
+        right: 0;
+    }
+
+    /* Accessibility Touch Targets minimum 44px */
+    .btn-primary,
+    .btn-secondary,
+    .ticket-btn,
+    .quick-reply-btn,
+    .theme-toggle {
+        min-height: 44px;
+        min-width: 44px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Mobile Header Safe Area, vertical alignment and title scaling */
+    .nav {
+        padding-top: env(safe-area-inset-top) !important;
+        height: auto !important;
+    }
+    .nav-inner {
+        padding: 12px 16px !important;
+        align-items: center !important;
+        display: flex !important;
+        justify-content: space-between !important;
+    }
+    .nav-brand {
+        font-size: 20px !important;
+        letter-spacing: 0.15em !important;
+    }
+    .nav-actions {
+        gap: 12px !important;
+        align-items: center !important;
+    }
+}
+
+/* Stacking payment methods on very small mobile devices */
+@media (max-width: 480px) {
+    #checkout-form div[style*="grid-template-columns:repeat(3,1fr)"] {
+        grid-template-columns: 1fr !important;
+    }
 }
