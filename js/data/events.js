@@ -8,7 +8,7 @@ export const events = [
     date: '2026-08-10',
     time: '09:00 AM',
     location: 'Hall A, Bharat Mandapam, New Delhi',
-    image: 'https://loremflickr.com/800/600/tech?lock=211',
+    image: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?q=80&w=2940&auto=format&fit=crop',
     price: '$150',
     attendees: 120,
     maxAttendees: 200
@@ -21,7 +21,7 @@ export const events = [
     date: '2026-09-15',
     time: '09:00 AM',
     location: 'Grand Ballroom, Marina Bay Sands, Singapore',
-    image: 'https://loremflickr.com/800/600/tech?lock=002',
+    image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=2940&auto=format&fit=crop',
     price: '$450',
     attendees: 300,
     maxAttendees: 500
@@ -34,7 +34,7 @@ export const events = [
     date: '2026-08-18',
     time: '10:30 AM',
     location: 'Auditorium 1, Shanmukhananda Hall, Mumbai',
-    image: 'https://loremflickr.com/800/600/business?lock=319',
+    image: 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?q=80&w=2940&auto=format&fit=crop',
     price: '$75',
     attendees: 85,
     maxAttendees: 150
@@ -47,7 +47,7 @@ export const events = [
     date: '2026-10-05',
     time: '10:00 AM',
     location: 'North Hall, Excel London, UK',
-    image: 'https://loremflickr.com/800/600/business?lock=004',
+    image: 'https://images.unsplash.com/photo-1591696205602-2f950c417cb9?q=80&w=2940&auto=format&fit=crop',
     price: '$299',
     attendees: 210,
     maxAttendees: 300
@@ -60,7 +60,7 @@ export const events = [
     date: '2026-08-25',
     time: '09:30 AM',
     location: 'Main Pavilion, HITEX Exhibition Centre, Hyderabad',
-    image: 'https://loremflickr.com/800/600/tech?lock=548',
+    image: 'https://images.unsplash.com/photo-1591115765373-5207764f72e7?q=80&w=2940&auto=format&fit=crop',
     price: '$120',
     attendees: 180,
     maxAttendees: 250
@@ -73,7 +73,7 @@ export const events = [
     date: '2026-11-20',
     time: '08:00 PM',
     location: 'Open Air Arena, Dubai World Trade Centre, UAE',
-    image: 'https://loremflickr.com/800/600/music?lock=006',
+    image: 'https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=2940&auto=format&fit=crop',
     price: '$350',
     attendees: 400,
     maxAttendees: 500
@@ -86,7 +86,7 @@ export const events = [
     date: '2026-09-05',
     time: '06:00 PM',
     location: 'Cultural Grounds, Deccan, Pune',
-    image: 'https://loremflickr.com/800/600/art?lock=189',
+    image: 'https://images.unsplash.com/photo-1531058020387-3be344556be6?q=80&w=2940&auto=format&fit=crop',
     price: 'Free',
     attendees: 300,
     maxAttendees: 400
@@ -99,7 +99,7 @@ export const events = [
     date: '2026-08-30',
     time: '09:30 AM',
     location: 'South Hall, Moscone Center, San Francisco',
-    image: 'https://loremflickr.com/800/600/tech?lock=008',
+    image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2940&auto=format&fit=crop',
     price: '$500',
     attendees: 280,
     maxAttendees: 350
@@ -112,7 +112,7 @@ export const events = [
     date: '2026-09-20',
     time: '10:00 AM',
     location: 'Conference Room 2, JLN Stadium, Delhi',
-    image: 'https://loremflickr.com/800/600/sports?lock=869',
+    image: 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?q=80&w=2940&auto=format&fit=crop',
     price: '$50',
     attendees: 45,
     maxAttendees: 60
@@ -125,7 +125,7 @@ export const events = [
     date: '2026-12-10',
     time: '10:00 AM',
     location: 'East Promenade, Tokyo Big Sight, Japan',
-    image: 'https://loremflickr.com/800/600/art?lock=519',
+    image: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=2940&auto=format&fit=crop',
     price: '$120',
     attendees: 250,
     maxAttendees: 300
@@ -138,7 +138,7 @@ export const events = [
     date: '2026-10-15',
     time: '09:00 AM',
     location: 'Incubation Center, BIEC Bengaluru',
-    image: 'https://loremflickr.com/800/600/business?lock=166',
+    image: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=2940&auto=format&fit=crop',
     price: '$99',
     attendees: 90,
     maxAttendees: 120
@@ -151,7 +151,7 @@ export const events = [
     date: '2026-09-25',
     time: '07:00 PM',
     location: 'The Pyramid Atrium, Louvre Museum, Paris',
-    image: 'https://loremflickr.com/800/600/art?lock=012',
+    image: 'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?q=80&w=2940&auto=format&fit=crop',
     price: '$1,200',
     attendees: 80,
     maxAttendees: 100
@@ -164,7 +164,7 @@ export const events = [
     date: '2026-10-28',
     time: '10:00 AM',
     location: 'Exhibition Hall B, Eco Park, Kolkata',
-    image: 'https://loremflickr.com/800/600/tech?lock=20',
+    image: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2940&auto=format&fit=crop',
     price: 'Free',
     attendees: 300,
     maxAttendees: 500
@@ -177,7 +177,7 @@ export const events = [
     date: '2026-10-18',
     time: '09:00 AM',
     location: 'Hub27, Messe Berlin, Germany',
-    image: 'https://loremflickr.com/800/600/business?lock=014',
+    image: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2940&auto=format&fit=crop',
     price: '$180',
     attendees: 150,
     maxAttendees: 200
@@ -190,7 +190,7 @@ export const events = [
     date: '2026-11-15',
     time: '06:00 AM',
     location: 'Ashram Grounds, Palolem Beach, Goa',
-    image: 'https://loremflickr.com/800/600/health?lock=929',
+    image: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=2940&auto=format&fit=crop',
     price: '$45',
     attendees: 30,
     maxAttendees: 50
@@ -203,7 +203,7 @@ export const events = [
     date: '2027-01-15',
     time: '11:00 AM',
     location: 'Darling Harbour, Sydney, Australia',
-    image: 'https://loremflickr.com/800/600/auto?lock=016',
+    image: 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=2940&auto=format&fit=crop',
     price: '$25',
     attendees: 220,
     maxAttendees: 300
@@ -216,7 +216,7 @@ export const events = [
     date: '2026-12-12',
     time: '10:30 AM',
     location: 'Yelahanka Air Force Station, Bengaluru, India',
-    image: 'https://loremflickr.com/800/600/aviation?lock=28',
+    image: 'https://images.unsplash.com/photo-1540962351504-03099e0a754b?q=80&w=2940&auto=format&fit=crop',
     price: '$85',
     attendees: 160,
     maxAttendees: 200
@@ -229,7 +229,7 @@ export const events = [
     date: '2026-12-20',
     time: '02:00 PM',
     location: 'Design Studio 1, Jawahar Kala Kendra, Jaipur',
-    image: 'https://loremflickr.com/800/600/art?lock=578',
+    image: 'https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?q=80&w=2940&auto=format&fit=crop',
     price: '$40',
     attendees: 40,
     maxAttendees: 60
@@ -242,7 +242,7 @@ export const events = [
     date: '2026-12-05',
     time: '09:00 AM',
     location: 'Main Auditorium, Chennai Trade Centre, Chennai',
-    image: 'https://loremflickr.com/800/600/tech?lock=898',
+    image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2940&auto=format&fit=crop',
     price: '$110',
     attendees: 190,
     maxAttendees: 250
@@ -255,7 +255,7 @@ export const events = [
     date: '2026-10-02',
     time: '04:30 PM',
     location: 'Open Grounds, Futala Lake, Nagpur',
-    image: 'https://loremflickr.com/800/600/food?lock=322',
+    image: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=2940&auto=format&fit=crop',
     price: '$15',
     attendees: 350,
     maxAttendees: 500
@@ -268,7 +268,7 @@ export const events = [
     date: '2027-02-18',
     time: '10:00 AM',
     location: 'Palexpo, Geneva, Switzerland',
-    image: 'https://loremflickr.com/800/600/auto?lock=565',
+    image: 'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?q=80&w=2940&auto=format&fit=crop',
     price: '$80',
     attendees: 400,
     maxAttendees: 500
@@ -281,7 +281,7 @@ export const events = [
     date: '2026-07-22',
     time: '09:00 AM',
     location: 'Farnborough Airport, Hampshire, UK',
-    image: 'https://loremflickr.com/800/600/aviation?lock=295',
+    image: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=2940&auto=format&fit=crop',
     price: '$120',
     attendees: 300,
     maxAttendees: 400
@@ -294,7 +294,7 @@ export const events = [
     date: '2027-01-10',
     time: '09:30 AM',
     location: 'Makuhari Messe, Chiba, Japan',
-    image: 'https://loremflickr.com/800/600/auto?lock=023',
+    image: 'https://images.unsplash.com/photo-1560958089-b8a1929cea89?q=80&w=2940&auto=format&fit=crop',
     price: '$50',
     attendees: 350,
     maxAttendees: 450
@@ -307,7 +307,7 @@ export const events = [
     date: '2027-11-14',
     time: '10:00 AM',
     location: 'Dubai World Central (DWC), Dubai, UAE',
-    image: 'https://loremflickr.com/800/600/aviation?lock=137',
+    image: 'https://images.unsplash.com/photo-1500835556837-99ac94a94552?q=80&w=2940&auto=format&fit=crop',
     price: '$200',
     attendees: 280,
     maxAttendees: 400
@@ -320,7 +320,7 @@ export const events = [
     date: '2027-03-05',
     time: '09:00 AM',
     location: 'India Expo Mart, Greater Noida, India',
-    image: 'https://loremflickr.com/800/600/auto?lock=025',
+    image: 'https://acko-cms.ackoassets.com/Whats_App_Image_2024_02_05_at_3_00_11_PM_4bc764ff80.jpeg',
     price: '$15',
     attendees: 300,
     maxAttendees: 500
@@ -333,7 +333,7 @@ export const events = [
     date: '2027-04-12',
     time: '10:00 AM',
     location: 'Begumpet Airport, Hyderabad, India',
-    image: 'https://loremflickr.com/800/600/aviation?lock=195',
+    image: 'https://www.travelandtourworld.com/wp-content/uploads/2026/01/international-aviation-expo-at-airport-e_LX6GMpfOSwWElOh-UVQ1Ww_X1lcbS8eReGFSKCeT_LugQ.jpeg',
     price: '$45',
     attendees: 200,
     maxAttendees: 300
@@ -346,7 +346,7 @@ export const events = [
     date: '2027-09-18',
     time: '09:00 AM',
     location: 'Huntington Place, Detroit, USA',
-    image: 'https://loremflickr.com/800/600/auto?lock=027',
+    image: 'https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=2940&auto=format&fit=crop',
     price: '$65',
     attendees: 400,
     maxAttendees: 500
@@ -359,7 +359,7 @@ export const events = [
     date: '2027-06-21',
     time: '08:30 AM',
     location: 'Le Bourget Airport, Paris, France',
-    image: 'https://loremflickr.com/800/600/aviation?lock=028',
+    image: 'https://etimg.etb2bimg.com/photo/126640137.cms',
     price: '$150',
     attendees: 450,
     maxAttendees: 600
@@ -372,7 +372,7 @@ export const events = [
     date: '2027-01-26',
     time: '08:00 AM',
     location: 'Marine Drive, Mumbai, India',
-    image: 'https://loremflickr.com/800/600/auto?lock=029',
+    image: 'https://akm-img-a-in.tosshub.com/businesstoday/images/story/202201/vintagestock1200-sixteen_nine.jpg?size=948:533',
     price: 'Free',
     attendees: 350,
     maxAttendees: 500
@@ -385,7 +385,7 @@ export const events = [
     date: '2026-08-10',
     time: '10:00 AM',
     location: 'Begumpet Airport, Hyderabad, India',
-    image: 'https://loremflickr.com/800/600/aviation?lock=030',
+    image: 'https://img.etimg.com/thumb/width-1200,height-900,imgsize-77680,resizemode-75,msid-127767794/industry/transportation/airlines-/-aviation/economic-survey-2026-indias-civil-aviation-sector-on-sustained-growth-trajectory-says-survey.jpg',
     price: '$40',
     attendees: 220,
     maxAttendees: 300
@@ -398,7 +398,7 @@ export const events = [
     date: '2027-04-20',
     time: '09:00 AM',
     location: 'National Exhibition and Convention Center, Shanghai, China',
-    image: 'https://loremflickr.com/800/600/auto?lock=349',
+    image: 'https://images.unsplash.com/photo-1511919884226-fd3cad34687c?q=80&w=2940&auto=format&fit=crop',
     price: '$90',
     attendees: 480,
     maxAttendees: 600
@@ -411,7 +411,7 @@ export const events = [
     date: '2028-02-15',
     time: '10:00 AM',
     location: 'Changi Exhibition Centre, Singapore',
-    image: 'https://loremflickr.com/800/600/aviation?lock=032',
+    image: 'https://images.unsplash.com/photo-1542296332-2e4473faf563?q=80&w=2940&auto=format&fit=crop',
     price: '$180',
     attendees: 350,
     maxAttendees: 400
