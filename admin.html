@@ -266,6 +266,52 @@
                 text-align: center;
                 margin: 0;
             }
+
+            /* Header vertical alignment & title stacking */
+            .page-header div[style*="display:flex"] {
+                flex-direction: column !important;
+                align-items: stretch !important;
+                gap: 16px !important;
+            }
+            .page-header .section-title {
+                margin-top: 8px !important;
+            }
+
+            /* Future-proof grid configurations for stats cards */
+            .admin-stats-grid,
+            .admin-stats-container,
+            .admin-stats {
+                display: grid !important;
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 16px !important;
+            }
+
+            /* Event Card Spacing & Polish */
+            .admin-table tr {
+                background: var(--bg-surface) !important;
+                border: 1px solid var(--border-subtle) !important;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02) !important;
+                margin-bottom: 20px !important;
+                padding: 20px !important;
+                border-radius: 16px !important;
+            }
+            .admin-table td {
+                padding: 12px 0 !important;
+                font-size: 13px !important;
+            }
+            .admin-table td::before {
+                color: var(--text-muted) !important;
+                font-weight: 500 !important;
+            }
+
+            /* Force modal form rows to stack on mobile */
+            .admin-form-row-2, .admin-form-row-3 {
+                grid-template-columns: 1fr !important;
+                gap: 12px !important;
+            }
+            .admin-form-row-3 .form-group {
+                margin-bottom: 12px !important;
+            }
         }
         .admin-form-row-2 {
             display: grid;
