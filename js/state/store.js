@@ -55,8 +55,8 @@ export function addEvent(eventData) {
   try {
     // Validate event structure
     const validation = validateEvent(eventData);
-    if (!validation.valid) {
-      return { success: false, error: validation.error };
+    if (!validation.isValid) {
+      return { success: false, error: validation.errors.join(' ') };
     }
 
     const events = getCustomEvents();
@@ -95,8 +95,8 @@ export function updateEvent(id, eventData) {
 
     // Validate incoming data
     const validation = validateEvent(eventData);
-    if (!validation.valid) {
-      return { success: false, error: validation.error };
+    if (!validation.isValid) {
+      return { success: false, error: validation.errors.join(' ') };
     }
 
     const events = getCustomEvents();
