@@ -5,9 +5,18 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>All Experiences | Conclave</title>
     <meta name="description" content="Explore our full calendar of curated masterclasses, elite social gatherings, and industry showcases."/>
-    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/styles.css?v=2">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+    <!-- ═══ Anti-Flash Theme Script ═══ -->
+    <script>
+        (function() {
+            var theme = localStorage.getItem('conclave_theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+<script src="../js/page-transition.js"></script>
 </head>
 <body>
 
@@ -25,6 +34,9 @@
             </div>
             <div class="nav-actions">
 
+                <button class="nav-icon-btn theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+                    <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
+                </button>
                 <a href="bookings.html" class="nav-avatar hide-mobile" style="display: flex; align-items: center; justify-content: center; color: var(--text-secondary); text-decoration: none;">
                     <span class="material-symbols-outlined" style="font-size: 24px;">person</span>
                 </a>
@@ -56,17 +68,21 @@
         <div class="reveal" style="margin-bottom:24px;">
             <div style="position:relative;max-width:480px;margin:0 auto;">
                 <span class="material-symbols-outlined" style="position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--text-secondary);font-size:20px;">search</span>
-                <input type="text" id="search-input" placeholder="Search events by name..." class="form-input" style="padding-left:48px;background:rgba(18,18,28,0.65);border:1px solid var(--border-subtle);border-radius:999px;">
+                <input type="text" id="search-input" placeholder="Search events by name..." class="form-input" style="padding-left:48px;background:var(--bg-surface);color:var(--text-primary);border:1px solid var(--border-subtle);border-radius:999px;">
             </div>
         </div>
 
         <!-- Filter Bar -->
         <div class="filter-bar reveal" style="margin-bottom:48px;">
             <button class="filter-btn active" data-filter="all">All</button>
-            <button class="filter-btn" data-filter="automotive">Automotive</button>
-            <button class="filter-btn" data-filter="aviation">Aviation</button>
-            <button class="filter-btn" data-filter="social">Social</button>
-            <button class="filter-btn" data-filter="masterclass">Masterclass</button>
+            <button class="filter-btn" data-filter="cat_tech">Technology</button>
+            <button class="filter-btn" data-filter="cat_music">Music</button>
+            <button class="filter-btn" data-filter="cat_sports">Sports</button>
+            <button class="filter-btn" data-filter="cat_art">Art</button>
+            <button class="filter-btn" data-filter="cat_business">Business</button>
+            <button class="filter-btn" data-filter="cat_food">Food</button>
+            <button class="filter-btn" data-filter="cat_health">Health</button>
+            <button class="filter-btn" data-filter="cat_edu">Education</button>
             <div style="width:1px;height:32px;background:var(--border-subtle);margin:0 8px;" class="hide-mobile"></div>
             <div style="display:flex;align-items:center;gap:8px;">
                 <span class="material-symbols-outlined" style="color:var(--text-secondary);font-size:18px;">calendar_month</span>
@@ -82,7 +98,7 @@
         <!-- No Results Message -->
         <div id="no-results" style="display:none;text-align:center;padding:80px 24px;">
             <span class="material-symbols-outlined" style="font-size:48px;color:var(--text-secondary);margin-bottom:16px;display:block;">search_off</span>
-            <h3 style="font-family:var(--font-display);font-size:24px;font-weight:300;color:white;margin-bottom:8px;">No events found</h3>
+            <h3 style="font-family:var(--font-display);font-size:24px;font-weight:300;color:var(--text-primary);margin-bottom:8px;">No events found</h3>
             <p style="font-family:var(--font-body);font-size:14px;color:var(--text-secondary);">Try adjusting your search or filters.</p>
         </div>
     </main>
@@ -117,7 +133,7 @@
     </div>
 
     <!-- ═══ Scripts ═══ -->
-    <script type="module" src="../js/events-data.js"></script>
+    <script type="module" src="../js/data/events.js"></script>
     <script src="../js/animations.js"></script>
     <script src="../js/toast.js"></script>
     <script src="../js/app.js"></script>
@@ -133,21 +149,7 @@
             const events = [...defaultEvents, ...customEvents];
 
             events.forEach((evt, idx) => {
-                const categoryMapping = {
-                    "cat_auto": "automotive",
-                    "cat_aviation": "aviation",
-                    "cat_tech": "masterclass",
-                    "cat_art": "masterclass",
-                    "cat_edu": "masterclass",
-                    "cat_business": "masterclass",
-                    "cat_music": "social",
-                    "cat_food": "social",
-                    "cat_health": "social",
-                    "cat_sports": "social",
-                    "cat_social": "social"
-                };
-                
-                const filterCat = categoryMapping[evt.category] || "social";
+                const filterCat = evt.category || "all";
                 
                 const card = document.createElement('a');
                 card.href = `event-detail.html?event=${evt.id}`;
@@ -157,15 +159,15 @@
                 card.style.transitionDelay = `${idx * 0.1}s`;
 
                 card.innerHTML = `
-                    <div class="event-card-image" style="background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center;">
-                        ${evt.image ? `<img src="${evt.image}" alt="${evt.title}"/>` : `<span class="material-symbols-outlined" style="font-size: 48px; color: rgba(255,255,255,0.1);">event</span>`}
+                    <div class="event-card-image" style="background: var(--bg-surface); display: flex; align-items: center; justify-content: center;">
+                        ${evt.image ? `<img src="${evt.image}" alt="${evt.title}"/>` : `<span class="material-symbols-outlined" style="font-size: 48px; color: var(--text-muted);">event</span>`}
                     </div>
                     <div class="event-card-body">
                         <div>
                             <div class="event-card-meta">${evt.date} / ${evt.time}</div>
                             <div class="event-card-attendees">
                                 <span class="material-symbols-outlined">group</span>
-                                <span>${evt.capacity} Attendees</span>
+                                <span>${(evt.attendees || 0) + (JSON.parse(localStorage.getItem('conclave_attendees') || '{}')[evt.id] || 0)} Attendees</span>
                             </div>
                             <h3 class="event-card-title">${evt.title}</h3>
                             <p class="event-card-location">${evt.location}</p>

@@ -417,3 +417,5 @@ export const events = [
     maxAttendees: 400
   }
 ];
+
+window.CONCLAVE_EVENTS = events;
