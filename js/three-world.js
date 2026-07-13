@@ -90,21 +90,23 @@
         const octx = offscreen.getContext('2d');
 
         const text = 'CONCLAVE';
-        // Scale font to viewport
-        const fontSize = Math.min(width * 0.13, 160);
+        // Scale font to viewport, use smaller ratio on mobile to prevent clipping
+        const fontSize = width < 768 ? width * 0.09 : Math.min(width * 0.12, 160);
         offscreen.width = width * dpr;
         offscreen.height = height * dpr;
         octx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
         octx.fillStyle = '#fff';
-        // Use font weight 200 to give the text strokes slightly more density for clean sampling
-        octx.font = `150 ${fontSize}px 'Montserrat', sans-serif`;
+        // Use a slightly heavier weight on mobile so thin strokes don't disappear
+        const fontWeight = width < 768 ? 400 : 200;
+        octx.font = `${fontWeight} ${fontSize}px 'Montserrat', sans-serif`;
         octx.textAlign = 'center';
         octx.textBaseline = 'middle';
         octx.fillText(text, width / 2, height / 2 - 20);
 
         // Sample pixels with a smaller step to capture thin strokes without missing parts (like N or L)
-        const step = 2;
+        // On mobile, sample denser to catch the smaller text strokes
+        const step = width < 768 ? 1 : 2;
 
         const imageData = octx.getImageData(0, 0, offscreen.width, offscreen.height);
         const data = imageData.data;
@@ -254,19 +256,14 @@
 
     // ── Events ──
     function bindEvents() {
+        let resizeTimeout;
         window.addEventListener('resize', () => {
             resize();
-            generateTextPositions();
-            // Update text targets for existing particles
-            const count = Math.min(textPositions.length, particles.filter(p => !p.isAmbient).length);
-            let ti = 0;
-            for (let i = 0; i < particles.length && ti < count; i++) {
-                if (!particles[i].isAmbient) {
-                    particles[i].tx = textPositions[ti].x;
-                    particles[i].ty = textPositions[ti].y;
-                    ti++;
-                }
-            }
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                generateTextPositions();
+                createParticles();
+            }, 150);
         });
 
         window.addEventListener('mousemove', (e) => {

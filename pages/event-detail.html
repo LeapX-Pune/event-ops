@@ -16,6 +16,57 @@
             document.documentElement.setAttribute('data-theme', theme);
         })();
     </script>
+    <style>
+        /* ── Mobile Redesign ── */
+        @media (max-width: 768px) {
+            main.container {
+                padding-top: 100px !important;
+                padding-bottom: 120px !important;
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+            #event-title {
+                font-size: clamp(32px, 8vw, 48px) !important;
+                line-height: 1.1;
+                margin-bottom: 16px !important;
+            }
+            .detail-hero-image {
+                height: 250px !important;
+                border-radius: 16px !important;
+                margin-bottom: 32px !important;
+            }
+            .event-meta {
+                flex-direction: column;
+                gap: 12px !important;
+                align-items: center;
+                background: var(--bg-surface-raised);
+                padding: 16px;
+                border-radius: 12px;
+                border: 1px solid var(--border-subtle);
+            }
+            .event-meta-dot {
+                display: none !important;
+            }
+            .detail-section-title {
+                font-size: 20px !important;
+                margin-bottom: 24px !important;
+            }
+            .itinerary-step {
+                padding: 20px !important;
+                border-radius: 16px !important;
+                gap: 16px !important;
+            }
+            .itinerary-num {
+                font-size: 24px !important;
+            }
+            .itinerary-title {
+                font-size: 18px !important;
+            }
+            .footer {
+                padding-bottom: calc(120px + env(safe-area-inset-bottom)) !important;
+            }
+        }
+    </style>
 <script src="../js/page-transition.js"></script>
 </head>
 <body>
@@ -34,6 +85,9 @@
             </div>
             <div class="nav-actions">
 
+                <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Open menu">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
                 <button class="nav-icon-btn theme-toggle" id="theme-toggle" aria-label="Toggle theme">
                     <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
                 </button>
@@ -169,6 +223,114 @@
         </button>
     </div>
 
+    <!-- ═══ Checkout Modal ═══ -->
+    <div id="checkout-modal" class="checkout-modal-overlay">
+        <div class="checkout-modal">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:32px;">
+                <h2 style="font-family:var(--font-display); font-weight:400; font-size:24px;">Secure Your Pass</h2>
+                <button id="checkout-modal-close" class="checkout-modal-close">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+
+            <!-- Event Summary -->
+            <div class="checkout-summary" style="margin-bottom: 32px;">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;">
+                    <div>
+                        <span class="text-label-sm text-gold" style="display:block;margin-bottom:6px;">Event</span>
+                        <h3 id="checkout-event-title" class="text-title" style="color:var(--text-primary);margin-bottom:4px;"></h3>
+                        <p id="checkout-event-location" style="font-size:13px;color:var(--text-secondary);"></p>
+                    </div>
+                    <div style="text-align:right;">
+                        <span class="text-label-sm text-gold" style="display:block;margin-bottom:6px;">Date</span>
+                        <p id="checkout-event-date" style="font-size:13px;color:var(--text-primary);font-weight:500;"></p>
+                    </div>
+                </div>
+                <div class="checkout-divider"></div>
+                <div style="display:flex;justify-content:space-between;align-items:center;font-size:14px;">
+                    <span style="color:var(--text-primary);">General Admission × 1</span>
+                    <span id="checkout-ticket-price" style="color:var(--gold);font-weight:600;"></span>
+                </div>
+            </div>
+
+            <!-- Booking Form -->
+            <form id="checkout-form">
+                <!-- Name -->
+                <div class="form-group">
+                    <label class="form-label">Legal Name</label>
+                    <input id="guest-name" required class="form-input" placeholder="Jane Doe" type="text"/>
+                </div>
+
+                <!-- Email -->
+                <div class="form-group">
+                    <label class="form-label">Identity Identifier</label>
+                    <input id="guest-email" required class="form-input" placeholder="jane.doe@conclave.org" type="email"/>
+                </div>
+
+                <!-- Payment Methods -->
+                <div style="margin-bottom:32px;">
+                    <label class="form-label" style="margin-bottom:12px;">Payment Method</label>
+                    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px;">
+                        <label class="payment-option">
+                            <input type="radio" name="payment-method" value="card" checked>
+                            <div class="payment-option-card">
+                                <span class="material-symbols-outlined">credit_card</span>
+                                <span class="pay-label">Card</span>
+                            </div>
+                        </label>
+                        <label class="payment-option">
+                            <input type="radio" name="payment-method" value="upi">
+                            <div class="payment-option-card">
+                                <span class="material-symbols-outlined">qr_code_scanner</span>
+                                <span class="pay-label">UPI</span>
+                            </div>
+                        </label>
+                        <label class="payment-option">
+                            <input type="radio" name="payment-method" value="netbanking">
+                            <div class="payment-option-card">
+                                <span class="material-symbols-outlined">account_balance</span>
+                                <span class="pay-label">Bank</span>
+                            </div>
+                        </label>
+                    </div>
+
+                    <!-- Payment Inputs (Toggled via JS) -->
+                    <div id="payment-input-card" style="display:block;">
+                        <label class="form-label">Card Number</label>
+                        <input id="checkout-card" class="form-input" placeholder="**** **** **** ****" type="text"/>
+                    </div>
+                    <div id="payment-input-upi" style="display:none;">
+                        <label class="form-label">UPI ID</label>
+                        <input id="checkout-upi" class="form-input" placeholder="username@upi" type="text"/>
+                    </div>
+                    <div id="payment-input-netbanking" style="display:none;">
+                        <p style="font-size:13px; color:var(--text-secondary);">You will be redirected to your bank's secure portal.</p>
+                    </div>
+                </div>
+
+                <!-- Price Breakdown -->
+                <div style="border-top:1px solid var(--border-subtle);padding-top:20px;margin-bottom:24px;">
+                    <div class="price-row">
+                        <span>Subtotal</span>
+                        <span id="breakdown-subtotal"></span>
+                    </div>
+                    <div class="price-row">
+                        <span>Processing Fee</span>
+                        <span>$0.00</span>
+                    </div>
+                    <div class="price-total" style="margin-top:8px;">
+                        <span>Total</span>
+                        <span id="breakdown-total"></span>
+                    </div>
+                </div>
+
+                <button id="pay-button" type="submit" class="btn-primary" style="width:100%;display:flex;justify-content:center;align-items:center;height:48px;">
+                    Secure with <span class="material-symbols-outlined" style="font-size:16px;margin:0 4px;font-variation-settings:'FILL' 1;">token</span> Conclave Pay
+                </button>
+            </form>
+        </div>
+    </div>
+
     <!-- ═══ Scripts ═══ -->
     <script type="module" src="../js/data/events.js"></script>
     <script src="../js/animations.js"></script>
@@ -268,9 +430,9 @@
                 reserveBtn.disabled = false;
                 mobileReserveBtn.textContent = 'Book';
                 mobileReserveBtn.disabled = false;
-                // Change reserve to checkout
-                reserveBtn.onclick = () => { window.location.href = 'checkout.html?event=' + eventKey; };
-                mobileReserveBtn.onclick = () => { window.location.href = 'checkout.html?event=' + eventKey; };
+                // Change reserve to open modal
+                reserveBtn.onclick = () => { openCheckoutModal(); };
+                mobileReserveBtn.onclick = () => { openCheckoutModal(); };
             } else if (remaining > 0) {
                 b1.textContent = remaining + ' SEAT' + (remaining > 1 ? 'S' : '');
                 b2.textContent = 'LEFT';
@@ -291,16 +453,15 @@
 
         updateSeatsDisplay();
 
-        // Register action (FR-2): increments attendee, no page refresh
         const registerAction = () => {
             if (!eventKey) {
                 console.error('No eventKey available for registration');
-                if (typeof showToast === 'function') showToast('Unable to register: event not identified', 'error');
+                if (typeof showToast === 'function') showToast('Unable to open checkout: event not identified', 'error');
                 return;
             }
             if (registeredEvents.includes(eventKey)) {
-                // Already registered, go to checkout
-                window.location.href = 'checkout.html?event=' + eventKey;
+                // Already registered, open checkout modal
+                openCheckoutModal();
                 return;
             }
             
@@ -308,18 +469,100 @@
             const remaining = (data.maxAttendees || 0) - ((data.attendees || 0) + localAtt);
 
             if (remaining > 0) {
-                attendeesObj[eventKey] = (attendeesObj[eventKey] || 0) + 1;
-                localStorage.setItem('conclave_attendees', JSON.stringify(attendeesObj));
-
-                registeredEvents.push(eventKey);
-                localStorage.setItem('conclave_registered', JSON.stringify(registeredEvents));
-
-                updateSeatsDisplay();
-                if (typeof showToast === 'function') showToast('Registration confirmed! You can now book your pass.', 'success');
+                openCheckoutModal(); // Just open the modal
             }
         };
         document.getElementById('reserve-btn').addEventListener('click', registerAction);
         document.getElementById('mobile-reserve-btn').addEventListener('click', registerAction);
+
+        // ── Checkout Modal Logic ─────────────────────────────────
+        const checkoutModal = document.getElementById('checkout-modal');
+        const checkoutClose = document.getElementById('checkout-modal-close');
+
+        function openCheckoutModal() {
+            // Populate data
+            document.getElementById('checkout-event-title').textContent = data.title;
+            document.getElementById('checkout-event-location').textContent = (data.location || '').split(',')[0];
+            document.getElementById('checkout-event-date').textContent = data.date;
+            document.getElementById('checkout-ticket-price').textContent = data.price || 'Free';
+            document.getElementById('breakdown-subtotal').textContent = data.price || 'Free';
+            document.getElementById('breakdown-total').textContent = data.price || 'Free';
+
+            // Load saved user info
+            const savedName = localStorage.getItem('conclave_user_name');
+            const savedEmail = localStorage.getItem('conclave_user_email');
+            if (savedName) document.getElementById('guest-name').value = savedName;
+            if (savedEmail) document.getElementById('guest-email').value = savedEmail;
+
+            checkoutModal.classList.add('active');
+        }
+
+        checkoutClose.addEventListener('click', () => {
+            checkoutModal.classList.remove('active');
+        });
+
+        // Payment toggle
+        const paymentRadios = document.querySelectorAll('input[name="payment-method"]');
+        const payButton = document.getElementById('pay-button');
+        const inputCard = document.getElementById('payment-input-card');
+        const inputUpi = document.getElementById('payment-input-upi');
+        const inputNet = document.getElementById('payment-input-netbanking');
+
+        paymentRadios.forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                const val = e.target.value;
+                inputCard.style.display = 'none';
+                inputUpi.style.display = 'none';
+                inputNet.style.display = 'none';
+
+                if (val === 'card') {
+                    inputCard.style.display = 'block';
+                    payButton.innerHTML = 'Secure with <span class="material-symbols-outlined" style="font-size:16px;margin:0 4px;font-variation-settings:\'FILL\' 1;">token</span> Conclave Pay';
+                } else if (val === 'upi') {
+                    inputUpi.style.display = 'block';
+                    payButton.innerHTML = 'Pay with <span class="material-symbols-outlined" style="font-size:16px;margin:0 4px;">qr_code_scanner</span> UPI App';
+                } else if (val === 'netbanking') {
+                    inputNet.style.display = 'block';
+                    payButton.innerHTML = 'Proceed to <span class="material-symbols-outlined" style="font-size:16px;margin:0 4px;">account_balance</span> Bank Login';
+                }
+            });
+        });
+
+        // Form submission
+        document.getElementById('checkout-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const btn = document.getElementById('pay-button');
+
+            // Save user details
+            localStorage.setItem('conclave_user_name', document.getElementById('guest-name').value);
+            localStorage.setItem('conclave_user_email', document.getElementById('guest-email').value);
+
+            // Loading state
+            btn.innerHTML = '<span style="animation:loaderPulse 1s infinite;letter-spacing:0.15em;font-size:11px;">PROCESSING...</span>';
+            btn.style.pointerEvents = 'none';
+
+            setTimeout(() => {
+                btn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px;margin-right:8px;">check_circle</span> RESERVATION CONFIRMED';
+                btn.style.background = 'var(--gold)';
+                btn.style.color = 'var(--bg-surface)';
+
+                // Perform registration
+                if (!registeredEvents.includes(eventKey)) {
+                    attendeesObj[eventKey] = (attendeesObj[eventKey] || 0) + 1;
+                    localStorage.setItem('conclave_attendees', JSON.stringify(attendeesObj));
+                    registeredEvents.push(eventKey);
+                    localStorage.setItem('conclave_registered', JSON.stringify(registeredEvents));
+                }
+
+                if (typeof showToast === 'function') {
+                    showToast('Registered for ' + data.title + '!', 'success');
+                }
+
+                setTimeout(() => {
+                    window.location.href = 'bookings.html';
+                }, 1200);
+            }, 1800);
+        });
         });
     </script>
 </body>

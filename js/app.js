@@ -57,8 +57,13 @@
         if (!openBtn || !menu) return;
 
         openBtn.addEventListener('click', () => {
-            menu.classList.add('open');
-            document.body.style.overflow = 'hidden';
+            if (menu.classList.contains('open')) {
+                menu.classList.remove('open');
+                document.body.style.overflow = '';
+            } else {
+                menu.classList.add('open');
+                document.body.style.overflow = 'hidden';
+            }
         });
 
         if (closeBtn) {

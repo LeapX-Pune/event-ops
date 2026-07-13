@@ -11,36 +11,67 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initGlobe(userLat, userLng);
 
+    // Adjust Ambient and Directional lighting in the Three.js scene
+    function adjustGlobeLighting(world, isLight) {
+        const scene = world.scene();
+        if (!scene) return;
+        scene.traverse(obj => {
+            if (obj.type === 'AmbientLight') {
+                obj.intensity = isLight ? 1.8 : 0.7;
+            } else if (obj.type === 'DirectionalLight') {
+                obj.intensity = isLight ? 1.2 : 1.5;
+                obj.color.set(isLight ? '#f2eee7' : '#ffffff');
+            }
+        });
+    }
+
     // Theme-aware texture URLs
     function getGlobeTextures() {
         const isLight = document.documentElement.getAttribute('data-theme') === 'light';
         return {
             globeImage: isLight 
-                ? '../assets/img/earth-light.png' // Custom light theme earth texture
+                ? '../assets/img/earth-blue-marble.jpg' 
                 : '../assets/img/earth-dark.jpg',
             bumpImage: '../assets/img/earth-topology.png',
-            backgroundImage: isLight
-                ? '../assets/img/light-sky-premium.png'
-                : '../assets/img/night-sky.png',
+            backgroundImage: isLight ? null : '../assets/img/night-sky.png',
             backgroundColor: isLight ? 'rgba(0,0,0,0)' : '#000000',
-            atmosphereColor: isLight ? '#C49A2A' : '#E6C687'
+            atmosphereColor: isLight ? 'rgba(135, 206, 250, 0.25)' : '#E6C687'
         };
+    }
+
+    function applyGlobeTextures(world, isLight) {
+        const textures = getGlobeTextures();
+        world.backgroundColor(textures.backgroundColor);
+        world.atmosphereColor(textures.atmosphereColor);
+        world.backgroundImageUrl(textures.backgroundImage);
+        world.globeImageUrl(textures.globeImage);
+        
+        // Set material properties for a soft, premium matte look
+        const material = world.globeMaterial();
+        if (material) {
+            material.shininess = isLight ? 15 : 30; // Softer specular highlights in daytime
+            if (material.specular) {
+                material.specular.set(isLight ? '#333333' : '#111111');
+            }
+        }
+        
+        // Wait briefly for globe.gl to initialize/render, then adjust the lights in scene
+        setTimeout(() => {
+            adjustGlobeLighting(world, isLight);
+        }, 150);
     }
 
     // --- 2. Globe Initialization ---
     function initGlobe(lat, lng) {
         const container = document.getElementById('globe-container');
         const textures = getGlobeTextures();
+        const isLight = document.documentElement.getAttribute('data-theme') === 'light';
         
         // Setup Globe
         const world = Globe()
             (container)
-            .globeImageUrl(textures.globeImage)
             .bumpImageUrl(textures.bumpImage)
-            .backgroundImageUrl(textures.backgroundImage)
-            .backgroundColor(textures.backgroundColor)
             .showAtmosphere(true)
-            .atmosphereColor(textures.atmosphereColor)
             .atmosphereAltitude(0.15)
             .htmlElementsData(generateNearbyEvents(lat, lng))
             .htmlElement(d => {
@@ -48,11 +79,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 el.className = 'globe-marker';
                 
                 // Construct the HTML for the pin and popup
+                // Category label uses text-gold instead of low-contrast gold in light theme
                 el.innerHTML = `
                     <div class="marker-pulse"></div>
                     <div class="marker-core"></div>
                     <div class="marker-popup">
-                        <span class="text-label" style="color:var(--gold); display:block; margin-bottom:8px;">${d.category}</span>
+                        <span class="text-label" style="color:var(--text-gold, var(--gold)); display:block; margin-bottom:8px;">${d.category}</span>
                         <h4 style="font-family:var(--font-display); font-size:16px; font-weight:400; color:var(--text-primary); margin-bottom:6px;">${d.title}</h4>
                         <p style="font-size:12px; color:var(--text-secondary); margin-bottom: 16px;">
                             ${d.date} • ${d.time}
@@ -65,6 +97,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 return el;
             });
 
+        // Apply theme-specific textures and lighting
+        applyGlobeTextures(world, isLight);
+
         // Set initial camera position (Outer Space)
         world.pointOfView({ lat: lat, lng: lng, altitude: 3.5 });
 
@@ -72,18 +107,26 @@ document.addEventListener('DOMContentLoaded', () => {
         world.controls().autoRotate = true;
         world.controls().autoRotateSpeed = 0.5;
 
-        // Animate Zoom in after 0.5 seconds to feel more immediate
-        setTimeout(() => {
-            world.controls().autoRotate = false; // Stop rotation during zoom
-            // Fly to the user's location, very close for "zoom" effect
-            world.pointOfView({ lat: lat, lng: lng, altitude: 0.15 }, 4000);
-            
-            // Resume very slow rotation after zoom
+        // Animate Zoom in after 0.5 seconds to feel more immediate (Desktop only)
+        if (window.innerWidth >= 768) {
             setTimeout(() => {
-                world.controls().autoRotate = true;
-                world.controls().autoRotateSpeed = 0.02; // very slow
-            }, 4500);
-        }, 500);
+                world.controls().autoRotate = false; // Stop rotation during zoom
+                // Fly to the user's location, less aggressively zoomed
+                const zoomAlt = 0.6;
+                world.pointOfView({ lat: lat, lng: lng, altitude: zoomAlt }, 4000);
+                
+                // Resume very slow rotation after zoom
+                setTimeout(() => {
+                    world.controls().autoRotate = true;
+                    world.controls().autoRotateSpeed = 0.02; // very slow
+                }, 4500);
+            }, 500);
+        } else {
+            // Mobile: set comfortable initial altitude without triggering aggressive pointOfView zoom flight
+            world.pointOfView({ lat: lat, lng: lng, altitude: 2.2 });
+            world.controls().autoRotate = true;
+            world.controls().autoRotateSpeed = 0.2;
+        }
 
         // Handle window resize
         window.addEventListener('resize', () => {
@@ -93,11 +136,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Theme change handler - update globe textures
         window.addEventListener('themechange', (e) => {
-            const newTextures = getGlobeTextures();
-            world.globeImageUrl(newTextures.globeImage);
-            world.backgroundImageUrl(newTextures.backgroundImage);
-            world.backgroundColor(newTextures.backgroundColor);
-            world.atmosphereColor(newTextures.atmosphereColor);
+            const newIsLight = document.documentElement.getAttribute('data-theme') === 'light';
+            applyGlobeTextures(world, newIsLight);
         });
     }
 

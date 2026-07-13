@@ -8,6 +8,332 @@
     <link rel="stylesheet" href="css/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+    <!-- ═══ Anti-Flash Theme Script ═══ -->
+    <script>
+        (function() {
+            var theme = localStorage.getItem('conclave_theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+    <script src="js/page-transition.js"></script>
+    <style>
+        .admin-table-wrap {
+            overflow-x: auto;
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            background: var(--bg-surface);
+            backdrop-filter: blur(20px);
+        }
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: var(--font-body);
+            font-size: 13px;
+        }
+        .admin-table th {
+            text-align: left;
+            padding: 14px 16px;
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border-subtle);
+            white-space: nowrap;
+        }
+        .admin-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+            vertical-align: middle;
+        }
+        .admin-table tr:last-child td { border-bottom: none; }
+        .admin-table tr:hover td { background: var(--bg-surface-raised); }
+        .admin-table .title-cell {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+        .admin-action-btn {
+            background: none;
+            border: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+            padding: 6px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .admin-action-btn:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+        .admin-action-btn.delete:hover {
+            border-color: var(--error-border);
+            color: var(--aurora-pink);
+        }
+        .admin-action-btn .material-symbols-outlined { font-size: 16px; }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(10,10,18,0.8);
+            backdrop-filter: blur(8px);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        .modal-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .modal-box {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 32px;
+            width: 520px;
+            max-width: calc(100vw - 48px);
+            max-height: calc(100vh - 80px);
+            overflow-y: auto;
+            transform: translateY(20px);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .modal-overlay.open .modal-box {
+            transform: translateY(0);
+        }
+        .modal-title {
+            font-family: var(--font-display);
+            font-size: 24px;
+            font-weight: 300;
+            color: var(--text-primary);
+            margin-bottom: 24px;
+        }
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 24px;
+        }
+        .btn-cancel {
+            font-family: var(--font-body);
+            font-size: 13px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 12px 24px;
+            border-radius: 999px;
+            border: 1px solid var(--border-subtle);
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-cancel:hover { border-color: var(--gold); color: var(--text-primary); }
+        .btn-danger {
+            font-family: var(--font-body);
+            font-size: 13px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 12px 24px;
+            border-radius: 999px;
+            border: none;
+            background: var(--error-glow);
+            color: var(--aurora-pink);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-danger:hover { background: var(--error-glow); }
+        .btn-danger:hover { box-shadow: var(--error-glow); }
+
+        .validation-error {
+            color: var(--aurora-pink);
+            font-size: 11px;
+            margin-top: 4px;
+            display: none;
+        }
+        .form-input.error {
+            border-color: var(--aurora-pink) !important;
+        }
+
+        .actions-cell {
+            text-align: right;
+            white-space: nowrap;
+        }
+
+        /* ── Mobile Redesign ── */
+        @media (max-width: 768px) {
+            main.container {
+                padding-top: 100px !important;
+                padding-bottom: 80px !important;
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+            .page-header {
+                margin-bottom: 32px;
+            }
+            #add-event-btn {
+                width: 100% !important;
+                margin-top: 16px;
+            }
+            
+            /* Table to Cards */
+            .admin-table-wrap {
+                border: none;
+                background: transparent;
+                backdrop-filter: none;
+                overflow-x: visible !important;
+                padding: 0;
+            }
+            .admin-table thead {
+                display: none;
+            }
+            .admin-table, .admin-table tbody, .admin-table tr {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+            }
+            .admin-table tr {
+                margin-bottom: 16px;
+                border: 1px solid var(--border-subtle);
+                border-radius: 12px;
+                padding: 16px;
+                background: var(--bg-card);
+            }
+            .admin-table td {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 10px 0;
+                border-bottom: 1px solid var(--border-subtle);
+                text-align: right;
+                width: 100%;
+            }
+            .admin-table td:last-child {
+                border-bottom: none;
+                padding-bottom: 0;
+            }
+            .admin-table td::before {
+                content: attr(data-label);
+                font-weight: 600;
+                font-size: 10px;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+                color: var(--text-muted);
+                text-align: left;
+                margin-right: 16px;
+                flex-shrink: 0;
+            }
+            .admin-table .actions-cell {
+                justify-content: flex-end;
+                gap: 8px;
+                margin-top: 8px;
+                padding-top: 16px;
+            }
+            .admin-table .actions-cell::before {
+                display: none;
+            }
+            
+            /* Fullscreen Modal */
+            .modal-box {
+                width: 100%;
+                max-width: 100%;
+                height: 100%;
+                max-height: 100%;
+                border-radius: 0;
+                padding: 24px 16px;
+                border: none;
+                display: flex;
+                flex-direction: column;
+            }
+            #event-form {
+                flex: 1;
+                overflow-y: auto;
+            }
+            .modal-actions {
+                flex-direction: column;
+                gap: 12px;
+                margin-top: 32px;
+                padding-bottom: 32px;
+            }
+            .btn-cancel, .btn-danger, .modal-actions .btn-primary {
+                width: 100%;
+                text-align: center;
+                margin: 0;
+            }
+
+            /* Header vertical alignment & title stacking */
+            .page-header div[style*="display:flex"] {
+                flex-direction: column !important;
+                align-items: stretch !important;
+                gap: 16px !important;
+            }
+            .page-header .section-title {
+                margin-top: 8px !important;
+            }
+
+            /* Future-proof grid configurations for stats cards */
+            .admin-stats-grid,
+            .admin-stats-container,
+            .admin-stats {
+                display: grid !important;
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 16px !important;
+            }
+
+            /* Event Card Spacing & Polish */
+            .admin-table tr {
+                background: var(--bg-surface) !important;
+                border: 1px solid var(--border-subtle) !important;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02) !important;
+                margin-bottom: 20px !important;
+                padding: 20px !important;
+                border-radius: 16px !important;
+            }
+            .admin-table td {
+                padding: 12px 0 !important;
+                font-size: 13px !important;
+            }
+            .admin-table td::before {
+                color: var(--text-muted) !important;
+                font-weight: 500 !important;
+            }
+
+            /* Force modal form rows to stack on mobile */
+            .admin-form-row-2, .admin-form-row-3 {
+                grid-template-columns: 1fr !important;
+                gap: 12px !important;
+            }
+            .admin-form-row-3 .form-group {
+                margin-bottom: 12px !important;
+            }
+        }
+        .admin-form-row-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        .admin-form-row-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        @media (max-width: 640px) {
+            .admin-form-row-2, .admin-form-row-3 {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            .admin-form-row-3 .form-group {
+                margin-bottom: 12px !important;
+            }
+        }
+    </style>
     <link rel="stylesheet" href="css/admin.css">
 </head>
 <body>
@@ -25,6 +351,12 @@
                 <a class="nav-link" href="pages/bookings.html">My Bookings</a>
             </div>
             <div class="nav-actions">
+                <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Open menu">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+                <button class="nav-icon-btn theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+                    <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
+                </button>
                 <a href="pages/bookings.html" class="nav-avatar" style="display: flex; align-items: center; justify-content: center; color: var(--text-secondary); text-decoration: none;">
                     <span class="material-symbols-outlined" style="font-size: 24px;">person</span>
                 </a>
@@ -133,7 +465,7 @@
                         <!-- Items injected here by JS -->
                     </div>
                 </div>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+                <div class="admin-form-row-2">
                     <div class="form-group">
                         <label class="form-label">Category *</label>
                         <select class="form-input" id="form-category" required>
@@ -155,7 +487,7 @@
                         <div class="validation-error" id="err-date">A valid date is required.</div>
                     </div>
                 </div>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+                <div class="admin-form-row-2">
                     <div class="form-group">
                         <label class="form-label">Time *</label>
                         <input type="time" class="form-input" id="form-time" required/>
@@ -172,7 +504,7 @@
                     <input type="text" class="form-input" id="form-location" placeholder="e.g. Community Hall" required/>
                     <div class="validation-error" id="err-location">Location is required.</div>
                 </div>
-                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:24px;">
+                <div class="admin-form-row-3">
                     <div class="form-group" style="margin-bottom:0;">
                         <label class="form-label">Price (e.g. $100)</label>
                         <input type="text" class="form-input" id="form-price" placeholder="Free"/>
@@ -219,7 +551,7 @@
     <!-- ═══ Delete Confirm Modal ═══ -->
     <div class="modal-overlay" id="delete-modal">
         <div class="modal-box" style="max-width:400px;text-align:center;">
-            <span class="material-symbols-outlined" style="font-size:48px;color:#ef4444;margin-bottom:16px;">warning</span>
+            <span class="material-symbols-outlined" style="font-size:48px;color:var(--aurora-pink);margin-bottom:16px;">warning</span>
             <h2 class="modal-title" style="margin-bottom:12px;">Delete Event?</h2>
             <p style="font-family:var(--font-body);font-size:14px;color:var(--text-secondary);margin-bottom:24px;">This action cannot be undone. The event will be permanently removed.</p>
             <div class="modal-actions" style="justify-content:center;">
@@ -247,6 +579,404 @@
     <script src="js/app.js"></script>
     <script src="js/sidebar.js"></script>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tbody = document.getElementById('admin-table-body');
+            const modal = document.getElementById('event-modal');
+            const deleteModal = document.getElementById('delete-modal');
+            const form = document.getElementById('event-form');
+            const addBtn = document.getElementById('add-event-btn');
+            const cancelBtn = document.getElementById('modal-cancel');
+            const submitBtn = document.getElementById('modal-submit');
+            const modalTitle = document.getElementById('modal-title');
+
+            // --- Image Upload Logic ---
+            const dropZone = document.getElementById('image-upload-zone');
+            const fileInput = document.getElementById('form-image-file');
+            const previewContainer = document.getElementById('image-preview-container');
+            const previewImage = document.getElementById('image-preview');
+            const removeBtn = document.getElementById('remove-image-btn');
+            const urlInput = document.getElementById('form-image');
+            const imageDataInput = document.getElementById('form-image-data');
+
+            function handleFile(file) {
+                if (file && file.type.startsWith('image/')) {
+                    if (file.size > 5 * 1024 * 1024) {
+                        showToast('File size must be under 5MB.', 'error');
+                        return;
+                    }
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        imageDataInput.value = e.target.result;
+                        previewImage.src = e.target.result;
+                        dropZone.style.display = 'none';
+                        previewContainer.style.display = 'block';
+                        urlInput.value = '';
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    showToast('Please upload a valid image file.', 'error');
+                }
+            }
+
+            dropZone.addEventListener('click', () => fileInput.click());
+            fileInput.addEventListener('change', (e) => handleFile(e.target.files[0]));
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.style.borderColor = 'var(--gold)';
+                dropZone.style.background = 'rgba(230,198,135,0.1)';
+            });
+            function resetDropZoneStyles() {
+                dropZone.style.borderColor = 'var(--border-subtle)';
+                dropZone.style.background = 'var(--bg-surface-high)';
+            }
+            dropZone.addEventListener('dragleave', () => {
+                resetDropZoneStyles();
+            });
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                resetDropZoneStyles();
+                if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                    handleFile(e.dataTransfer.files[0]);
+                }
+            });
+            removeBtn.addEventListener('click', () => {
+                fileInput.value = '';
+                imageDataInput.value = '';
+                previewImage.src = '';
+                previewContainer.style.display = 'none';
+                dropZone.style.display = 'block';
+            });
+            urlInput.addEventListener('input', () => {
+                if (urlInput.value.trim() !== '') {
+                    removeBtn.click();
+                }
+            });
+
+            // Load custom events from localStorage
+            function getCustomEvents() {
+                return JSON.parse(localStorage.getItem('conclave_custom_events') || '[]');
+            }
+            function saveCustomEvents(events) {
+                localStorage.setItem('conclave_custom_events', JSON.stringify(events));
+            }
+
+            // Get all events (built-in + custom overridden)
+            function getAllEvents() {
+                const builtInRaw = window.CONCLAVE_EVENTS || [];
+                const custom = getCustomEvents();
+                const deletedIds = JSON.parse(localStorage.getItem('conclave_deleted_events') || '[]');
+                
+                let activeBuiltIn = builtInRaw.filter(e => !deletedIds.includes(e.id));
+                activeBuiltIn = activeBuiltIn.map(e => {
+                    const override = custom.find(c => c.id === e.id);
+                    return override ? override : e;
+                });
+                
+                const newCustom = custom.filter(c => !builtInRaw.some(b => b.id === c.id));
+                return [...activeBuiltIn, ...newCustom];
+            }
+
+            // Render table
+            function renderTable() {
+<!--                 const events = getAllEvents(); -->
+                tbody.innerHTML = '';
+                events.forEach(evt => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td class="title-cell" data-label="Event">${evt.title}</td>
+                        <td data-label="Category">${evt.categoryName || evt.category}</td>
+                        <td data-label="Date">${evt.date}</td>
+                        <td data-label="Location">${evt.location}</td>
+                        <td data-label="Capacity">${evt.maxAttendees || 'N/A'}</td>
+                        <td data-label="Actions" class="actions-cell">
+                            <button class="admin-action-btn edit-btn" data-id="${evt.id}">
+                                <span class="material-symbols-outlined">edit</span>
+                            </button>
+                            <button class="admin-action-btn delete delete-btn" data-id="${evt.id}">
+                                <span class="material-symbols-outlined">delete</span>
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+                document.querySelectorAll('.edit-btn').forEach(btn => {
+                    btn.addEventListener('click', () => openEditModal(btn.dataset.id));
+                });
+                document.querySelectorAll('.delete-btn').forEach(btn => {
+                    btn.addEventListener('click', () => openDeleteModal(btn.dataset.id));
+                });
+            }
+
+            function openModal() { modal.classList.add('open'); }
+            function closeModal() { modal.classList.remove('open'); clearValidation(); }
+            function openDeleteModalUI() { deleteModal.classList.add('open'); }
+            function closeDeleteModal() { deleteModal.classList.remove('open'); }
+
+            // --- Dynamic Itinerary Logic ---
+            const itineraryContainer = document.getElementById('itinerary-items-container');
+            const addItineraryBtn = document.getElementById('add-itinerary-btn');
+
+            let draggedItem = null;
+
+            function updateItineraryNumbers() {
+                const blocks = itineraryContainer.querySelectorAll('.itinerary-input-block');
+                blocks.forEach((block, index) => {
+                    const numDisplay = block.querySelector('.itinerary-num-display');
+                    if (numDisplay) {
+                        numDisplay.textContent = String(index + 1).padStart(2, '0');
+                    }
+                });
+            }
+
+            function addItineraryItem(num = '', title = '', desc = '') {
+                const div = document.createElement('div');
+                div.className = 'itinerary-input-block';
+                div.draggable = true;
+                div.style.background = 'var(--bg-surface)';
+                div.style.border = '1px solid var(--border-subtle)';
+                div.style.padding = '12px';
+                div.style.borderRadius = '8px';
+                div.style.display = 'grid';
+                div.style.gap = '8px';
+                div.style.position = 'relative';
+                div.style.cursor = 'grab';
+
+                div.innerHTML = `
+                    <button type="button" class="remove-itinerary-btn material-symbols-outlined" style="position:absolute; top:8px; right:8px; background:none; border:none; color:var(--text-secondary); cursor:pointer; font-size:18px; z-index: 10;">close</button>
+                    <div style="display:grid; grid-template-columns: 24px 30px 1fr; gap:8px; align-items:center;">
+                        <span class="material-symbols-outlined drag-handle" style="color:var(--text-secondary); font-size: 20px;">drag_indicator</span>
+                        <div class="itinerary-num-display" style="font-weight:600; font-size:16px; color:var(--gold); text-align:center;">${num}</div>
+                        <input type="text" class="form-input itinerary-title-input" placeholder="Heading (e.g. The Masterclass)" value="${title}" style="padding:8px;" />
+                    </div>
+                    <textarea class="form-input itinerary-desc-input" rows="2" placeholder="Description..." style="resize:vertical; padding:8px; margin-top:4px;">${desc}</textarea>
+                `;
+
+                div.querySelector('.remove-itinerary-btn').addEventListener('click', () => {
+                    div.remove();
+                    updateItineraryNumbers();
+                });
+
+                div.addEventListener('dragstart', (e) => {
+                    draggedItem = div;
+                    e.dataTransfer.effectAllowed = 'move';
+                    div.style.opacity = '0.5';
+                });
+                div.addEventListener('dragend', () => {
+                    draggedItem = null;
+                    div.style.opacity = '1';
+                });
+                div.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = 'move';
+                });
+                div.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    if (draggedItem && draggedItem !== div) {
+                        const allItems = Array.from(itineraryContainer.querySelectorAll('.itinerary-input-block'));
+                        const draggedIndex = allItems.indexOf(draggedItem);
+                        const dropIndex = allItems.indexOf(div);
+                        
+                        if (draggedIndex < dropIndex) {
+                            div.after(draggedItem);
+                        } else {
+                            div.before(draggedItem);
+                        }
+                        updateItineraryNumbers();
+                    }
+                });
+
+                itineraryContainer.appendChild(div);
+                updateItineraryNumbers();
+            }
+
+            addItineraryBtn.addEventListener('click', () => addItineraryItem());
+
+            addBtn.addEventListener('click', () => {
+                form.reset();
+                document.getElementById('form-event-id').value = '';
+                removeBtn.click();
+                itineraryContainer.innerHTML = '';
+                addItineraryItem('01', '', '');
+                modalTitle.textContent = 'Create Event';
+                submitBtn.textContent = 'Create Event';
+                openModal();
+            });
+
+            cancelBtn.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+            document.getElementById('delete-cancel').addEventListener('click', closeDeleteModal);
+            deleteModal.addEventListener('click', (e) => { if (e.target === deleteModal) closeDeleteModal(); });
+
+            function openEditModal(id) {
+                const events = getAllEvents();
+                const evt = events.find(e => e.id === id);
+                if (!evt) return;
+
+                document.getElementById('form-event-id').value = evt.id;
+                document.getElementById('form-title').value = evt.title;
+                document.getElementById('form-description').value = evt.description || '';
+                
+                itineraryContainer.innerHTML = '';
+                if (Array.isArray(evt.itinerary) && evt.itinerary.length > 0) {
+                    evt.itinerary.forEach(item => {
+                        addItineraryItem(item.num, item.title, item.desc);
+                    });
+                } else {
+                    addItineraryItem('01', '', '');
+                }
+
+                document.getElementById('form-category').value = evt.category;
+                document.getElementById('form-date').value = evt.date;
+                document.getElementById('form-time').value = evt.time || '';
+                document.getElementById('form-capacity').value = evt.maxAttendees || '';
+                document.getElementById('form-location').value = evt.location;
+                document.getElementById('form-price').value = evt.price !== 'Free' ? evt.price : '';
+                document.getElementById('form-duration').value = evt.duration || '';
+                document.getElementById('form-difficulty').value = evt.difficulty || 'All Levels';
+                
+                removeBtn.click();
+                if (evt.image && evt.image.startsWith('data:image')) {
+                    imageDataInput.value = evt.image;
+                    previewImage.src = evt.image;
+                    dropZone.style.display = 'none';
+                    previewContainer.style.display = 'block';
+                } else {
+                    document.getElementById('form-image').value = evt.image || '';
+                }
+
+                modalTitle.textContent = 'Edit Event';
+                submitBtn.textContent = 'Save Changes';
+                openModal();
+            }
+
+            let deleteTargetId = null;
+            function openDeleteModal(id) {
+                deleteTargetId = id;
+                openDeleteModalUI();
+            }
+            document.getElementById('delete-confirm').addEventListener('click', () => {
+                if (!deleteTargetId) return;
+                let events = getCustomEvents();
+                events = events.filter(e => e.id !== deleteTargetId);
+                saveCustomEvents(events);
+                
+                const deletedIds = JSON.parse(localStorage.getItem('conclave_deleted_events') || '[]');
+                if (!deletedIds.includes(deleteTargetId)) {
+                    deletedIds.push(deleteTargetId);
+                    localStorage.setItem('conclave_deleted_events', JSON.stringify(deletedIds));
+                }
+                
+                renderTable();
+                closeDeleteModal();
+                showToast('Event deleted successfully.', 'success');
+                deleteTargetId = null;
+            });
+
+            function clearValidation() {
+                document.querySelectorAll('.validation-error').forEach(el => el.style.display = 'none');
+                document.querySelectorAll('.form-input.error').forEach(el => el.classList.remove('error'));
+            }
+
+            function validate() {
+                clearValidation();
+                let valid = true;
+
+                const title = document.getElementById('form-title');
+                const category = document.getElementById('form-category');
+                const date = document.getElementById('form-date');
+                const capacity = document.getElementById('form-capacity');
+                const location = document.getElementById('form-location');
+
+                if (!title.value.trim()) {
+                    title.classList.add('error');
+                    document.getElementById('err-title').style.display = 'block';
+                    valid = false;
+                }
+                if (!category.value) {
+                    category.classList.add('error');
+                    document.getElementById('err-category').style.display = 'block';
+                    valid = false;
+                }
+                if (!date.value) {
+                    date.classList.add('error');
+                    document.getElementById('err-date').style.display = 'block';
+                    valid = false;
+                }
+                if (!capacity.value || parseInt(capacity.value) < 1) {
+                    capacity.classList.add('error');
+                    document.getElementById('err-capacity').style.display = 'block';
+                    valid = false;
+                }
+                if (!location.value.trim()) {
+                    location.classList.add('error');
+                    document.getElementById('err-location').style.display = 'block';
+                    valid = false;
+                }
+
+                return valid;
+            }
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                if (!validate()) return;
+
+                const eventId = document.getElementById('form-event-id').value;
+                
+                let itineraryArray = [];
+                const itineraryBlocks = document.querySelectorAll('.itinerary-input-block');
+                itineraryBlocks.forEach((block, idx) => {
+                    let num = block.querySelector('.itinerary-num-display').textContent.trim();
+                    let title = block.querySelector('.itinerary-title-input').value.trim();
+                    let desc = block.querySelector('.itinerary-desc-input').value.trim();
+                    if (title || desc) {
+                        if (!num) num = String(idx + 1).padStart(2, '0');
+                        itineraryArray.push({ num, title, desc });
+                    }
+                });
+
+                const eventData = {
+                    id: eventId || 'custom_' + Date.now(),
+                    title: document.getElementById('form-title').value.trim(),
+                    description: document.getElementById('form-description').value.trim(),
+                    itinerary: itineraryArray,
+                    category: document.getElementById('form-category').value,
+                    categoryName: document.getElementById('form-category').options[document.getElementById('form-category').selectedIndex].text,
+                    date: document.getElementById('form-date').value,
+                    time: document.getElementById('form-time').value || '12:00 PM',
+                    maxAttendees: parseInt(document.getElementById('form-capacity').value),
+                    attendees: 0,
+                    location: document.getElementById('form-location').value.trim(),
+                    price: document.getElementById('form-price').value.trim() || 'Free',
+                    duration: document.getElementById('form-duration').value.trim() || 'TBD',
+                    difficulty: document.getElementById('form-difficulty').value || 'All Levels',
+                    image: document.getElementById('form-image-data').value || document.getElementById('form-image').value.trim() || ''
+                };
+
+                let events = getCustomEvents();
+
+                if (eventId) {
+                    const idx = events.findIndex(e => e.id === eventId);
+                    if (idx !== -1) {
+                        events[idx] = eventData;
+                    } else {
+                        events.push(eventData);
+                    }
+                    showToast('Event updated successfully.', 'success');
+                } else {
+                    events.push(eventData);
+                    showToast('Event created successfully!', 'success');
+                }
+
+                saveCustomEvents(events);
+                renderTable();
+                closeModal();
+            });
+
+            renderTable();
+        });
+    </script>
     <script type="module" src="js/admin/adminApp.js"></script>
 </body>
 </html>

@@ -33,6 +33,9 @@
         // Ignore clicks with modifiers (Cmd, Ctrl, Shift) - let browser handle new tabs natively
         if (e.ctrlKey || e.metaKey || e.shiftKey) return;
 
+        // Ignore clicks on elements that have their own JS logic (like the sidebar trigger)
+        if (link.classList.contains('nav-avatar') || link.closest('.no-transition')) return;
+
         // Prevent immediate navigation
         e.preventDefault();
 
