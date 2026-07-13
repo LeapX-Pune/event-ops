@@ -2677,11 +2677,61 @@ ul, ol {
         gap: 12px !important;
         align-items: center !important;
     }
+
+    /* Bottom-sheet chat window layout on mobile */
+    .chat-window {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: 75vh !important;
+        max-height: 75vh !important;
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        border-radius: 20px 20px 0 0 !important;
+        border-bottom: none !important;
+        z-index: 99999 !important;
+        box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.15) !important;
+    }
+    .chat-window.open {
+        display: flex !important;
+        animation: slideUpMobileChat 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .chat-input-row {
+        padding-bottom: calc(16px + env(safe-area-inset-bottom)) !important;
+    }
+}
+
+@keyframes slideUpMobileChat {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
 }
 
 /* Stacking payment methods on very small mobile devices */
 @media (max-width: 480px) {
     #checkout-form div[style*="grid-template-columns:repeat(3,1fr)"] {
         grid-template-columns: 1fr !important;
+    }
+}
+
+/* ── Mobile Spacing Refinements (PR #7 Tweaks) ───────────────── */
+@media (max-width: 768px) {
+    /* Major vertical spacing reductions (20-30%) */
+    .scroll-section {
+        padding: var(--space-2xl) var(--space-lg) !important; /* Reduced from 48px to 32px top/bottom padding */
+    }
+    .detail-section {
+        margin-bottom: var(--space-xl) !important; /* Reduced from 48px to 32px margin */
+    }
+    main.container {
+        padding-top: 100px !important; /* Reduced from 160px top padding for event details & settings */
+        padding-bottom: 40px !important;
+    }
+    .bookings-grid {
+        padding: 40px 0 !important; /* Reduced from 80px padding */
+    }
+    .bookings-hero {
+        height: 35vh !important; /* Reduced from 50vh height */
+        min-height: 250px !important;
     }
 }
