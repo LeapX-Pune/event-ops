@@ -57,7 +57,7 @@
 
     const KEYWORD_RESPONSES = {
         tech: {
-            keywords: ['technology', 'coding', 'programming', 'developer', 'software'],
+            keywords: ['tech', 'technology', 'coding', 'programming', 'developer', 'software'],
             response: "Here are our tech events:",
             category: 'cat_tech'
         },
@@ -67,7 +67,7 @@
             category: 'cat_music'
         },
         workshop: {
-            keywords: ['bootcamp', 'masterclass', 'learn', 'training'],
+            keywords: ['workshop', 'bootcamp', 'masterclass', 'class', 'learn', 'training'],
             response: "We have these workshops and learning experiences:",
             category: 'cat_edu'
         },
@@ -107,7 +107,7 @@
             category: 'cat_aviation'
         },
         upcoming: {
-            keywords: ['upcoming', 'soon', 'next', 'weekend', 'future'],
+            keywords: ['upcoming', 'soon', 'next', 'weekend', 'future', 'events', 'event'],
             response: "Here are upcoming events:",
             getEvents: function () {
                 const now = new Date();
