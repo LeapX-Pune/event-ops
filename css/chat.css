@@ -207,6 +207,33 @@
     color: var(--text-on-gold);
 }
 
+.chat-event-suggestion {
+    background: var(--bg-primary, #1a1a2e);
+    border: 1px solid var(--border-subtle, rgba(230,198,135,0.2));
+    border-radius: 8px;
+    padding: 8px 12px;
+    margin: 4px 0;
+    cursor: pointer;
+    transition: border-color 0.25s ease, background 0.25s ease;
+}
+
+.chat-event-suggestion:hover {
+    border-color: var(--gold, #E6C687);
+    background: var(--bg-surface, #131320);
+}
+
+.chat-event-suggestion .suggestion-title {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-primary, #fff);
+    margin-bottom: 2px;
+}
+
+.chat-event-suggestion .suggestion-meta {
+    font-size: 10px;
+    color: var(--text-muted, #5a5a6a);
+}
+
 /* ── Responsive Chat Widget ────────────────────────────────── */
 @media (max-width: 768px) {
     .chat-widget {
