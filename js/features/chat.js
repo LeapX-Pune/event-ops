@@ -56,59 +56,70 @@
         return map[key] || null;
     }
 
+    var responseIndex = {};
+
+    function pickResponse(key) {
+        if (!responseIndex[key]) responseIndex[key] = 0;
+        var config = KEYWORD_RESPONSES[key];
+        if (!config.responses) return config.response;
+        var idx = responseIndex[key] % config.responses.length;
+        responseIndex[key] = idx + 1;
+        return config.responses[idx];
+    }
+
     const KEYWORD_RESPONSES = {
         tech: {
-            keywords: ['tech', 'technology', 'coding', 'programming', 'developer', 'software'],
+            keywords: ['tech', 'technology', 'coding', 'programming', 'developer', 'software', 'frontend', 'backend', 'ai', 'software engineer'],
             response: "Here are our tech events:",
             category: 'cat_tech'
         },
         music: {
-            keywords: ['concert', 'band', 'orchestra', 'music'],
+            keywords: ['concert', 'band', 'orchestra', 'music', 'live music', 'dj', 'festival', 'symphony'],
             response: "Check out these music events:",
             category: 'cat_music'
         },
         workshop: {
-            keywords: ['workshop', 'bootcamp', 'masterclass', 'class', 'learn', 'training'],
+            keywords: ['workshop', 'bootcamp', 'masterclass', 'class', 'learn', 'training', 'course', 'tutorial', 'seminar'],
             response: "We have these workshops and learning experiences:",
             category: 'cat_edu'
         },
         sports: {
-            keywords: ['fitness', 'game', 'running', 'yoga', 'marathon', 'sports'],
+            keywords: ['fitness', 'game', 'running', 'yoga', 'marathon', 'sports', 'match', 'tournament', 'football', 'cricket', 'tennis', 'basketball'],
             response: "Explore these sports events:",
             category: 'cat_sports'
         },
         art: {
-            keywords: ['exhibition', 'gallery', 'creative', 'design', 'paint', 'art'],
+            keywords: ['exhibition', 'gallery', 'creative', 'design', 'paint', 'art', 'photography', 'sculpture', 'museum'],
             response: "Art events coming up:",
             category: 'cat_art'
         },
         food: {
-            keywords: ['cooking', 'culinary', 'dining', 'gastronomy', 'food'],
+            keywords: ['cooking', 'culinary', 'dining', 'gastronomy', 'food', 'restaurant', 'bakery', 'street food', 'wine'],
             response: "Food events you'll enjoy:",
             category: 'cat_food'
         },
         business: {
-            keywords: ['networking', 'startup', 'entrepreneur', 'corporate', 'fintech', 'business'],
+            keywords: ['networking', 'startup', 'entrepreneur', 'corporate', 'fintech', 'business', 'investor', 'pitch', 'conference'],
             response: "Business events available:",
             category: 'cat_business'
         },
         health: {
-            keywords: ['wellness', 'meditation', 'fitness', 'nutrition', 'health'],
+            keywords: ['wellness', 'meditation', 'fitness', 'nutrition', 'health', 'mental health', 'therapy', 'retreat'],
             response: "Health and wellness events:",
             category: 'cat_health'
         },
         auto: {
-            keywords: ['car', 'racing', 'automotive', 'hypercar', 'auto'],
+            keywords: ['car', 'racing', 'automotive', 'hypercar', 'auto', 'motor', 'vehicle', 'supercar', 'expo'],
             response: "Automotive events:",
             category: 'cat_auto'
         },
         aviation: {
-            keywords: ['airshow', 'aerospace', 'aviation', 'flight', 'aircraft'],
+            keywords: ['airshow', 'aerospace', 'aviation', 'flight', 'aircraft', 'plane', 'jet', 'airport'],
             response: "Aviation events:",
             category: 'cat_aviation'
         },
         upcoming: {
-            keywords: ['upcoming', 'soon', 'next', 'weekend', 'future', 'events', 'event'],
+            keywords: ['upcoming', 'soon', 'next', 'weekend', 'future', 'events', 'event', 'calendar', 'schedule', 'happening', 'planned'],
             response: "Here are upcoming events:",
             getEvents: function () {
                 const now = new Date();
@@ -120,28 +131,40 @@
             }
         },
         register: {
-            keywords: ['register', 'sign up', 'join', 'ticket', 'booking', 'reserve'],
+            keywords: ['register', 'sign up', 'join', 'ticket', 'booking', 'reserve', 'book', 'buy', 'purchase', 'enroll', 'attend'],
             response: "To register for any event, just find it on our Events page, click the event card, and hit the 'Reserve Pass' button!",
             getEvents: function () { return []; }
         },
         pricing: {
-            keywords: ['price', 'cost', 'how much', 'expensive', 'cheap', 'pricing'],
+            keywords: ['price', 'cost', 'how much', 'expensive', 'cheap', 'pricing', 'worth', 'value', 'fee', 'donation', 'free'],
             response: "Our events range from free to premium experiences. Browse the Events page to see specific pricing for each event.",
             getEvents: function () { return []; }
         },
         help: {
-            keywords: ['help', 'how', 'what', 'guide', 'assist', 'support', 'can you'],
-            response: "I can help you find events! Try asking about: tech, music, art, sports, food, business, health, automotive, or aviation events. You can also ask about upcoming events or pricing.",
+            keywords: ['help', 'how', 'what', 'guide', 'assist', 'support', 'can you', 'could you', 'would you', 'how to', 'what is', 'what are', 'how does', 'i need', 'looking for'],
+            responses: [
+                "I can help you find events! Try asking about: tech, music, art, sports, food, business, health, automotive, or aviation events. You can also ask about upcoming events or pricing.",
+                "Sure, I'm here to help! You can ask me about event categories like tech or music, check pricing, or find out what's upcoming. What are you interested in?",
+                "Need help navigating? Try typing a category name like 'tech', 'music', or 'sports', or ask about 'upcoming events' to see what's happening soon!"
+            ],
             getEvents: function () { return []; }
         },
         hello: {
-            keywords: ['hello', 'hi', 'hey', 'greetings', 'good morning', 'good evening'],
-            response: "Welcome to Conclave! I'm your event assistant. Ask me about our curated experiences, pricing, or how to book. Try 'Show me tech events' or 'What's upcoming?'",
+            keywords: ['hello', 'hi', 'hey', 'greetings', 'good morning', 'good evening', 'good afternoon', 'good day', 'howdy', 'sup', 'yo', 'how are you', 'how do you do', 'nice to meet', 'whats up', 'wasup'],
+            responses: [
+                "Hey there! Welcome to Conclave! I'm your event assistant. Ask me about our curated experiences, pricing, or how to book. Try 'Show me tech events' or 'What's upcoming?'",
+                "Hi! Great to see you. I can help you discover amazing events. Try asking about categories like tech, music, or sports!",
+                "Hello! Welcome aboard. Browse our events or just ask me anything — I'm here to help you find the perfect experience!"
+            ],
             getEvents: function () { return []; }
         },
         thanks: {
-            keywords: ['thanks', 'thank you', 'appreciate', 'helpful', 'great'],
-            response: "You're welcome! Let me know if you need anything else. Happy exploring!",
+            keywords: ['thanks', 'thank you', 'thank you so much', 'thx', 'appreciate', 'helpful', 'great', 'awesome', 'wonderful', 'perfect', 'amazing', 'good', 'cool'],
+            responses: [
+                "You're welcome! Let me know if you need anything else. Happy exploring!",
+                "Happy to help! Enjoy your event journey with Conclave.",
+                "Anytime! If you have more questions, I'm right here. Enjoy!"
+            ],
             getEvents: function () { return []; }
         }
     };
@@ -270,7 +293,7 @@
 
                     if (matchingEvents.length > 0) {
                         return {
-                            text: config.response,
+                            text: pickResponse(key),
                             events: matchingEvents.slice(0, 3)
                         };
                     } else {
@@ -287,7 +310,7 @@
                             };
                         }
                         return {
-                            text: config.response,
+                            text: pickResponse(key),
                             events: []
                         };
                     }
