@@ -132,13 +132,11 @@
         },
         register: {
             keywords: ['register', 'sign up', 'join', 'ticket', 'booking', 'reserve', 'book', 'buy', 'purchase', 'enroll', 'attend'],
-            response: "To register for any event, just find it on our Events page, click the event card, and hit the 'Reserve Pass' button!",
-            getEvents: function () { return []; }
+            response: "To register for any event, just find it on our Events page, click the event card, and hit the 'Reserve Pass' button!"
         },
         pricing: {
             keywords: ['price', 'cost', 'how much', 'expensive', 'cheap', 'pricing', 'worth', 'value', 'fee', 'donation', 'free'],
-            response: "Our events range from free to premium experiences. Browse the Events page to see specific pricing for each event.",
-            getEvents: function () { return []; }
+            response: "Our events range from free to premium experiences. Browse the Events page to see specific pricing for each event."
         },
         help: {
             keywords: ['help', 'how', 'what', 'guide', 'assist', 'support', 'can you', 'could you', 'would you', 'how to', 'what is', 'what are', 'how does', 'i need', 'looking for'],
@@ -146,8 +144,7 @@
                 "I can help you find events! Try asking about: tech, music, art, sports, food, business, health, automotive, or aviation events. You can also ask about upcoming events or pricing.",
                 "Sure, I'm here to help! You can ask me about event categories like tech or music, check pricing, or find out what's upcoming. What are you interested in?",
                 "Need help navigating? Try typing a category name like 'tech', 'music', or 'sports', or ask about 'upcoming events' to see what's happening soon!"
-            ],
-            getEvents: function () { return []; }
+            ]
         },
         hello: {
             keywords: ['hello', 'hi', 'hey', 'greetings', 'good morning', 'good evening', 'good afternoon', 'good day', 'howdy', 'sup', 'yo', 'how are you', 'how do you do', 'nice to meet', 'whats up', 'wasup'],
@@ -155,8 +152,7 @@
                 "Hey there! Welcome to Conclave! I'm your event assistant. Ask me about our curated experiences, pricing, or how to book. Try 'Show me tech events' or 'What's upcoming?'",
                 "Hi! Great to see you. I can help you discover amazing events. Try asking about categories like tech, music, or sports!",
                 "Hello! Welcome aboard. Browse our events or just ask me anything — I'm here to help you find the perfect experience!"
-            ],
-            getEvents: function () { return []; }
+            ]
         },
         thanks: {
             keywords: ['thanks', 'thank you', 'thank you so much', 'thx', 'appreciate', 'helpful', 'great', 'awesome', 'wonderful', 'perfect', 'amazing', 'good', 'cool'],
@@ -164,8 +160,7 @@
                 "You're welcome! Let me know if you need anything else. Happy exploring!",
                 "Happy to help! Enjoy your event journey with Conclave.",
                 "Anytime! If you have more questions, I'm right here. Enjoy!"
-            ],
-            getEvents: function () { return []; }
+            ]
         }
     };
 
