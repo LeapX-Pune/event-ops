@@ -15,8 +15,43 @@
     const MOUSE_RADIUS = 0.15;
     const MOUSE_PUSH = 0.02;
     const RETURN_SPEED = 0.12;
-    const BASE_COLOR = { r: 230, g: 198, b: 135 }; // Gold
-    const BG_COLOR = { r: 10, g: 10, b: 18 };
+
+    // Read colors from CSS custom properties (theme-aware)
+    function getThemeColors() {
+        const rootStyles = getComputedStyle(document.documentElement);
+        const particleColor = rootStyles.getPropertyValue('--particle-color').trim();
+        const particleBg = rootStyles.getPropertyValue('--particle-bg').trim();
+        
+        // Parse particle color (format: "r, g, b")
+        let color = { r: 230, g: 198, b: 135 }; // Default gold
+        if (particleColor) {
+            const parts = particleColor.split(',').map(n => parseInt(n.trim(), 10));
+            if (parts.length === 3) {
+                color = { r: parts[0], g: parts[1], b: parts[2] };
+            }
+        }
+        
+        // Parse background color
+        let bg = { r: 10, g: 10, b: 18 }; // Default dark
+        if (particleBg) {
+            // Could be hex or rgb
+            if (particleBg.startsWith('#')) {
+                const hex = particleBg.slice(1);
+                bg = {
+                    r: parseInt(hex.slice(0, 2), 16),
+                    g: parseInt(hex.slice(2, 4), 16),
+                    b: parseInt(hex.slice(4, 6), 16)
+                };
+            } else if (particleBg.startsWith('rgb')) {
+                const parts = particleBg.match(/\d+/g);
+                if (parts && parts.length >= 3) {
+                    bg = { r: parseInt(parts[0]), g: parseInt(parts[1]), b: parseInt(parts[2]) };
+                }
+            }
+        }
+        
+        return { color, bg };
+    }
 
     let width, height, dpr;
     let ctx;
@@ -25,6 +60,7 @@
     let mouseNorm = { x: -999, y: -999 };
     let scrollProgress = 0;
     let animId;
+    let currentColors = getThemeColors();
 
     // ── Init ──
     function init() {
@@ -54,21 +90,23 @@
         const octx = offscreen.getContext('2d');
 
         const text = 'CONCLAVE';
-        // Scale font to viewport
-        const fontSize = Math.min(width * 0.13, 160);
+        // Scale font to viewport, use smaller ratio on mobile to prevent clipping
+        const fontSize = width < 768 ? width * 0.09 : Math.min(width * 0.12, 160);
         offscreen.width = width * dpr;
         offscreen.height = height * dpr;
         octx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
         octx.fillStyle = '#fff';
-        // Use font weight 200 to give the text strokes slightly more density for clean sampling
-        octx.font = `150 ${fontSize}px 'Montserrat', sans-serif`;
+        // Use a slightly heavier weight on mobile so thin strokes don't disappear
+        const fontWeight = width < 768 ? 400 : 200;
+        octx.font = `${fontWeight} ${fontSize}px 'Montserrat', sans-serif`;
         octx.textAlign = 'center';
         octx.textBaseline = 'middle';
         octx.fillText(text, width / 2, height / 2 - 20);
 
         // Sample pixels with a smaller step to capture thin strokes without missing parts (like N or L)
-        const step = 2;
+        // On mobile, sample denser to catch the smaller text strokes
+        const step = width < 768 ? 1 : 2;
 
         const imageData = octx.getImageData(0, 0, offscreen.width, offscreen.height);
         const data = imageData.data;
@@ -97,6 +135,7 @@
 
     // ── Create Particles ──
     function createParticles() {
+        currentColors = getThemeColors();
         particles = [];
         const count = Math.min(PARTICLE_COUNT, textPositions.length);
 
@@ -150,8 +189,8 @@
         animId = requestAnimationFrame(animate);
         const time = performance.now() * 0.001;
 
-        // Clear
-        ctx.fillStyle = `rgb(${BG_COLOR.r}, ${BG_COLOR.g}, ${BG_COLOR.b})`;
+        // Clear with theme-aware background
+        ctx.fillStyle = `rgb(${currentColors.bg.r}, ${currentColors.bg.g}, ${currentColors.bg.b})`;
         ctx.fillRect(0, 0, width, height);
 
         // Determine text formation vs scatter based on scroll
@@ -178,7 +217,7 @@
 
                 ctx.beginPath();
                 ctx.arc(p.x, p.y, Math.max(0.2, size), 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(${BASE_COLOR.r}, ${BASE_COLOR.g}, ${BASE_COLOR.b}, ${alpha})`;
+                ctx.fillStyle = `rgba(${currentColors.color.r}, ${currentColors.color.g}, ${currentColors.color.b}, ${alpha})`;
                 ctx.fill();
                 continue;
             }
@@ -210,26 +249,21 @@
 
             ctx.beginPath();
             ctx.arc(p.x, p.y, Math.max(0.2, size), 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(${BASE_COLOR.r}, ${BASE_COLOR.g}, ${BASE_COLOR.b}, ${alpha})`;
+            ctx.fillStyle = `rgba(${currentColors.color.r}, ${currentColors.color.g}, ${currentColors.color.b}, ${alpha})`;
             ctx.fill();
         }
     }
 
     // ── Events ──
     function bindEvents() {
+        let resizeTimeout;
         window.addEventListener('resize', () => {
             resize();
-            generateTextPositions();
-            // Update text targets for existing particles
-            const count = Math.min(textPositions.length, particles.filter(p => !p.isAmbient).length);
-            let ti = 0;
-            for (let i = 0; i < particles.length && ti < count; i++) {
-                if (!particles[i].isAmbient) {
-                    particles[i].tx = textPositions[ti].x;
-                    particles[i].ty = textPositions[ti].y;
-                    ti++;
-                }
-            }
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                generateTextPositions();
+                createParticles();
+            }, 150);
         });
 
         window.addEventListener('mousemove', (e) => {
@@ -241,6 +275,13 @@
             const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
             scrollProgress = scrollHeight > 0 ? window.scrollY / scrollHeight : 0;
         }, { passive: true });
+
+        // Theme change handler
+        window.addEventListener('themechange', () => {
+            currentColors = getThemeColors();
+            // Recreate particles with new colors
+            createParticles();
+        });
     }
 
     // ── Start ──
