@@ -3,6 +3,7 @@
 
     let isTyping = false;
     let chatInitialized = false;
+    let fallbackStreak = 0;
 
     const STORAGE_KEY = 'ep_chat_history';
     const MAX_HISTORY = 50;
@@ -161,6 +162,36 @@
 
     const FALLBACK_RESPONSE = "I'm not sure about that, but I can help you find something incredible. Try asking about tech, music, art, sports, food, business, or aviation events.";
 
+    var FALLBACK_ESCALATIONS = [
+        function () {
+            var all = getEvents();
+            var now = new Date();
+            var upcoming = all.filter(function (e) {
+                var d = new Date(e.date);
+                return d >= now;
+            }).sort(function (a, b) { return new Date(a.date) - new Date(b.date); });
+            if (upcoming.length > 0) {
+                return {
+                    text: "Having trouble finding something? Here are some upcoming events you might like!",
+                    events: upcoming.slice(0, 3)
+                };
+            }
+            return null;
+        },
+        function () {
+            return {
+                text: "Let me help! You can browse all our events on the Events page, or try asking about categories like tech, music, or sports. What interests you?",
+                events: []
+            };
+        },
+        function () {
+            return {
+                text: "I'm here to help! Head over to our Events page to see everything, or type something like 'tech events', 'music', or 'upcoming' to get started!",
+                events: []
+            };
+        }
+    ];
+
     function findResponse(message) {
         var lower = message.toLowerCase().trim();
 
@@ -266,7 +297,8 @@
 
         return {
             text: FALLBACK_RESPONSE,
-            events: []
+            events: [],
+            isFallback: true
         };
     }
 
@@ -503,6 +535,21 @@
             try {
                 var response = findResponse(text);
                 removeTypingIndicator();
+
+                if (response.isFallback) {
+                    fallbackStreak++;
+                    if (fallbackStreak >= 2) {
+                        var idx = Math.min(fallbackStreak - 2, FALLBACK_ESCALATIONS.length - 1);
+                        var escalated = FALLBACK_ESCALATIONS[idx]();
+                        if (escalated) {
+                            addMessage(escalated.text, 'bot', escalated.events);
+                            return;
+                        }
+                    }
+                } else {
+                    fallbackStreak = 0;
+                }
+
                 addMessage(response.text, 'bot', response.events);
             } catch (err) {
                 removeTypingIndicator();
