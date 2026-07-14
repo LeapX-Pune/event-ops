@@ -145,6 +145,20 @@
         }
     };
 
+    const EVENT_CATEGORIES = ['tech', 'music', 'workshop', 'sports', 'art', 'food', 'business', 'health', 'auto', 'aviation'];
+
+    function suggestOtherCategories(excludeKey) {
+        var others = [];
+        for (var i = 0; i < EVENT_CATEGORIES.length; i++) {
+            if (EVENT_CATEGORIES[i] !== excludeKey) {
+                others.push(EVENT_CATEGORIES[i]);
+            }
+        }
+        var shuffled = others.sort(function () { return 0.5 - Math.random(); });
+        var picked = shuffled.slice(0, 3);
+        return "Try asking about " + picked.join(', ') + ", or check upcoming events!";
+    }
+
     const FALLBACK_RESPONSE = "I'm not sure about that, but I can help you find something incredible. Try asking about tech, music, art, sports, food, business, or aviation events.";
 
     function findResponse(message) {
@@ -176,7 +190,7 @@
                 }).sort(function (a, b) { return new Date(a.date) - new Date(b.date); });
 
                 return {
-                    text: weekEvents.length > 0 ? "Events happening this week:" : "No events scheduled for this week.",
+                    text: weekEvents.length > 0 ? "Events happening this week:" : "Nothing scheduled this week. " + suggestOtherCategories(null),
                     events: weekEvents.slice(0, 3)
                 };
             }
@@ -192,7 +206,7 @@
             return {
                 text: dayEvents.length > 0
                     ? "Events happening " + label + ":"
-                    : "No events scheduled for " + label + ".",
+                    : "Nothing happening " + label + ". " + suggestOtherCategories(null),
                 events: dayEvents.slice(0, 3)
             };
         }
@@ -231,7 +245,13 @@
                     } else {
                         if (config.category) {
                             return {
-                                text: "No " + key + " events found at the moment. Check back soon!",
+                                text: "No " + key + " events are happening right now. " + suggestOtherCategories(key),
+                                events: []
+                            };
+                        }
+                        if (typeof config.getEvents === 'function') {
+                            return {
+                                text: "No " + key + " events found. " + suggestOtherCategories(null),
                                 events: []
                             };
                         }
